@@ -1,6 +1,6 @@
 import React from "react";
 
-function AppointmentTable() {
+const AppointmentTable = () => {
   return (
     <div className="lg:col-span-8">
       <div className="bg-white rounded-2xl shadow-sm border-2 border-mint/20 h-full">
@@ -92,6 +92,6 @@ function AppointmentTable() {
       </div>
     </div>
   );
-}
+};
 
 export default AppointmentTable;
