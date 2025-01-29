@@ -1,9 +1,9 @@
 import React from "react";
-import HorizotalBlock from "./Horizonal-block";
-import AppointmentTable from "./Appointment-table";
-import PendingRequest from "./Pending-request";
+import HorizotalBlock from "./horizontal-block";
+import AppointmentTable from "./appointment-table";
+import PendingRequest from "./pendig-requests";
 
-function Home() {
+const Home = () => {
   return (
     <div className="p-8">
       <HorizotalBlock />
@@ -17,6 +17,6 @@ function Home() {
       </div>
     </div>
   );
-}
+};
 
 export default Home;

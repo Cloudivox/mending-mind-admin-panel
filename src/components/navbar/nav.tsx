@@ -1,6 +1,8 @@
-import logo from "../assets/logo.png";
+import React from "react";
+import logo from "../../assets/logo.png";
+import { Link } from "react-router-dom";
 
-function Nav() {
+const Nav = () => {
   return (
     <aside className="w-64 h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/20">
       <div className="p-6 flex items-center">
@@ -8,8 +10,8 @@ function Nav() {
       </div>
 
       <nav className="px-4 font-montserrat">
-        <a
-          href="#"
+        <Link
+          to="/"
           className="flex items-center gap-3 text-black bg-mint/20 px-4 py-3 rounded-xl mb-2"
         >
           <svg
@@ -26,11 +28,11 @@ function Nav() {
             />
           </svg>
           <span className="font-medium">Home</span>
-        </a>
+        </Link>
 
         <div className="space-y-1.5">
-          <a
-            href="#"
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -47,9 +49,9 @@ function Nav() {
               />
             </svg>
             <span>Dashboard</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/calendar"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -66,9 +68,9 @@ function Nav() {
               />
             </svg>
             <span>Calendar</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -85,9 +87,9 @@ function Nav() {
               />
             </svg>
             <span>Session</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -104,9 +106,9 @@ function Nav() {
               />
             </svg>
             <span>Package</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -123,9 +125,9 @@ function Nav() {
               />
             </svg>
             <span>Availability</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -142,9 +144,9 @@ function Nav() {
               />
             </svg>
             <span>Payment</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -161,9 +163,9 @@ function Nav() {
               />
             </svg>
             <span>Blog</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -180,9 +182,9 @@ function Nav() {
               />
             </svg>
             <span>Event</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -199,9 +201,9 @@ function Nav() {
               />
             </svg>
             <span>Team Management</span>
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="flex items-center gap-3 text-black/70 hover:text-black hover:bg-mint/10 px-4 py-3 rounded-xl transition-colors"
           >
             <svg
@@ -218,11 +220,11 @@ function Nav() {
               />
             </svg>
             <span>Profile</span>
-          </a>
+          </Link>
         </div>
       </nav>
     </aside>
   );
-}
+};
 
 export default Nav;

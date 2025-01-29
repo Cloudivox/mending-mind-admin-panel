@@ -1,6 +1,6 @@
 import React from "react";
 
-function PendingRequest() {
+const PendingRequest = () => {
   const ratings = [
     { name: "Shivshanka Yadav", by: "Kinjal Jain" },
     { name: "Prateek Tiwari", by: "Kinjal J" },
@@ -63,6 +63,6 @@ function PendingRequest() {
       </div>
     </div>
   );
-}
+};
 
 export default PendingRequest;
