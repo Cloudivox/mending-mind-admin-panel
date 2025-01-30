@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import Avatar from "../../components/avatar";
+"use client";
+
+import { useState } from "react";
+import ArrowLeft from "../../assets/icons/arrow-left";
+import ArrowRight from "../../assets/icons/arrow-right";
 
 const users = [
   {
     id: 1,
     name: "Priyanka Parekh",
-    // avatar: "/placeholder.svg?height=48&width=48",
     avatar: "",
     busyTimes: [
       {
@@ -48,9 +50,9 @@ const users = [
     ],
   },
   {
-    id: 2,
+    id: 3,
     name: "Dr. Michael Glenn",
-    avatar: "", // Empty string to test initials
+    avatar: "",
     busyTimes: [
       {
         date: "2025-01-24",
@@ -83,6 +85,31 @@ function formatDate(dateString: string) {
   });
 }
 
+function Avatar({ name, src }: { name: string; src: string }) {
+  if (src) {
+    return (
+      <img
+        src={src || "/placeholder.svg"}
+        alt={name}
+        className="w-10 h-10 rounded-lg object-cover border-2 border-mint"
+      />
+    );
+  }
+
+  const initials = name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+  return (
+    <div className="w-10 h-10 rounded-xl bg-coral/10 flex items-center justify-center text-coral font-medium group-hover:scale-110 transition-transform duration-200">
+      {initials}
+    </div>
+  );
+}
+
 function DatePicker({
   selectedDate,
   onDateChange,
@@ -105,21 +132,28 @@ function DatePicker({
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 bg-yellow/10 p-2 rounded-xl">
       <button
-        className="px-3 py-2 border rounded hover:bg-gray-100"
+        className="p-2 rounded-lg border-2 border-yellow/30 hover:bg-yellow/20 text-black transition-colors disabled:opacity-50"
         onClick={goToPreviousDay}
         disabled={currentDateIndex === 0}
       >
-        ←
+        <ArrowLeft />
       </button>
-      <div className="text-lg font-semibold">{formatDate(selectedDate)}</div>
+      <div className="flex items-center gap-2">
+        <input
+          type="date"
+          className="appearance-none bg-yellow/10 border-2 border-yellow/30 rounded-xl px-3 py-2 pr-5 text-lg font-playfair text-black focus:outline-none focus:border-yellow/50 hover:bg-yellow/20 transition-colors cursor-pointer"
+          value={selectedDate} // Use selectedDate directly
+          onChange={(e) => onDateChange(e.target.value)} // Allow manual date selection
+        />
+      </div>
       <button
-        className="px-3 py-2 border rounded hover:bg-gray-100"
+        className="p-2 rounded-lg border-2 border-yellow/30 hover:bg-yellow/20 text-black transition-colors disabled:opacity-50"
         onClick={goToNextDay}
         disabled={currentDateIndex === dates.length - 1}
       >
-        →
+        <ArrowRight />
       </button>
     </div>
   );
@@ -128,11 +162,11 @@ function DatePicker({
 function TimeSlots() {
   return (
     <div className="w-20 flex-shrink-0">
-      <div className="h-24 border-b border-r border-gray-200" />
+      <div className="h-24 border-b border-r border-black/5" />
       {timeSlots.map((time) => (
         <div
           key={time}
-          className="h-16 border-b border-r border-gray-200 px-2 py-1 text-sm text-gray-500"
+          className="h-16 border-b border-r border-black/5 px-2 py-1 text-sm text-black/60 font-montserrat"
         >
           {time}
         </div>
@@ -151,9 +185,9 @@ function SessionBlock({
   title: string;
 }) {
   return (
-    <div className="absolute left-0 right-0 m-1 rounded-md bg-blue-100 p-2 text-xs">
-      <div className="font-medium text-blue-800">{title}</div>
-      <div className="text-blue-600">
+    <div className="absolute left-0 right-0 m-1 rounded-lg bg-coral/10 p-2 text-xs border-2 border-coral/30 transition-all hover:bg-coral/20">
+      <div className="font-medium text-black font-playfair">{title}</div>
+      <div className="text-black/60 font-montserrat">
         {startTime} - {endTime}
       </div>
     </div>
@@ -164,16 +198,35 @@ export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState(dates[0]);
 
   return (
-    <div className="flex h-full flex-col space-y-6 p-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Calendar</h1>
+    <div className="flex h-full flex-col space-y-6 p-8 bg-mint/5">
+      <div className="flex items-center justify-between border-b-2 border-terracotta/20 pb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-terracotta/20 rounded-xl flex items-center justify-center">
+            <svg
+              className="w-5 h-5 text-black"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold font-playfair text-black">
+            Calendar
+          </h1>
+        </div>
         <DatePicker
           selectedDate={selectedDate}
           onDateChange={setSelectedDate}
         />
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden rounded-xl border-2 border-mint/30 bg-white">
         <TimeSlots />
 
         <div className="flex-1 overflow-x-auto">
@@ -186,24 +239,23 @@ export default function Calendar() {
           >
             {users.map((user) => (
               <div key={user.id} className="flex-1 min-w-[200px]">
-                {/* User Header */}
-                <div className="h-24 border-b border-r border-gray-200 p-2 flex items-center">
+                <div className="h-24 border-b border-r border-black/5 p-4 flex items-center bg-purple/5">
                   <div className="flex items-center gap-3">
-                    <Avatar src={user.avatar} name={user.name} size={48} />
-                    <span className="text-sm font-medium">{user.name}</span>
+                    <Avatar src={user.avatar} name={user.name} />
+                    <span className="text-sm font-medium font-montserrat text-black">
+                      {user.name}
+                    </span>
                   </div>
                 </div>
 
-                {/* Time Slots */}
                 <div className="relative">
                   {timeSlots.map((time) => (
                     <div
                       key={time}
-                      className="h-16 border-b border-r border-gray-200"
+                      className="h-16 border-b border-r border-black/5 hover:bg-mint/10 transition-colors"
                     />
                   ))}
 
-                  {/* Session Blocks */}
                   {user.busyTimes
                     .filter((session) => session.date === selectedDate)
                     .map((session, index) => {
