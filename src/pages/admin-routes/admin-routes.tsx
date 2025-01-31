@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Nav from "../../components/navbar";
 import Home from "../home";
 import Calender from "../calender";
+import Products from "../dashboards/products";
 
 const AdminRoutes = () => {
   return (
@@ -12,6 +13,8 @@ const AdminRoutes = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="calendar" element={<Calender />} />
+            <Route path="dashboard/products" element={<Products />} />
+            <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </main>
       </div>

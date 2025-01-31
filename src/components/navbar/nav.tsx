@@ -92,7 +92,7 @@ const Nav = () => {
                 Client
               </Link>
               <Link
-                to="#"
+                to="/dashboard/products"
                 onClick={() => setIsActive("Product")}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                   isActive === "Product"
