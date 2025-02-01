@@ -9,7 +9,7 @@ const Event = () => {
   return (
     <div id="webcrumbs">
       <div className="min-h-screen bg-[#F5F7FA] p-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="mx-auto">
           <div className="flex justify-between items-center mb-12">
             <h1 className="font-playfair font-bold text-4xl text-[#2C3E50]">
               Events
