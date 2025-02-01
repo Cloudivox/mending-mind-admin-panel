@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavHomeIcon from "../../assets/icons/nav-home-icon";
 import NavDashboardIcon from "../../assets/icons/nav-dashboard-icon";
 import NavCalendarIcon from "../../assets/icons/nav-calendar-icon";
@@ -18,10 +18,17 @@ import ArrowDown from "../../assets/icons/arrow-down";
 const Nav = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isActive, setIsActive] = useState("Home");
+  const navigate = useNavigate();
   return (
     <aside className="w-64 h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/25 overflow-auto custom-scrollbar">
       <div className="p-6 flex items-center">
-        <img src={logo} className="h-20" alt="logo" title="logo" />
+        <img
+          onClick={() => navigate("/")}
+          src={logo}
+          className="h-20 cursor-pointer"
+          alt="logo"
+          title="logo"
+        />
       </div>
 
       <nav className="px-4 font-montserrat">
