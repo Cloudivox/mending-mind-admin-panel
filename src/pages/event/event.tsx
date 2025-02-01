@@ -35,8 +35,8 @@ const Event = () => {
             <h2 className="font-playfair font-bold text-2xl mb-8 text-[#2c5049]">
               Upcoming Events
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((item) => (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((item) => (
                 <div
                   key={item}
                   className="bg-white rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
@@ -134,14 +134,29 @@ const Event = () => {
                 </div>
               ))}
             </div>
+
+            <div className="flex justify-center mt-8 gap-2">
+              {[1, 2, 3].map((page) => (
+                <button
+                  key={page}
+                  className={`px-4 py-2 rounded-lg font-montserrat font-semibold transition-all duration-300 ${
+                    page === 1
+                      ? "bg-[#16A085] text-white"
+                      : "bg-white text-[#2C3E50] hover:bg-[#16A085] hover:text-white"
+                  } `}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
           </section>
 
           <section>
             <h2 className="font-playfair font-bold text-2xl mb-8 text-[#2C3E50]">
               Previous Events
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((item) => (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((item) => (
                 <div
                   key={item}
                   className="bg-white rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
@@ -231,6 +246,20 @@ const Event = () => {
                     View Details
                   </button>
                 </div>
+              ))}
+            </div>
+            <div className="flex justify-center mt-8 gap-2">
+              {[1, 2, 3].map((page) => (
+                <button
+                  key={page}
+                  className={`px-4 py-2 rounded-lg font-montserrat font-semibold transition-all duration-300 ${
+                    page === 1
+                      ? "bg-[#16A085] text-white"
+                      : "bg-white text-[#2C3E50] hover:bg-[#16A085] hover:text-white"
+                  } `}
+                >
+                  {page}
+                </button>
               ))}
             </div>
           </section>
