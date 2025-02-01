@@ -70,7 +70,7 @@ const Nav = () => {
                 Overall
               </Link>
               <Link
-                to="#"
+                to="/dashboard/therapist"
                 onClick={() => setIsActive("Therapist")}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                   isActive === "Therapist"
@@ -81,7 +81,7 @@ const Nav = () => {
                 Therapist
               </Link>
               <Link
-                to="#"
+                to="/dashboard/client"
                 onClick={() => setIsActive("Client")}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                   isActive === "Client"

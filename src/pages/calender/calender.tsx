@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import ArrowLeft from "../../assets/icons/arrow-left";
 import ArrowRight from "../../assets/icons/arrow-right";
@@ -75,15 +73,6 @@ const timeSlots = Array.from({ length: 12 }, (_, i) => {
   const hour = i + 8; // Start from 8 AM
   return `${hour.toString().padStart(2, "0")}:00`;
 });
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 function Avatar({ name, src }: { name: string; src: string }) {
   if (src) {
