@@ -56,7 +56,7 @@ const Client = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-8 shadow-md transition-all">
+        <div className="bg-white rounded-2xl p-8 transition-all">
           <h3 className="font-playfair font-bold mb-6 text-2xl text-[#1A365D]">
             Client Information
           </h3>

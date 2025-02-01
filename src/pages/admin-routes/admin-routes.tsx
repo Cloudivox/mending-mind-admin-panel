@@ -5,6 +5,8 @@ import Calender from "../calender";
 import Products from "../dashboards/products";
 import Clients from "../dashboards/clients";
 import Therapists from "../dashboards/therapists";
+import Overall from "../dashboards/overall";
+import Event from "../event";
 
 const AdminRoutes = () => {
   return (
@@ -18,6 +20,8 @@ const AdminRoutes = () => {
             <Route path="dashboard/products" element={<Products />} />
             <Route path="dashboard/client" element={<Clients />} />
             <Route path="dashboard/therapist" element={<Therapists />} />
+            <Route path="dashboard/overall" element={<Overall />} />
+            <Route path="event" element={<Event />} />
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </main>

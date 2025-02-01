@@ -59,7 +59,7 @@ const Nav = () => {
           {isDropdownOpen && (
             <div className="pl-10 space-y-2 mt-2">
               <Link
-                to="#"
+                to="/dashboard/overall"
                 onClick={() => setIsActive("OverAll")}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                   isActive === "OverAll"
@@ -177,7 +177,7 @@ const Nav = () => {
             <span>Blog</span>
           </Link>
           <Link
-            to="#"
+            to="/event"
             onClick={() => setIsActive("Event")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Event"
