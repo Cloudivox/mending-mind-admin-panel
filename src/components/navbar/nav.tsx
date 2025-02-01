@@ -23,7 +23,10 @@ const Nav = () => {
     <aside className="w-64 h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/25 overflow-auto custom-scrollbar">
       <div className="p-6 flex items-center">
         <img
-          onClick={() => navigate("/")}
+          onClick={() => {
+            navigate("/");
+            setIsActive("Home");
+          }}
           src={logo}
           className="h-20 cursor-pointer"
           alt="logo"
