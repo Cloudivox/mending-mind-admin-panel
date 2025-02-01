@@ -188,27 +188,10 @@ export default function Calendar() {
 
   return (
     <div className="flex h-full flex-col space-y-6 p-8 bg-mint/5">
-      <div className="flex items-center justify-between border-b-2 border-terracotta/20 pb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-terracotta/20 rounded-xl flex items-center justify-center">
-            <svg
-              className="w-5 h-5 text-black"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-          </div>
+      <div className="flex items-center justify-between border-b-2 border-terracotta/20 pb-2">
           <h1 className="text-2xl font-bold font-playfair text-black">
             Calendar
           </h1>
-        </div>
         <DatePicker
           selectedDate={selectedDate}
           onDateChange={setSelectedDate}

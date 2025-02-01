@@ -7,6 +7,7 @@ import Clients from "../dashboards/clients";
 import Therapists from "../dashboards/therapists";
 import Overall from "../dashboards/overall";
 import Event from "../event";
+import Profile from "../profile";
 
 const AdminRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AdminRoutes = () => {
             <Route path="dashboard/therapist" element={<Therapists />} />
             <Route path="dashboard/overall" element={<Overall />} />
             <Route path="event" element={<Event />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </main>

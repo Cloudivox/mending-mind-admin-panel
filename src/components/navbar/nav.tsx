@@ -40,16 +40,18 @@ const Nav = () => {
 
         <div className="space-y-1.5">
           <Link
-            to="#"
+            to="/dashboard/overall"
             onClick={() => {
               setIsDropdownOpen(!isDropdownOpen);
-              setIsActive("Dashboard");
+              setIsActive("OverAll");
             }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Dashboard"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors 
+            ${
+              isActive === "OverAll" && !isDropdownOpen
                 ? "text-black bg-mint/20"
                 : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
+            }
+            `}
           >
             <NavDashboardIcon />
             <span>Dashboard</span>
@@ -201,7 +203,7 @@ const Nav = () => {
             <span>Team Management</span>
           </Link>
           <Link
-            to="#"
+            to="/profile"
             onClick={() => setIsActive("Profile")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Profile"

@@ -1,11 +1,14 @@
+import Datepicker from "../../../components/datepicker";
+
 const Therapist = () => {
   return (
-    <div id="webcrumbs" className="w-full min-h-screen bg-[#F7F9FC]">
-      <div className="w-full p-8 bg-white shadow-md rounded-2xl min-h-screen">
+    <div className="w-full min-h-screen bg-[#F7F9FC]">
+      <div className="w-full p-8 bg-white min-h-screen">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-3xl font-playfair font-bold text-[#2C3E50]">
             Therapist Dashboard
           </h1>
+          <Datepicker />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 mb-10">
