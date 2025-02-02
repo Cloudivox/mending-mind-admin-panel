@@ -7,8 +7,8 @@ interface BlogCardProps {
 
   const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
     return (
-        <div className="bg-white rounded-lg p-6 transition-shadow hover:shadow-lg">
-          <div className="relative h-48 mb-4">
+        <div className="bg-white rounded-2xl p-6 transition-shadow hover:shadow-lg">
+          <div className="relative h-48 mb-4 overflow-hidden rounded-xl">
           <img
                     src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3"
                     alt={post.title}

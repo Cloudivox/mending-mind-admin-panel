@@ -201,7 +201,7 @@ const Nav = () => {
             <span>Event</span>
           </Link>
           <Link
-            to="#"
+            to="/team"
             onClick={() => setIsActive("Team")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Team"
