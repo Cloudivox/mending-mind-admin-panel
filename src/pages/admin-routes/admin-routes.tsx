@@ -10,6 +10,7 @@ import Event from "../event";
 import Profile from "../profile";
 import Availability from "../availability";
 import Blog from "../blog";
+import Session from "../session";
 
 const AdminRoutes = () => {
   return (
@@ -28,6 +29,7 @@ const AdminRoutes = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="availability" element={<Availability />} />
             <Route path="blog" element={<Blog />} />
+            <Route path="session" element={<Session />} />
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </main>

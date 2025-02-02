@@ -129,7 +129,7 @@ const Nav = () => {
             <span>Calendar</span>
           </Link>
           <Link
-            to="#"
+            to="/session"
             onClick={() => setIsActive("Session")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Session"
