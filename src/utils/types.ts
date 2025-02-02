@@ -36,3 +36,24 @@ export interface TimeSlot {
     }
   }
   
+  export interface Sessions {
+    patientName: string
+    patientEmail: string
+    patientPhone: string
+    therapistName: string
+    sessionDate: string
+    duration: string
+  }
+  
+  export interface CreateSessionForm {
+    therapist: string;
+    patient: string;
+    meetingName: string;
+    duration: string;
+    date: string;
+    time: string;
+    autoConfirm: boolean;
+    paymentType: 'free' | 'paid' | 'no-booking-fee';
+    location: string;
+  }
+  
