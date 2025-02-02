@@ -8,6 +8,8 @@ import Therapists from "../dashboards/therapists";
 import Overall from "../dashboards/overall";
 import Event from "../event";
 import Profile from "../profile";
+import Availability from "../availability";
+import Blog from "../blog";
 
 const AdminRoutes = () => {
   return (
@@ -24,6 +26,8 @@ const AdminRoutes = () => {
             <Route path="dashboard/overall" element={<Overall />} />
             <Route path="event" element={<Event />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="availability" element={<Availability />} />
+            <Route path="blog" element={<Blog />} />
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </main>

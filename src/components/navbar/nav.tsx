@@ -153,7 +153,7 @@ const Nav = () => {
             <span>Package</span>
           </Link>
           <Link
-            to="#"
+            to="/availability"
             onClick={() => setIsActive("Availability")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Availability"
@@ -177,7 +177,7 @@ const Nav = () => {
             <span>Payment</span>
           </Link>
           <Link
-            to="#"
+            to="/blog"
             onClick={() => setIsActive("blog")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "blog"
