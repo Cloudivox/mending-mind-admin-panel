@@ -11,6 +11,7 @@ import Profile from "../profile";
 import Availability from "../availability";
 import Blog from "../blog";
 import Session from "../session";
+import TeamManagement from "../team-management/team-management";
 
 const AdminRoutes = () => {
   return (
@@ -30,6 +31,7 @@ const AdminRoutes = () => {
             <Route path="availability" element={<Availability />} />
             <Route path="blog" element={<Blog />} />
             <Route path="session" element={<Session />} />
+            <Route path="team" element={<TeamManagement />} />
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </main>
