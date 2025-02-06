@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import BlogCard from "./blog-card";
 import { BlogPost } from "../../utils/types";
 import PendingRequestsTable from "./pending-request-table";
@@ -44,9 +43,9 @@ const MOCK_REVIEW_REQUESTS = [
 ];
 
 const Blog = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 6;
-  const totalPages = Math.ceil(MOCK_POSTS.length / postsPerPage);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const postsPerPage = 6;
+  // const totalPages = Math.ceil(MOCK_POSTS.length / postsPerPage);
 
   const handleApprove = (id: string) => {
     console.log("Approved:", id);

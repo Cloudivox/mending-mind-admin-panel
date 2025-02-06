@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -96,14 +96,14 @@ const Login = () => {
               htmlFor="email"
               className="block font-montserrat text-sm font-medium text-black"
             >
-              Email or Username
+              Email
             </label>
             <input
               id="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email or username"
+              placeholder="Enter your email"
               className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.email ? "border-red-500" : "border-gray-300"
               } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
@@ -181,19 +181,10 @@ const Login = () => {
             )}
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-terracotta focus:ring-terracotta"
-              />
-              <span className="font-montserrat text-sm text-gray-600">
-                Remember me
-              </span>
-            </label>
+          <div className="flex justify-end">
             <Link
               to="/forgot-password"
-              className="font-montserrat text-sm text-terracotta hover:text-coral transition-colors"
+              className="font-montserrat text-sm text-terracotta hover:text-coral transition-colors float-end"
             >
               Forgot password?
             </Link>
@@ -211,4 +202,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;

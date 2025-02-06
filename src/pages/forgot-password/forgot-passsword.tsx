@@ -270,7 +270,7 @@ const ForgotPassword = () => {
         <p className="text-center font-montserrat text-sm text-gray-500">
           Remember your password?{" "}
           <Link
-            to="/login"
+            to="/signin"
             className="text-terracotta hover:text-coral transition-colors font-medium"
           >
             Sign in
