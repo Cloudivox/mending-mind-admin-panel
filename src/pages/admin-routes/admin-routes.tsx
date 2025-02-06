@@ -12,7 +12,6 @@ import Availability from "../availability";
 import Blog from "../blog";
 import Session from "../session";
 import TeamManagement from "../team-management/team-management";
-import Login from "../login";
 
 const AdminRoutes = () => {
   return (
