@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Sessions } from "../../utils/types";
 import CreateSessionModal from "./create-session-modal";
 
@@ -24,6 +24,7 @@ const initialSessions: Sessions[] = [
 const Session = () => {
   const [sessions, setSessions] = useState<Sessions[]>(initialSessions);
   const [isModalOpen, setIsModalOpen] = useState(false);
+console.log(setSessions);
 
   return (
     <div className="p-6">

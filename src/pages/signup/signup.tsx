@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Login = () => {
+const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -12,6 +12,7 @@ const Login = () => {
     password: "",
     cpassword: "",
   });
+
 
   const validateEmail = (email: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -71,7 +72,7 @@ const Login = () => {
     } else if (id === "cpassword") {
       setErrors((prev) => ({
         ...prev,
-        password: validateCpassword(value),
+        cpassword: validateCpassword(value),
       }));
     }
   };
@@ -81,7 +82,7 @@ const Login = () => {
 
     const emailError = validateEmail(formData.email);
     const passwordError = validatePassword(formData.password);
-    const cpasswordError = validatePassword(formData.cpassword);
+    const cpasswordError = validateCpassword(formData.cpassword);
 
     setErrors({
       email: emailError,
@@ -100,10 +101,10 @@ const Login = () => {
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg m-4">
         <div className="text-center space-y-2">
           <h1 className="font-playfair text-4xl font-bold text-black">
-            Welcome Back
+            Create an Account
           </h1>
           <p className="font-montserrat text-sm text-gray-500">
-            Please enter your credentials to continue
+            Join us today by filling in your details below
           </p>
         </div>
 
@@ -113,14 +114,14 @@ const Login = () => {
               htmlFor="email"
               className="block font-montserrat text-sm font-medium text-black"
             >
-              Email or Username
+              Email
             </label>
             <input
               id="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email or username"
+              placeholder="Enter your email"
               className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.email ? "border-red-500" : "border-gray-300"
               } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
@@ -206,7 +207,7 @@ const Login = () => {
             </label>
             <input
               id="cpassword"
-              type="cpassword"
+              type="password"
               value={formData.cpassword}
               onChange={handleChange}
               placeholder="Re-type your password"
@@ -223,7 +224,7 @@ const Login = () => {
             type="submit"
             className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
           >
-            Sign In
+            Sign Up
           </button>
         </form>
       </div>
@@ -231,4 +232,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
