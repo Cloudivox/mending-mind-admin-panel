@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +12,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const validateEmail = (email: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,7 +64,34 @@ const SignIn = () => {
     }
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSignin = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/auth-service/v1/auth/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      if (data.Status === "success") {
+        localStorage.setItem("token", data.Data.token);
+        toast.success("Signin successful!");
+        navigate("/");
+        return data.Data;
+      } else {
+        toast.error(data.message || "Signin failed");
+      }
+    } catch (error) {
+      console.error("Error during signin:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const emailError = validateEmail(formData.email);
@@ -73,7 +103,8 @@ const SignIn = () => {
     });
 
     if (!emailError && !passwordError) {
-      console.log("Form submitted:", formData);
+      const data = await handleSignin();
+      console.log(data, "data");
       setFormData({ email: "", password: "" });
     }
   };
