@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,7 +14,7 @@ const SignUp = () => {
     password: "",
     cpassword: "",
   });
-
+  const navigate = useNavigate();
 
   const validateEmail = (email: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,7 +79,35 @@ const SignUp = () => {
     }
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSignup = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/auth-service/v1/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      if (data.Status === "success") {
+        localStorage.setItem("token", data.Data.token);
+        toast.success("User register successful!");
+        navigate("/");
+        return data.Data;
+      } else {
+        toast.error(data.message || "Signup failed");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const emailError = validateEmail(formData.email);
@@ -91,7 +121,9 @@ const SignUp = () => {
     });
 
     if (!emailError && !passwordError) {
-      console.log("Form submitted:", formData);
+      const data = await handleSignup();
+      console.log(data, "data");
+
       setFormData({ email: "", password: "", cpassword: "" });
     }
   };
