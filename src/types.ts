@@ -19,3 +19,17 @@ export interface IAxiosResponse<T> {
     Status: string;
   };
 }
+
+export interface IAuthResponse {
+  id: string;
+  email: string;
+  phone: string;
+  type: string;
+  token: string;
+}
+
+export interface IAuthData {
+  email?: string;
+  phone?: string;
+  password?: string;
+}

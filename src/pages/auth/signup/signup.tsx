@@ -1,19 +1,26 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSignup } from "../services";
+import Cookies from "js-cookie";
+import { USER_ACCESS_KEY } from "../../../utils/enum";
+import { useUser } from "../../../context/user-context";
 
-const SignIn = () => {
+const SignUp = () => {
+  const { setUser } = useUser();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    cpassword: "",
   });
   const [errors, setErrors] = useState({
     email: "",
     password: "",
+    cpassword: "",
   });
-
   const navigate = useNavigate();
+  const signup = useSignup();
 
   const validateEmail = (email: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,6 +50,15 @@ const SignIn = () => {
     return "";
   };
 
+  const validateCpassword = (cpassword: any) => {
+    if (!cpassword) {
+      return "Confirm Password is required";
+    } else if (cpassword !== formData.password) {
+      return "Passwords do not match";
+    }
+    return "";
+  };
+
   const handleChange = (e: any) => {
     const { id, value } = e.target;
     setFormData((prev) => ({
@@ -61,63 +77,68 @@ const SignIn = () => {
         ...prev,
         password: validatePassword(value),
       }));
+    } else if (id === "cpassword") {
+      setErrors((prev) => ({
+        ...prev,
+        cpassword: validateCpassword(value),
+      }));
     }
   };
 
-  const handleSignin = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/auth-service/v1/auth/signin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-      if (data.Status === "success") {
-        localStorage.setItem("token", data.Data.token);
-        toast.success("Signin successful!");
-        navigate("/");
-        return data.Data;
-      } else {
-        toast.error(data.message || "Signin failed");
-      }
-    } catch (error) {
-      console.error("Error during signin:", error);
-      toast.error("Something went wrong. Please try again.");
-    }
-  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const emailError = validateEmail(formData.email);
     const passwordError = validatePassword(formData.password);
+    const cpasswordError = validateCpassword(formData.cpassword);
 
     setErrors({
       email: emailError,
       password: passwordError,
+      cpassword: cpasswordError,
     });
 
     if (!emailError && !passwordError) {
-      const data = await handleSignin();
-      console.log(data, "data");
-      setFormData({ email: "", password: "" });
+      signup.mutate(formData);
     }
   };
+
+  useEffect(() => {
+    if (signup.isSuccess && signup.data) {
+      toast.success("User register successful!");
+      setFormData({ email: "", password: "", cpassword: "" });
+      Cookies.set(USER_ACCESS_KEY.TOKEN, signup.data?.token, {
+        secure: true,
+        sameSite: "lax",
+      });
+
+      setUser({
+        id: signup.data?.id,
+        email: signup.data?.email,
+        type: signup.data?.type,
+      });
+      navigate("/");
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signup.isSuccess, signup.data]);
+
+  useEffect(() => {
+    if (signup.isError) {
+      toast.error("Signup failed");
+      console.log(signup.error);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signup.isError]);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-mint via-white to-purple/20">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg m-4">
         <div className="text-center space-y-2">
           <h1 className="font-playfair text-4xl font-bold text-black">
-            Welcome Back
+            Create an Account
           </h1>
           <p className="font-montserrat text-sm text-gray-500">
-            Please enter your credentials to continue
+            Join us today by filling in your details below
           </p>
         </div>
 
@@ -211,21 +232,33 @@ const SignIn = () => {
               <p className="text-red-500 text-xs mt-1">{errors.password}</p>
             )}
           </div>
-
-          <div className="flex justify-end">
-            <Link
-              to="/forgot-password"
-              className="font-montserrat text-sm text-terracotta hover:text-coral transition-colors float-end"
+          <div className="space-y-2">
+            <label
+              htmlFor="cpassword"
+              className="block font-montserrat text-sm font-medium text-black"
             >
-              Forgot password?
-            </Link>
+              Confirm Password
+            </label>
+            <input
+              id="cpassword"
+              type="password"
+              value={formData.cpassword}
+              onChange={handleChange}
+              placeholder="Re-type your password"
+              className={`w-full h-12 px-3 py-2 bg-white border ${
+                errors.cpassword ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
+            />
+            {errors.cpassword && (
+              <p className="text-red-500 text-xs mt-1">{errors.cpassword}</p>
+            )}
           </div>
 
           <button
             type="submit"
             className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
           >
-            Sign In
+            Sign Up
           </button>
         </form>
       </div>
@@ -233,4 +266,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
