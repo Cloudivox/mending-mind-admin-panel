@@ -21,11 +21,13 @@ export interface IAxiosResponse<T> {
 }
 
 export interface IAuthResponse {
-  id: string;
-  email: string;
-  phone: string;
-  type: string;
-  token: string;
+  user: {
+    id: string;
+    email: string;
+    phone: string;
+    role: string;
+    token: string;
+  };
 }
 
 export interface IAuthData {

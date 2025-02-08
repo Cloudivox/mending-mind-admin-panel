@@ -25,9 +25,9 @@ const SignIn = () => {
   const validateEmail = (email: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
-      return "Email is required";
+      return "Email or phone no. is required";
     } else if (!emailRegex.test(email)) {
-      return "Please enter a valid email address";
+      return "Please enter a valid email address or phone no.";
     }
     return "";
   };
@@ -92,15 +92,15 @@ const SignIn = () => {
       toast.success("Signin successful!");
       console.log(signin.data);
       setFormData({ email: "", password: "" });
-      Cookies.set(USER_ACCESS_KEY.TOKEN, signin.data?.token, {
+      Cookies.set(USER_ACCESS_KEY.TOKEN, signin.data?.user?.token, {
         secure: true,
         sameSite: "lax",
       });
 
       setUser({
-        id: signin.data?.id,
-        email: signin.data?.email,
-        type: signin.data?.type,
+        id: signin.data?.user?.id,
+        email: signin.data?.user?.email,
+        role: signin.data?.user?.role,
       });
       navigate("/");
     }
@@ -133,14 +133,14 @@ const SignIn = () => {
               htmlFor="email"
               className="block font-montserrat text-sm font-medium text-black"
             >
-              Email
+              Email or Phone no.
             </label>
             <input
               id="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email"
+              placeholder="Enter your email or phone no."
               className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.email ? "border-red-500" : "border-gray-300"
               } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
