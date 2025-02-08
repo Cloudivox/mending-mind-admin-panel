@@ -1,5 +1,5 @@
 export const USER_ACCESS_KEY = {
-  TOKEN: "gameAccessToken",
+  TOKEN: "mendingMindAccessToken",
 };
 
 export const API_QUERY_KEY = {
