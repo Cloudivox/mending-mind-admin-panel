@@ -36,7 +36,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (Cookies.get(USER_ACCESS_KEY.TOKEN)) {
       if (getUserDetails.isSuccess && getUserDetails.data) {
-        setUser(getUserDetails.data?.user);
+        setUser(getUserDetails.data.user);
       }
     }
   }, [getUserDetails.isSuccess, getUserDetails.data]);
