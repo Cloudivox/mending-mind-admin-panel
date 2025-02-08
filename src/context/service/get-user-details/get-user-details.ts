@@ -1,11 +1,11 @@
 import { useQuery } from "react-query";
 
 import apiClient from "../../../apis/api-client";
-import { IAPIError, IAxiosResponse, IAuthData } from "../../../types";
+import { IAPIError, IAxiosResponse, IAuthResponse } from "../../../types";
 import { API_QUERY_KEY, APIS_ROUTES } from "../../../utils/enum";
 
 const getUserDetails = async () => {
-  const result = await apiClient.get<null, IAxiosResponse<IAuthData>>(
+  const result = await apiClient.get<null, IAxiosResponse<IAuthResponse>>(
     APIS_ROUTES.GET_USER_DETAILS
   );
 
@@ -13,7 +13,7 @@ const getUserDetails = async () => {
 };
 
 const useGetUserDetails = () =>
-  useQuery<IAuthData, IAPIError>(
+  useQuery<IAuthResponse, IAPIError>(
     [API_QUERY_KEY.GET_USER_DETAILS],
     getUserDetails,
     {
