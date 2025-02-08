@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { TimeSlot } from "../../utils/types";
+import {
+  useCreateAvailibility,
+  useDeleteAvailibility,
+  useGetAvailibility,
+} from "./services";
 
 const useAvailabilityController = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [slots, setSlots] = useState<TimeSlot[]>([]);
+
+  const getAvailibility = useGetAvailibility(
+    selectedDate.toISOString().split("T")[0]
+  );
+  const addAvailability = useCreateAvailibility();
+  const deleteAvailibility = useDeleteAvailibility();
 
   const formatDate = (date: Date) => {
     return date.toISOString().split("T")[0];
@@ -25,19 +36,39 @@ const useAvailabilityController = () => {
     setSelectedDate(date);
   };
 
-  const handleAddSlot = (startTime: string, endTime: string) => {
-    const newSlot: TimeSlot = {
-      id: Math.random().toString(36).substr(2, 9),
+  const handleAddSlot = (
+    startTime: string,
+    endTime: string,
+    type: "online" | "offline"
+  ) => {
+    const newSlot = {
       date: formatDate(selectedDate),
+      type,
       startTime,
       endTime,
     };
-    setSlots([...slots, newSlot]);
+
+    addAvailability.mutate(newSlot);
+    // setSlots([...slots, newSlot]);
   };
 
+  useEffect(() => {
+    if (addAvailability.isSuccess) {
+      getAvailibility.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addAvailability.isSuccess]);
+
   const handleDeleteSlot = (slotId: string) => {
-    setSlots(slots.filter((slot) => slot.id !== slotId));
+    deleteAvailibility.mutate(slotId);
   };
+
+  useEffect(() => {
+    if (deleteAvailibility.isSuccess) {
+      getAvailibility.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deleteAvailibility.isSuccess]);
 
   const isPastDate = (date: Date) => {
     const today = new Date();
@@ -47,6 +78,7 @@ const useAvailabilityController = () => {
   };
 
   const getDaySlots = (date: Date) => {
+    if (!slots) return [];
     return slots.filter((slot) => slot.date === formatDate(date));
   };
 
@@ -71,7 +103,8 @@ const useAvailabilityController = () => {
         date.getDate() === selectedDate.getDate() &&
         date.getMonth() === selectedDate.getMonth() &&
         date.getFullYear() === selectedDate.getFullYear();
-      const hasSlots = getDaySlots(date).length > 0;
+      const daySlots = getDaySlots(date);
+      const hasSlots = daySlots && daySlots.length > 0;
 
       days.push(
         <button
@@ -99,6 +132,12 @@ const useAvailabilityController = () => {
     return days;
   };
 
+  useEffect(() => {
+    if (getAvailibility.isSuccess && getAvailibility.data) {
+      setSlots(getAvailibility.data.availibility || []);
+    }
+  }, [getAvailibility.isSuccess, getAvailibility.data]);
+
   return {
     selectedDate,
     setSelectedDate,
@@ -114,6 +153,7 @@ const useAvailabilityController = () => {
     generateCalendarDays,
     formatDate,
     formatTimeRange,
+    isLoading: getAvailibility.isLoading,
   };
 };
 

@@ -1,9 +1,11 @@
 import type { AddSlotModalProps } from "../../../utils/types";
-import useAddSlotModalController from "./  add-slot-modal-controller";
+import useAddSlotModalController from "./add-slot-modal-controller";
+
 const AddSlotModal = ({
   isOpen,
   onClose,
   onSubmit,
+  selectedDate,
   isPastDate,
 }: AddSlotModalProps) => {
   const {
@@ -12,14 +14,37 @@ const AddSlotModal = ({
     startTime,
     endTime,
     setEndTime,
-  } = useAddSlotModalController(onSubmit, onClose);
+    setType,
+    type,
+    minStartTime,
+  } = useAddSlotModalController(onSubmit, onClose, selectedDate);
 
   if (!isOpen || isPastDate) return null;
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Add Availability Slot</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="type"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Type
+            </label>
+            <select
+              id="type"
+              name="type"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              required
+              value={type}
+              onChange={(e) => setType(e.target.value as "online" | "offline")}
+            >
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
           <div>
             <label
               htmlFor="startTime"
@@ -32,6 +57,8 @@ const AddSlotModal = ({
               id="startTime"
               value={startTime}
               onChange={(e) => handleStartTimeChange(e.target.value)}
+              min={minStartTime}
+              max="23:59"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
               required
             />
@@ -49,6 +76,7 @@ const AddSlotModal = ({
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
               min={startTime}
+              max="23:59"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
               required
             />

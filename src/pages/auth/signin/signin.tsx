@@ -90,7 +90,6 @@ const SignIn = () => {
   useEffect(() => {
     if (signin.isSuccess) {
       toast.success("Signin successful!");
-      console.log(signin.data);
       setFormData({ email: "", password: "" });
       Cookies.set(USER_ACCESS_KEY.TOKEN, signin.data?.user?.token, {
         secure: true,

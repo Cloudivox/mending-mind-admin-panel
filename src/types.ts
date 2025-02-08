@@ -37,11 +37,12 @@ export interface IAuthData {
 }
 
 export interface IAvailabilityResponse {
+  _id: string;
   userId: string;
   date: string;
   startTime: string;
   endTime: string;
-  type: string;
+  type: "online" | "offline";
   status: string;
   clientId: string;
 }
@@ -58,5 +59,10 @@ export interface IUsers {
   email: string;
   role: string;
   status: string;
+  _id: string;
+}
+export interface IAllTherapist {
+  email: string;
+  name: string;
   _id: string;
 }
