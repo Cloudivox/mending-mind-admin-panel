@@ -14,26 +14,43 @@ import NavTeamManageIcon from "../../assets/icons/nav-team-manage-icon";
 import NavProfileIcon from "../../assets/icons/nav-profile-icon";
 import ArrowUp from "../../assets/icons/arrow-up";
 import ArrowDown from "../../assets/icons/arrow-down";
+import WavyLines from "../../assets/icons/wavy-lines";
+import ArrowLeft from "../../assets/icons/arrow-left";
+import ArrowRight from "../../assets/icons/arrow-right";
+import { useUser } from "../../context/user-context";
 
 const Nav = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isActive, setIsActive] = useState("Home");
   const navigate = useNavigate();
-  return (
-    <aside className="w-64 h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/25 overflow-auto custom-scrollbar">
-      <div className="p-6 flex items-center">
-        <img
-          onClick={() => {
-            navigate("/");
-            setIsActive("Home");
-          }}
-          src={logo}
-          className="h-20 cursor-pointer"
-          alt="logo"
-          title="logo"
-        />
-      </div>
+  const { user } = useUser();
+  console.log(user, "user");
 
+  return (
+    <aside
+      className={`group h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/25 custom-scrollbar transition-all  ${
+        isCollapsed ? "w-[5.5rem]" : "w-64"
+      }`}
+    >
+      {isCollapsed ? (
+        <div className="flex justify-center items-center w-20 h-[8rem]">
+          <WavyLines />
+        </div>
+      ) : (
+        <div className="p-6 flex items-center">
+          <img
+            onClick={() => {
+              navigate("/");
+              setIsActive("Home");
+            }}
+            src={logo}
+            className="h-20 cursor-pointer"
+            alt="logo"
+            title="logo"
+          />
+        </div>
+      )}
       <nav className="px-4 font-montserrat">
         <Link
           to="/"
@@ -45,7 +62,7 @@ const Nav = () => {
           }`}
         >
           <NavHomeIcon />
-          <span className="font-medium">Home</span>
+          {!isCollapsed && <span className="font-medium">Home</span>}
         </Link>
 
         <div className="space-y-1.5">
@@ -64,11 +81,13 @@ const Nav = () => {
             `}
           >
             <NavDashboardIcon />
-            <span>Dashboard</span>
-            <span>{isDropdownOpen ? <ArrowUp /> : <ArrowDown />}</span>
+            {!isCollapsed && <span>Dashboard</span>}
+            {!isCollapsed && (
+              <span>{isDropdownOpen ? <ArrowUp /> : <ArrowDown />}</span>
+            )}
           </Link>
 
-          {isDropdownOpen && (
+          {isDropdownOpen && !isCollapsed && (
             <div className="pl-10 space-y-2 mt-2">
               <Link
                 to="/dashboard/overall"
@@ -126,7 +145,7 @@ const Nav = () => {
             }`}
           >
             <NavCalendarIcon />
-            <span>Calendar</span>
+            {!isCollapsed && <span>Calendar</span>}
           </Link>
           <Link
             to="/session"
@@ -138,7 +157,7 @@ const Nav = () => {
             }`}
           >
             <NavSessionIcon />
-            <span>Session</span>
+            {!isCollapsed && <span>Session</span>}
           </Link>
           <Link
             to="#"
@@ -150,7 +169,7 @@ const Nav = () => {
             }`}
           >
             <NavPackageIcon />
-            <span>Package</span>
+            {!isCollapsed && <span>Package</span>}
           </Link>
           <Link
             to="/availability"
@@ -162,7 +181,7 @@ const Nav = () => {
             }`}
           >
             <NavAvailabilityIcon />
-            <span>Availability</span>
+            {!isCollapsed && <span>Availability</span>}
           </Link>
           <Link
             to="#"
@@ -174,7 +193,7 @@ const Nav = () => {
             }`}
           >
             <NavPaymentIcon />
-            <span>Payment</span>
+            {!isCollapsed && <span>Payment</span>}
           </Link>
           <Link
             to="/blog"
@@ -186,7 +205,7 @@ const Nav = () => {
             }`}
           >
             <NavBlogIcon />
-            <span>Blog</span>
+            {!isCollapsed && <span>Blog</span>}
           </Link>
           <Link
             to="/event"
@@ -198,7 +217,7 @@ const Nav = () => {
             }`}
           >
             <NavEventIcon />
-            <span>Event</span>
+            {!isCollapsed && <span>Event</span>}
           </Link>
           <Link
             to="/team"
@@ -210,7 +229,7 @@ const Nav = () => {
             }`}
           >
             <NavTeamManageIcon />
-            <span>Team Management</span>
+            {!isCollapsed && <span>Team Management</span>}
           </Link>
           <Link
             to="/profile"
@@ -222,10 +241,20 @@ const Nav = () => {
             }`}
           >
             <NavProfileIcon />
-            <span>Profile</span>
+            {!isCollapsed && <span>Profile</span>}
           </Link>
         </div>
       </nav>
+      <button
+        className="absolute right-[-16px] transform -translate-y-1/2
+        w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 shadow-md 
+        opacity-0 group-hover:opacity-100 transition-all
+        bg-white/80 hover:w-12 hover:h-12 hover:border-gray-600
+        hover:clip-path-circle"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
+        {isCollapsed ? <ArrowRight /> : <ArrowLeft />}
+      </button>
     </aside>
   );
 };

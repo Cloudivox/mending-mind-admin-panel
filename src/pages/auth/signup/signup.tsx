@@ -107,15 +107,15 @@ const SignUp = () => {
     if (signup.isSuccess && signup.data) {
       toast.success("User register successful!");
       setFormData({ email: "", password: "", cpassword: "" });
-      Cookies.set(USER_ACCESS_KEY.TOKEN, signup.data?.token, {
+      Cookies.set(USER_ACCESS_KEY.TOKEN, signup.data?.user?.token, {
         secure: true,
         sameSite: "lax",
       });
 
       setUser({
-        id: signup.data?.id,
-        email: signup.data?.email,
-        type: signup.data?.type,
+        id: signup.data?.user?.id,
+        email: signup.data?.user?.email,
+        role: signup.data?.user?.role,
       });
       navigate("/");
     }
