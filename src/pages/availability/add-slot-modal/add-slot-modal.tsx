@@ -1,43 +1,30 @@
-import { useState } from "react"
-import type { AddSlotModalProps } from "../../../utils/types"
-const  AddSlotModal =({ isOpen, onClose, onSubmit, selectedDate, isPastDate }: AddSlotModalProps)=> {
-  const [startTime, setStartTime] = useState("")
-  const [endTime, setEndTime] = useState("")
+import type { AddSlotModalProps } from "../../../utils/types";
+import useAddSlotModalController from "./  add-slot-modal-controller";
+const AddSlotModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  isPastDate,
+}: AddSlotModalProps) => {
+  const {
+    handleStartTimeChange,
+    handleSubmit,
+    startTime,
+    endTime,
+    setEndTime,
+  } = useAddSlotModalController(onSubmit, onClose);
 
-  if (!isOpen || isPastDate) return null
-
-  const handleStartTimeChange = (time: string) => {
-    setStartTime(time)
-    // If start time is selected and end time isn't, set end time to 1 hour after start time
-    if (time && !endTime) {
-      const [hours, minutes] = time.split(":")
-      const date = new Date()
-      date.setHours(Number.parseInt(hours))
-      date.setMinutes(Number.parseInt(minutes))
-      date.setHours(date.getHours() + 1)
-      setEndTime(`${date.getHours().toString().padStart(2, "0")}:${minutes}`)
-    }
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (startTime >= endTime) {
-      alert("End time must be after start time")
-      return
-    }
-    onSubmit(startTime, endTime)
-    setStartTime("")
-    setEndTime("")
-    onClose()
-  }
-
+  if (!isOpen || isPastDate) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Add Availability Slot</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="startTime"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Start Time
             </label>
             <input
@@ -50,7 +37,10 @@ const  AddSlotModal =({ isOpen, onClose, onSubmit, selectedDate, isPastDate }: A
             />
           </div>
           <div>
-            <label htmlFor="endTime" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="endTime"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               End Time
             </label>
             <input
@@ -81,7 +71,7 @@ const  AddSlotModal =({ isOpen, onClose, onSubmit, selectedDate, isPastDate }: A
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default AddSlotModal;

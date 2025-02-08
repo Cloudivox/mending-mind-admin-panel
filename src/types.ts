@@ -35,3 +35,20 @@ export interface IAuthData {
   phone?: string;
   password?: string;
 }
+
+export interface IAvailabilityResponse {
+  userId: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: string;
+  status: string;
+  clientId: string;
+}
+
+export interface IAvailabilityData {
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: string;
+}
