@@ -1,19 +1,25 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSignin } from "../services";
+import Cookies from "js-cookie";
+import { USER_ACCESS_KEY } from "../../../utils/enum";
+import { useUser } from "../../../context/user-context";
 
-const SignUp = () => {
+const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { setUser } = useUser();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    cpassword: "",
   });
   const [errors, setErrors] = useState({
     email: "",
     password: "",
-    cpassword: "",
   });
+
+  const signin = useSignin();
   const navigate = useNavigate();
 
   const validateEmail = (email: any) => {
@@ -44,15 +50,6 @@ const SignUp = () => {
     return "";
   };
 
-  const validateCpassword = (cpassword: any) => {
-    if (!cpassword) {
-      return "Confirm Password is required";
-    } else if (cpassword !== formData.password) {
-      return "Passwords do not match";
-    }
-    return "";
-  };
-
   const handleChange = (e: any) => {
     const { id, value } = e.target;
     setFormData((prev) => ({
@@ -71,39 +68,6 @@ const SignUp = () => {
         ...prev,
         password: validatePassword(value),
       }));
-    } else if (id === "cpassword") {
-      setErrors((prev) => ({
-        ...prev,
-        cpassword: validateCpassword(value),
-      }));
-    }
-  };
-
-  const handleSignup = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/auth-service/v1/auth/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-      if (data.Status === "success") {
-        localStorage.setItem("token", data.Data.token);
-        toast.success("User register successful!");
-        navigate("/");
-        return data.Data;
-      } else {
-        toast.error(data.message || "Signup failed");
-      }
-    } catch (error) {
-      console.error("Error during signup:", error);
-      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -112,31 +76,54 @@ const SignUp = () => {
 
     const emailError = validateEmail(formData.email);
     const passwordError = validatePassword(formData.password);
-    const cpasswordError = validateCpassword(formData.cpassword);
 
     setErrors({
       email: emailError,
       password: passwordError,
-      cpassword: cpasswordError,
     });
 
     if (!emailError && !passwordError) {
-      const data = await handleSignup();
-      console.log(data, "data");
-
-      setFormData({ email: "", password: "", cpassword: "" });
+      signin.mutate(formData);
     }
   };
+
+  useEffect(() => {
+    if (signin.isSuccess) {
+      toast.success("Signin successful!");
+      console.log(signin.data);
+      setFormData({ email: "", password: "" });
+      Cookies.set(USER_ACCESS_KEY.TOKEN, signin.data?.token, {
+        secure: true,
+        sameSite: "lax",
+      });
+
+      setUser({
+        id: signin.data?.id,
+        email: signin.data?.email,
+        type: signin.data?.type,
+      });
+      navigate("/");
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signin.isSuccess]);
+
+  useEffect(() => {
+    if (signin.isError) {
+      toast.error("Something went wrong. Please try again.");
+      console.log(signin.error);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signin.isError]);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-mint via-white to-purple/20">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg m-4">
         <div className="text-center space-y-2">
           <h1 className="font-playfair text-4xl font-bold text-black">
-            Create an Account
+            Welcome Back
           </h1>
           <p className="font-montserrat text-sm text-gray-500">
-            Join us today by filling in your details below
+            Please enter your credentials to continue
           </p>
         </div>
 
@@ -230,33 +217,21 @@ const SignUp = () => {
               <p className="text-red-500 text-xs mt-1">{errors.password}</p>
             )}
           </div>
-          <div className="space-y-2">
-            <label
-              htmlFor="cpassword"
-              className="block font-montserrat text-sm font-medium text-black"
+
+          <div className="flex justify-end">
+            <Link
+              to="/forgot-password"
+              className="font-montserrat text-sm text-terracotta hover:text-coral transition-colors float-end"
             >
-              Confirm Password
-            </label>
-            <input
-              id="cpassword"
-              type="password"
-              value={formData.cpassword}
-              onChange={handleChange}
-              placeholder="Re-type your password"
-              className={`w-full h-12 px-3 py-2 bg-white border ${
-                errors.cpassword ? "border-red-500" : "border-gray-300"
-              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
-            />
-            {errors.cpassword && (
-              <p className="text-red-500 text-xs mt-1">{errors.cpassword}</p>
-            )}
+              Forgot password?
+            </Link>
           </div>
 
           <button
             type="submit"
             className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
           >
-            Sign Up
+            Sign In
           </button>
         </form>
       </div>
@@ -264,4 +239,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
