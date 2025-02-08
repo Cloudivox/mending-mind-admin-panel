@@ -28,9 +28,8 @@ const Nav = () => {
 
   return (
     <aside
-      className={`group h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/25 custom-scrollbar transition-all  ${
-        isCollapsed ? "w-[5.5rem]" : "w-64"
-      }`}
+      className={`group h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/25 transition-all
+    ${isCollapsed ? "w-[5.5rem]" : "w-64"} flex flex-col`}
     >
       {isCollapsed ? (
         <div className="flex justify-center items-center w-20 h-[8rem]">
@@ -50,7 +49,7 @@ const Nav = () => {
           />
         </div>
       )}
-      <nav className="px-4 font-montserrat">
+      <nav className="px-4 font-montserrat flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
         <Link
           to="/"
           onClick={() => setIsActive("Home")}
@@ -255,11 +254,10 @@ const Nav = () => {
         </div>
       </nav>
       <button
-        className="absolute right-[-16px] transform -translate-y-1/2
+        className="absolute right-[-16px] top-3/4 transform -translate-y-1/2
         w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 shadow-md 
-        opacity-0 group-hover:opacity-100 transition-all
-        bg-white/80 hover:w-12 hover:h-12 hover:border-gray-600
-        hover:clip-path-circle"
+        opacity-0 group-hover:opacity-100 transition-all bg-white/80
+        hover:w-12 hover:h-12 hover:border-gray-600"
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
         {isCollapsed ? <ArrowRight /> : <ArrowLeft />}
