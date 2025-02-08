@@ -25,7 +25,6 @@ const Nav = () => {
   const [isActive, setIsActive] = useState("Home");
   const navigate = useNavigate();
   const { user } = useUser();
-  console.log(user, "user");
 
   return (
     <aside
@@ -66,87 +65,93 @@ const Nav = () => {
         </Link>
 
         <div className="space-y-1.5">
-          <Link
-            to="/dashboard/overall"
-            onClick={() => {
-              setIsDropdownOpen(!isDropdownOpen);
-              setIsActive("OverAll");
-            }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors 
+          {user && user.role === "admin" && (
+            <>
+              <Link
+                to="/dashboard/overall"
+                onClick={() => {
+                  setIsDropdownOpen(!isDropdownOpen);
+                  setIsActive("OverAll");
+                }}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors 
             ${
               isActive === "OverAll" && !isDropdownOpen
                 ? "text-black bg-mint/20"
                 : "text-black/70 hover:text-black hover:bg-mint/10"
             }
             `}
-          >
-            <NavDashboardIcon />
-            {!isCollapsed && <span>Dashboard</span>}
-            {!isCollapsed && (
-              <span>{isDropdownOpen ? <ArrowUp /> : <ArrowDown />}</span>
-            )}
-          </Link>
+              >
+                <NavDashboardIcon />
+                {!isCollapsed && <span>Dashboard</span>}
+                {!isCollapsed && (
+                  <span>{isDropdownOpen ? <ArrowUp /> : <ArrowDown />}</span>
+                )}
+              </Link>
 
-          {isDropdownOpen && !isCollapsed && (
-            <div className="pl-10 space-y-2 mt-2">
-              <Link
-                to="/dashboard/overall"
-                onClick={() => setIsActive("OverAll")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "OverAll"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
-              >
-                Overall
-              </Link>
-              <Link
-                to="/dashboard/therapist"
-                onClick={() => setIsActive("Therapist")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "Therapist"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
-              >
-                Therapist
-              </Link>
-              <Link
-                to="/dashboard/client"
-                onClick={() => setIsActive("Client")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "Client"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
-              >
-                Client
-              </Link>
-              <Link
-                to="/dashboard/products"
-                onClick={() => setIsActive("Product")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "Product"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
-              >
-                Product
-              </Link>
-            </div>
+              {isDropdownOpen && !isCollapsed && (
+                <div className="pl-10 space-y-2 mt-2">
+                  <Link
+                    to="/dashboard/overall"
+                    onClick={() => setIsActive("OverAll")}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                      isActive === "OverAll"
+                        ? "text-black bg-mint/20"
+                        : "text-black/70 hover:text-black hover:bg-mint/10"
+                    }`}
+                  >
+                    Overall
+                  </Link>
+                  <Link
+                    to="/dashboard/therapist"
+                    onClick={() => setIsActive("Therapist")}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                      isActive === "Therapist"
+                        ? "text-black bg-mint/20"
+                        : "text-black/70 hover:text-black hover:bg-mint/10"
+                    }`}
+                  >
+                    Therapist
+                  </Link>
+                  <Link
+                    to="/dashboard/client"
+                    onClick={() => setIsActive("Client")}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                      isActive === "Client"
+                        ? "text-black bg-mint/20"
+                        : "text-black/70 hover:text-black hover:bg-mint/10"
+                    }`}
+                  >
+                    Client
+                  </Link>
+                  <Link
+                    to="/dashboard/products"
+                    onClick={() => setIsActive("Product")}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                      isActive === "Product"
+                        ? "text-black bg-mint/20"
+                        : "text-black/70 hover:text-black hover:bg-mint/10"
+                    }`}
+                  >
+                    Product
+                  </Link>
+                </div>
+              )}
+            </>
           )}
-          <Link
-            to="/calendar"
-            onClick={() => setIsActive("Calender")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Calender"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
-          >
-            <NavCalendarIcon />
-            {!isCollapsed && <span>Calendar</span>}
-          </Link>
+          {user && user.role === "admin" && (
+            <Link
+              to="/calendar"
+              onClick={() => setIsActive("Calender")}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "Calender"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <NavCalendarIcon />
+              {!isCollapsed && <span>Calendar</span>}
+            </Link>
+          )}
           <Link
             to="/session"
             onClick={() => setIsActive("Session")}
@@ -207,30 +212,34 @@ const Nav = () => {
             <NavBlogIcon />
             {!isCollapsed && <span>Blog</span>}
           </Link>
-          <Link
-            to="/event"
-            onClick={() => setIsActive("Event")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Event"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
-          >
-            <NavEventIcon />
-            {!isCollapsed && <span>Event</span>}
-          </Link>
-          <Link
-            to="/team"
-            onClick={() => setIsActive("Team")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Team"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
-          >
-            <NavTeamManageIcon />
-            {!isCollapsed && <span>Team Management</span>}
-          </Link>
+          {user && user.role === "admin" && (
+            <Link
+              to="/event"
+              onClick={() => setIsActive("Event")}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "Event"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <NavEventIcon />
+              {!isCollapsed && <span>Event</span>}
+            </Link>
+          )}
+          {user && user.role === "admin" && (
+            <Link
+              to="/team"
+              onClick={() => setIsActive("Team")}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "Team"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <NavTeamManageIcon />
+              {!isCollapsed && <span>Team Management</span>}
+            </Link>
+          )}
           <Link
             to="/profile"
             onClick={() => setIsActive("Profile")}

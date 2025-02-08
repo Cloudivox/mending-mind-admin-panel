@@ -52,3 +52,11 @@ export interface IAvailabilityData {
   endTime: string;
   type: string;
 }
+
+export interface IUsers {
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  _id: string;
+}

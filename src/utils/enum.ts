@@ -5,6 +5,7 @@ export const USER_ACCESS_KEY = {
 export const API_QUERY_KEY = {
   GET_USER_DETAILS: "get-user-details",
   GET_AVAILABILITY: "get-availability",
+  GET_ALL_USERS: "get-all-users",
 };
 
 export const API_MUTATION_KEY = {
@@ -13,6 +14,9 @@ export const API_MUTATION_KEY = {
   CREATE_AVAILABILITY: "create-availability",
   UPDATE_AVAILABILITY: "update-availability",
   DELETE_AVAILABILITY: "delete-availability",
+  ADD_USER: "create",
+  UPDATE_USER: "update-user",
+  DELETE_USER: "delete-user",
 };
 
 export const APIS_ROUTES = {
@@ -26,4 +30,8 @@ export const APIS_ROUTES = {
     "/availability-service/v1/availability/update-availability",
   DELETE_AVAILABILITY:
     "/availability-service/v1/availability/delete-availability",
+  GET_ALL_USERS: "/auth-service/v1/auth/get-all-users",
+  ADD_USER: "/auth-service/v1/auth/create",
+  UPDATE_USER: "/auth-service/v1/auth/update-user",
+  DELETE_USER: "/auth-service/v1/auth/delete-user",
 };
