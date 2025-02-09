@@ -5,6 +5,7 @@ import {
   useDeleteAvailibility,
   useGetAvailibility,
 } from "./services";
+import { formatDate } from "../../utils/enum";
 
 const useAvailabilityController = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -12,14 +13,10 @@ const useAvailabilityController = () => {
   const [slots, setSlots] = useState<TimeSlot[]>([]);
 
   const getAvailibility = useGetAvailibility(
-    selectedDate.toISOString().split("T")[0]
+    formatDate(selectedDate).toString()
   );
   const addAvailability = useCreateAvailibility();
   const deleteAvailibility = useDeleteAvailibility();
-
-  const formatDate = (date: Date) => {
-    return date.toISOString().split("T")[0];
-  };
 
   const formatTimeRange = (startTime: string, endTime: string) => {
     const formatTime = (time: string) => {
