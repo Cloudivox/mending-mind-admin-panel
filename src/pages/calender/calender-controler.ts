@@ -43,7 +43,7 @@ const useCalenderController = () => {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [users, setUsers] = useState<UserWithAvailability[]>([]);
 
-  const timeSlots = Array.from({ length: 23 }, (_, i) => {
+  const timeSlots = Array.from({ length: 24 }, (_, i) => {
     const hour = i + 0; // Start from 8 AM
     return `${hour.toString().padStart(2, "0")}:00`;
   });
