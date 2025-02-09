@@ -8,6 +8,7 @@ export interface IAddUser {
   email: string;
   role: string;
   name: string;
+  phone?: string;
 }
 
 const addUser = async (user: IAddUser) => {
