@@ -1,22 +1,34 @@
 import { useQuery } from "react-query";
-
 import apiClient from "../../../../apis/api-client";
 import { IAPIError, IAxiosResponse, IUsers } from "../../../../types";
 import { API_QUERY_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
-const getUsers = async () => {
-  const result = await apiClient.get<null, IAxiosResponse<{ users: IUsers[] }>>(
-    APIS_ROUTES.GET_ALL_USERS
+interface PaginationData {
+  totalUsers: number;
+  totalPages: number;
+  currentPage: number;
+  limit: number;
+}
+
+interface UsersResponse {
+  users: IUsers[];
+  pagination: PaginationData;
+}
+
+const getUsers = async (page: number, limit: number, search: string) => {
+  const result = await apiClient.get<null, IAxiosResponse<UsersResponse>>(
+    `${APIS_ROUTES.GET_ALL_USERS}?page=${page}&limit=${limit}&search=${search}`
   );
   return result.data.Data;
 };
 
-const useGetAllUsers = () =>
-  useQuery<{ users: IUsers[] }, IAPIError>(
-    [API_QUERY_KEY.GET_ALL_USERS],
-    () => getUsers(),
+const useGetAllUsers = (page: number, limit: number, search: string) =>
+  useQuery<UsersResponse, IAPIError>(
+    [API_QUERY_KEY.GET_ALL_USERS, page, limit, search],
+    () => getUsers(page, limit, search),
     {
       cacheTime: 0,
+      keepPreviousData: true,
     }
   );
 

@@ -8,6 +8,7 @@ export interface IUpdateUser {
   email: string;
   role: string;
   name: string;
+  phone: string;
   _id: string;
 }
 
