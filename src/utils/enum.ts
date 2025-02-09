@@ -7,6 +7,7 @@ export const API_QUERY_KEY = {
   GET_AVAILABILITY: "get-availability",
   GET_ALL_USERS: "get-all-users",
   GET_ALL_THERAPIST: "get-all-therapist",
+  SEARCH_USER: "search-user",
 };
 
 export const API_MUTATION_KEY = {
@@ -36,4 +37,5 @@ export const APIS_ROUTES = {
   ADD_USER: "/auth-service/v1/auth/create",
   UPDATE_USER: "/auth-service/v1/auth/update-user",
   DELETE_USER: "/auth-service/v1/auth/delete-user",
+  SEARCH_USER: "/auth-service/v1/auth/search-user",
 };
