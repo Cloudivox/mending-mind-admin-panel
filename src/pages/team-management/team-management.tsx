@@ -195,7 +195,6 @@ const TeamManagement = () => {
               <tbody>
                 {userData?.users
                   .sort((a: any, b: any) => {
-                    {
                       const roleOrder: Record<string, number> = {
                         admin: 1,
                         therapist: 2,
@@ -204,7 +203,6 @@ const TeamManagement = () => {
                       return (
                         (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3)
                       );
-                    }
                   })
                   .map((user: any) => (
                     <tr
