@@ -1,6 +1,7 @@
 import Loader from "../../components/loader";
 import AddSlotModal from "./add-slot-modal";
 import useAvailabilityController from "./availability-controller";
+import RescheduleModal from "./reschedule-modal";
 
 export default function AvailabilityPage() {
   const {
@@ -15,6 +16,12 @@ export default function AvailabilityPage() {
     generateCalendarDays,
     formatTimeRange,
     isLoading,
+    editSlot,
+    onEditClick,
+    setEditSlot,
+    isRescheduleModalVisible,
+    onRescheduleClick,
+    setIsRescheduleModalVisible,
   } = useAvailabilityController();
 
   return (
@@ -116,32 +123,73 @@ export default function AvailabilityPage() {
                         key={slot._id}
                         className="p-4 bg-gray-50 hover:bg-gray-100 rounded-lg flex items-center justify-between transition-colors"
                       >
-                        <span className="text-gray-900 font-medium">
-                          {formatTimeRange(slot.startTime, slot.endTime)}
-                        </span>
+                        <div className="flex flex-col">
+                          <span className="text-gray-900 font-medium">
+                            {formatTimeRange(slot.startTime, slot.endTime)}
+                          </span>
+                          {/* <span className="text-gray-600">{slot.type}</span> */}
+                        </div>
                         <span className="text-gray-600">{slot.type}</span>
+                        {slot.clientId && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                            Booked
+                          </span>
+                        )}
                         {!isPastDate(selectedDate) && (
-                          <button
-                            onClick={() => handleDeleteSlot(slot._id)}
-                            className="text-red-500 hover:text-red-600 transition-colors"
-                            aria-label="Delete slot"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M3 6h18"></path>
-                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                            </svg>
-                          </button>
+                          <div className="flex items-center gap-2">
+                            {slot.clientId ? (
+                              <button
+                                // size="sm"
+                                onClick={() => {
+                                  onRescheduleClick(slot);
+                                }}
+                                className="text-orange-500 hover:text-orange-600 border-orange-200 hover:bg-orange-50"
+                              >
+                                Reschedule
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => onEditClick(slot)}
+                                className="text-gray-500 hover:text-gray-600"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                </svg>
+                              </button>
+                            )}
+                            {!slot.clientId && (
+                              <button
+                                onClick={() => handleDeleteSlot(slot._id)}
+                                className="text-red-500 hover:text-red-600"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M3 6h18"></path>
+                                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                </svg>
+                              </button>
+                            )}
+                          </div>
                         )}
                       </div>
                     ))
@@ -153,13 +201,28 @@ export default function AvailabilityPage() {
         </div>
       </div>
 
-      <AddSlotModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddSlot}
-        selectedDate={selectedDate}
-        isPastDate={isPastDate(selectedDate)}
-      />
+      {isModalOpen && (
+        <AddSlotModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditSlot(undefined);
+          }}
+          onSubmit={handleAddSlot}
+          selectedDate={selectedDate}
+          isPastDate={isPastDate(selectedDate)}
+          slot={editSlot}
+        />
+      )}
+
+      {isRescheduleModalVisible && editSlot && (
+        <RescheduleModal
+          isOpen={isRescheduleModalVisible}
+          slot={editSlot}
+          onClose={() => setIsRescheduleModalVisible(false)}
+          onSubmit={handleAddSlot}
+        />
+      )}
     </div>
   );
 }
