@@ -102,7 +102,7 @@ export default function AvailabilityPage() {
               </div>
               {isLoading ? (
                 <div className="flex items-center justify-center">
-                  <Loader />
+                  <Loader isFullScreen={false} />
                 </div>
               ) : (
                 <div className="space-y-3">

@@ -18,6 +18,7 @@ import WavyLines from "../../assets/icons/wavy-lines";
 import ArrowLeft from "../../assets/icons/arrow-left";
 import ArrowRight from "../../assets/icons/arrow-right";
 import { useUser } from "../../context/user-context";
+import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-icon";
 
 const Nav = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -98,7 +99,7 @@ const Nav = () => {
                         : "text-black/70 hover:text-black hover:bg-mint/10"
                     }`}
                   >
-                    Overall
+                    <span>Overall</span>
                   </Link>
                   <Link
                     to="/dashboard/therapist"
@@ -175,18 +176,20 @@ const Nav = () => {
             <NavPackageIcon />
             {!isCollapsed && <span>Package</span>}
           </Link>
-          <Link
-            to="/availability"
-            onClick={() => setIsActive("Availability")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Availability"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
-          >
-            <NavAvailabilityIcon />
-            {!isCollapsed && <span>Availability</span>}
-          </Link>
+          {user && user.role !== "admin" && (
+            <Link
+              to="/availability"
+              onClick={() => setIsActive("Availability")}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "Availability"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <NavAvailabilityIcon />
+              {!isCollapsed && <span>Availability</span>}
+            </Link>
+          )}
           <Link
             to="#"
             onClick={() => setIsActive("Payment")}
@@ -251,6 +254,20 @@ const Nav = () => {
             <NavProfileIcon />
             {!isCollapsed && <span>Profile</span>}
           </Link>
+          {user && user.role !== "therapist" && (
+            <Link
+              to="/f&c"
+              onClick={() => setIsActive("f&c")}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "f&c"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <FeedbackCompainsIcon />
+              {!isCollapsed && <span>Feedback & Complains</span>}
+            </Link>
+          )}
         </div>
       </nav>
       <button

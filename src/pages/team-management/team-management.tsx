@@ -1,143 +1,24 @@
-import { useState } from "react";
-import { debounce } from "lodash";
-import useGetAllUsers from "./services/get-all-users/get-all-users";
-import { IUsers } from "../../types";
 import Loader from "../../components/loader";
-import useAddUser from "./services/add-user/add-user";
-import { toast } from "react-toastify";
-import useUpdateUser from "./services/update-user/update-user";
-import useDeleteUser from "./services/delete-user/delete-user";
 import PlusIcon from "../../assets/icons/plus-icon";
 import CrossIcon from "../../assets/icons/cross-icon";
+import useTeamManagementController from "./team-management-controller";
 
 const TeamManagement = () => {
-  const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    _id: "",
-    name: "",
-    email: "",
-    role: "",
-    phone: "",
-  });
-  const [isEditing, setIsEditing] = useState(false);
-
-  // Get users with pagination and search
   const {
-    data: userData,
     isLoading,
-    refetch,
-  } = useGetAllUsers(page, limit, searchTerm);
-  const adduser = useAddUser();
-  const updateUser = useUpdateUser();
-  const deleteUser = useDeleteUser();
-
-  // Debounced search handler using lodash
-  const handleSearch = debounce((value: string) => {
-    setSearchTerm(value);
-    setPage(1); // Reset to first page on new search
-  }, 300);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      if (isEditing) {
-        await updateUser.mutateAsync(formData);
-        toast.success("User updated successfully");
-      } else {
-        await adduser.mutateAsync({
-          name: formData.name,
-          email: formData.email,
-          role: formData.role as "admin" | "therapist",
-          phone: formData.phone,
-        });
-        toast.success("User added successfully");
-      }
-      setIsModalOpen(false);
-      resetForm();
-      refetch(); // Refresh the user list
-    } catch (error) {
-      toast.error("Operation failed. Please try again.");
-    }
-  };
-
-  const handleEdit = (user: IUsers) => {
-    setFormData({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      phone: "",
-    });
-    setIsEditing(true);
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteUser.mutateAsync(id);
-      toast.success("User deleted successfully");
-      refetch(); // Refresh the user list
-    } catch (error) {
-      toast.error("Failed to delete user");
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      _id: "",
-      name: "",
-      email: "",
-      role: "",
-      phone: "",
-    });
-    setIsEditing(false);
-  };
-
-  // Pagination Component
-  const Pagination = () => {
-    if (!userData?.pagination) return null;
-    const { totalPages, currentPage } = userData.pagination;
-
-    return (
-      <div className="flex justify-center items-center gap-4 mt-6">
-        <button
-          onClick={() => setPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 rounded-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-        >
-          Previous
-        </button>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">
-            Page {currentPage} of {totalPages}
-          </span>
-          <span className="text-sm text-gray-500">
-            ({userData.pagination.totalUsers} total users)
-          </span>
-        </div>
-        <button
-          onClick={() => setPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 rounded-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-        >
-          Next
-        </button>
-      </div>
-    );
-  };
+    handleSearch,
+    resetForm,
+    isModalOpen,
+    setIsModalOpen,
+    isEditing,
+    handleSubmit,
+    formData,
+    handleInputChange,
+    userData,
+    handleEdit,
+    handleDelete,
+    Pagination,
+  } = useTeamManagementController();
 
   return (
     <div>
@@ -312,72 +193,85 @@ const TeamManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {userData?.users.map((user) => (
-                  <tr
-                    key={user._id}
-                    className="border-b border-[#ECF0F1] hover:bg-black/5 transition-colors"
-                  >
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-10 h-10 rounded-full ${
-                            user.role === "admin"
-                              ? "bg-[#3498DB]/10 text-[#3498DB]"
-                              : "bg-[#9B59B6]/10 text-[#9B59B6]"
-                          } flex items-center justify-center font-medium`}
-                        >
-                          {user.name
-                            ? user.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")
-                                .toUpperCase()
-                            : "U"}
-                        </div>
-                        <div>
-                          <div className="font-montserrat text-[#2C3E50] font-medium">
-                            {user.name || "Unknown"}
+                {userData?.users
+                  .sort((a: any, b: any) => {
+                    {
+                      const roleOrder: Record<string, number> = {
+                        admin: 1,
+                        therapist: 2,
+                      };
+
+                      return (
+                        (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3)
+                      );
+                    }
+                  })
+                  .map((user: any) => (
+                    <tr
+                      key={user._id}
+                      className="border-b border-[#ECF0F1] hover:bg-black/5 transition-colors"
+                    >
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-10 h-10 rounded-full ${
+                              user.role === "admin"
+                                ? "bg-[#3498DB]/10 text-[#3498DB]"
+                                : "bg-[#9B59B6]/10 text-[#9B59B6]"
+                            } flex items-center justify-center font-medium`}
+                          >
+                            {user.name
+                              ? user.name
+                                  .split(" ")
+                                  .map((n: any) => n[0])
+                                  .join("")
+                                  .toUpperCase()
+                              : "U"}
                           </div>
-                          <div className="font-montserrat text-[#7F8C8D] text-sm">
-                            {user.email}
+                          <div>
+                            <div className="font-montserrat text-[#2C3E50] font-medium">
+                              {user.name || "Unknown"}
+                            </div>
+                            <div className="font-montserrat text-[#7F8C8D] text-sm">
+                              {user.email}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 font-montserrat text-[#34495E] capitalize">
-                      {user.role}
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <span
-                        className={`${
-                          user.status === "active"
-                            ? "bg-[#2ECC71]/10 text-[#27AE60]"
-                            : user.status === "pending"
-                            ? "bg-[#F1C40F]/10 text-[#D35400]"
-                            : "bg-[#E74C3C]/10 text-[#C0392B]"
-                        } px-3 py-1 rounded-full text-xs font-medium font-montserrat`}
-                      >
-                        {user.status}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <div className="flex justify-center gap-2">
-                        <button
-                          onClick={() => handleEdit(user)}
-                          className="text-[#3498DB] hover:text-[#2980B9] transition-colors font-montserrat text-sm font-medium"
+                      </td>
+                      <td className="py-4 px-4 font-montserrat text-[#34495E] capitalize">
+                        {user.role}
+                      </td>
+                      <td className="py-4 px-4 text-center">
+                        <span
+                          className={`${
+                            user.status === "active"
+                              ? "bg-[#2ECC71]/10 text-[#27AE60]"
+                              : user.status === "pending"
+                              ? "bg-[#F1C40F]/10 text-[#D35400]"
+                              : "bg-[#E74C3C]/10 text-[#C0392B]"
+                          } px-3 py-1 rounded-full text-xs font-medium font-montserrat`}
                         >
-                          Update
-                        </button>
-                        <button
-                          onClick={() => handleDelete(user._id)}
-                          className="text-[#E74C3C] hover:text-[#C0392B] transition-colors font-montserrat text-sm font-medium"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                          {user.status}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 text-center">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            onClick={() => handleEdit(user)}
+                            className="text-[#3498DB] hover:text-[#2980B9] transition-colors font-montserrat text-sm font-medium"
+                          >
+                            Update
+                          </button>
+                          <button
+                            onClick={() => handleDelete(user._id)}
+                            className="text-[#E74C3C] hover:text-[#C0392B] transition-colors font-montserrat text-sm font-medium"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
