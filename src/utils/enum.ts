@@ -19,6 +19,7 @@ export const API_MUTATION_KEY = {
   ADD_USER: "create",
   UPDATE_USER: "update-user",
   DELETE_USER: "delete-user",
+  RESCHEDULE_REQUEST: "reschedule-request",
 };
 
 export const APIS_ROUTES = {
@@ -38,6 +39,7 @@ export const APIS_ROUTES = {
   UPDATE_USER: "/auth-service/v1/auth/update-user",
   DELETE_USER: "/auth-service/v1/auth/delete-user",
   SEARCH_USER: "/auth-service/v1/auth/search-user",
+  RESCHEDULE_REQUEST: "/reschedule-session-service/v1/reschedule/reschedule-request",
 };
 
 export const formatDate = (date: Date): string => {

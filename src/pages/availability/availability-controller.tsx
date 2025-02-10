@@ -9,6 +9,9 @@ import {
 import { formatDate } from "../../utils/enum";
 import { useUser } from "../../context/user-context";
 import { useNavigate } from "react-router-dom";
+import useRequestReschedule from "./services/reschedule-request";
+import { IRequestRescheduleData } from "../../types";
+import { toast } from "react-toastify";
 
 const useAvailabilityController = () => {
   const { user } = useUser();
@@ -26,6 +29,7 @@ const useAvailabilityController = () => {
   const addAvailability = useCreateAvailibility();
   const deleteAvailibility = useDeleteAvailibility();
   const updateAvailibility = useUpdateAvailibility();
+  const requestReschedule = useRequestReschedule();
 
   const formatTimeRange = (startTime: string, endTime: string) => {
     const formatTime = (time: string) => {
@@ -66,7 +70,7 @@ const useAvailabilityController = () => {
       return;
     }
     addAvailability.mutate(newSlot);
-    // setSlots([...slots, newSlot]);
+    
   };
 
   const handleDeleteSlot = (slotId: string) => {
@@ -145,6 +149,27 @@ const useAvailabilityController = () => {
     setIsRescheduleModalVisible(true);
   };
 
+  const isSlotInPast = (slot: TimeSlot) => {
+    const now = new Date();
+    const slotDate = new Date(selectedDate);
+    const [startHours, startMinutes] = slot.startTime.split(":").map(Number);
+    const slotStartTime = new Date(slotDate.setHours(startHours, startMinutes, 0, 0));
+  
+    return slotStartTime < now; 
+  };
+
+ const onRescheduleModalSubmit = (data: IRequestRescheduleData) => {
+    requestReschedule.mutate(data);
+  };
+
+  useEffect(() => {
+    if(requestReschedule.isSuccess){
+      setIsRescheduleModalVisible(false);
+      setEditSlot(undefined);
+      toast.success("Reschedule request sent successfully");
+    }
+  },[requestReschedule.isSuccess]);
+
   useEffect(() => {
     if (getAvailibility.isSuccess && getAvailibility.data) {
       setSlots(getAvailibility.data.availibility || []);
@@ -202,6 +227,8 @@ const useAvailabilityController = () => {
     isRescheduleModalVisible,
     setIsRescheduleModalVisible,
     onRescheduleClick,
+    isSlotInPast,
+    onRescheduleModalSubmit
   };
 };
 

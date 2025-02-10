@@ -1,3 +1,5 @@
+import ArrowLeft from "../../assets/icons/arrow-left";
+import ArrowRight from "../../assets/icons/arrow-right";
 import Loader from "../../components/loader";
 import AddSlotModal from "./add-slot-modal";
 import useAvailabilityController from "./availability-controller";
@@ -22,6 +24,8 @@ export default function AvailabilityPage() {
     isRescheduleModalVisible,
     onRescheduleClick,
     setIsRescheduleModalVisible,
+    isSlotInPast,
+    onRescheduleModalSubmit,
   } = useAvailabilityController();
 
   return (
@@ -44,7 +48,7 @@ export default function AvailabilityPage() {
                   }
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  ←
+                  <ArrowLeft/>
                 </button>
                 <h2 className="text-lg font-medium mx-2">
                   {selectedDate.toLocaleString("default", {
@@ -62,7 +66,7 @@ export default function AvailabilityPage() {
                   }
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  →
+                  <ArrowRight />
                 </button>
               </div>
 
@@ -135,7 +139,7 @@ export default function AvailabilityPage() {
                             Booked
                           </span>
                         )}
-                        {!isPastDate(selectedDate) && (
+                        {!isPastDate(selectedDate) && !isSlotInPast(slot) && (
                           <div className="flex items-center gap-2">
                             {slot.clientId ? (
                               <button
@@ -220,7 +224,7 @@ export default function AvailabilityPage() {
           isOpen={isRescheduleModalVisible}
           slot={editSlot}
           onClose={() => setIsRescheduleModalVisible(false)}
-          onSubmit={handleAddSlot}
+          onSubmit={onRescheduleModalSubmit}
         />
       )}
     </div>

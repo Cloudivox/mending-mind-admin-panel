@@ -54,6 +54,16 @@ export interface IAvailabilityData {
   type: string;
 }
 
+export interface IRequestRescheduleData {
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: string;
+  clientId: string;
+  reason:string;
+  availibilityId: string
+}
+
 export interface IUsers {
   name: string;
   email: string;

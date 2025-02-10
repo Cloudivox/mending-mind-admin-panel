@@ -4,15 +4,22 @@ interface RescheduleModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (
-    startTime: string,
-    endTime: string,
-    type: "online" | "offline"
+    data: {
+      date: string;
+      startTime: string;
+      endTime: string;
+      type: string;
+      clientId: string;
+      reason:string;
+      availibilityId: string
+    }
   ) => void;
   slot: {
     _id: string;
     startTime: string;
     endTime: string;
     type: "online" | "offline";
+    clientId: string;
   };
 }
 
@@ -30,13 +37,15 @@ const RescheduleModal = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // onSubmit({
-    //   slotId: slot._id,
-    //   newDate: date,
-    //   newStartTime: startTime,
-    //   newEndTime: endTime,
-    //   reason,
-    // });
+    onSubmit({
+      availibilityId: slot._id,
+      date: date,
+      startTime: startTime,
+      endTime: endTime,
+      reason,
+      clientId: slot.clientId,
+      type: slot.type,
+    });
   };
 
   if (!isOpen) return null;
