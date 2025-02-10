@@ -4,14 +4,23 @@ const useAddSlotModalController = (
   onSubmit: (
     startTime: string,
     endTime: string,
-    type: "online" | "offline"
+    type: "online" | "offline",
+    slotId?: string
   ) => void,
   onClose: () => void,
-  selectedDate: Date
+  selectedDate: Date,
+  slot?: {
+    _id: string;
+    startTime: string;
+    endTime: string;
+    type: "online" | "offline";
+  }
 ) => {
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [type, setType] = useState<"online" | "offline">("online");
+  const [startTime, setStartTime] = useState(slot?.startTime || "");
+  const [endTime, setEndTime] = useState(slot?.endTime || "");
+  const [type, setType] = useState<"online" | "offline">(
+    slot?.type || "online"
+  );
   const [minStartTime, setMinStartTime] = useState("00:00");
 
   // Function to check if selected date is today
@@ -94,7 +103,7 @@ const useAddSlotModalController = (
       return;
     }
 
-    onSubmit(startTime, endTime, type);
+    onSubmit(startTime, endTime, type, slot?._id);
     setStartTime("");
     setEndTime("");
     onClose();

@@ -4,12 +4,20 @@ import {
   useCreateAvailibility,
   useDeleteAvailibility,
   useGetAvailibility,
+  useUpdateAvailibility,
 } from "./services";
 import { formatDate } from "../../utils/enum";
+import { useUser } from "../../context/user-context";
+import { useNavigate } from "react-router-dom";
 
 const useAvailabilityController = () => {
+  const { user } = useUser();
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRescheduleModalVisible, setIsRescheduleModalVisible] =
+    useState(false);
+  const [editSlot, setEditSlot] = useState<TimeSlot | undefined>();
   const [slots, setSlots] = useState<TimeSlot[]>([]);
 
   const getAvailibility = useGetAvailibility(
@@ -17,6 +25,7 @@ const useAvailabilityController = () => {
   );
   const addAvailability = useCreateAvailibility();
   const deleteAvailibility = useDeleteAvailibility();
+  const updateAvailibility = useUpdateAvailibility();
 
   const formatTimeRange = (startTime: string, endTime: string) => {
     const formatTime = (time: string) => {
@@ -36,36 +45,33 @@ const useAvailabilityController = () => {
   const handleAddSlot = (
     startTime: string,
     endTime: string,
-    type: "online" | "offline"
+    type: "online" | "offline",
+    slotId?: string
   ) => {
-    const newSlot = {
+    const newSlot: {
+      date: string;
+      type: "online" | "offline";
+      startTime: string;
+      endTime: string;
+      availibilityId?: string;
+    } = {
       date: formatDate(selectedDate),
       type,
       startTime,
       endTime,
     };
-
+    if (slotId) {
+      newSlot.availibilityId = slotId;
+      newSlot.availibilityId && updateAvailibility.mutate(newSlot);
+      return;
+    }
     addAvailability.mutate(newSlot);
     // setSlots([...slots, newSlot]);
   };
 
-  useEffect(() => {
-    if (addAvailability.isSuccess) {
-      getAvailibility.refetch();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addAvailability.isSuccess]);
-
   const handleDeleteSlot = (slotId: string) => {
     deleteAvailibility.mutate(slotId);
   };
-
-  useEffect(() => {
-    if (deleteAvailibility.isSuccess) {
-      getAvailibility.refetch();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deleteAvailibility.isSuccess]);
 
   const isPastDate = (date: Date) => {
     const today = new Date();
@@ -129,11 +135,50 @@ const useAvailabilityController = () => {
     return days;
   };
 
+  const onEditClick = (slot: TimeSlot) => {
+    setEditSlot(slot);
+    setIsModalOpen(true);
+  };
+
+  const onRescheduleClick = (slot: TimeSlot) => {
+    setEditSlot(slot);
+    setIsRescheduleModalVisible(true);
+  };
+
   useEffect(() => {
     if (getAvailibility.isSuccess && getAvailibility.data) {
       setSlots(getAvailibility.data.availibility || []);
     }
   }, [getAvailibility.isSuccess, getAvailibility.data]);
+
+  useEffect(() => {
+    if (addAvailability.isSuccess) {
+      getAvailibility.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addAvailability.isSuccess]);
+
+  useEffect(() => {
+    if (deleteAvailibility.isSuccess) {
+      getAvailibility.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deleteAvailibility.isSuccess]);
+
+  useEffect(() => {
+    if (updateAvailibility.isSuccess) {
+      getAvailibility.refetch();
+      setEditSlot(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateAvailibility.isSuccess]);
+
+  useEffect(() => {
+    if (user && user?.role !== "therapist") {
+      navigate("/");
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.role, user]);
 
   return {
     selectedDate,
@@ -151,6 +196,12 @@ const useAvailabilityController = () => {
     formatDate,
     formatTimeRange,
     isLoading: getAvailibility.isLoading,
+    editSlot,
+    onEditClick,
+    setEditSlot,
+    isRescheduleModalVisible,
+    setIsRescheduleModalVisible,
+    onRescheduleClick,
   };
 };
 

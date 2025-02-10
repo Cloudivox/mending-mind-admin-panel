@@ -9,7 +9,7 @@ import {
 import { API_MUTATION_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
 export interface IUpdateAvailability {
-  availibilityId: string;
+  availibilityId?: string;
   startTime: string;
   endTime: string;
   type: string;

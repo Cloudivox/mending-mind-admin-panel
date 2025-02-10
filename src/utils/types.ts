@@ -19,6 +19,12 @@ export interface AddSlotModalProps {
   ) => void;
   selectedDate: Date;
   isPastDate: boolean;
+  slot?: {
+    _id: string;
+    startTime: string;
+    endTime: string;
+    type: "online" | "offline";
+  };
 }
 
 export interface BlogPost {
