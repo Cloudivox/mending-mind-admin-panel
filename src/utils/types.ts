@@ -28,16 +28,13 @@ export interface AddSlotModalProps {
 }
 
 export interface BlogPost {
-  id: string;
+  _id: string;
   title: string;
-  description: string;
-  coverImage: string;
-  readTime: number;
-  lastModified: string;
-  author: {
-    name: string;
-    id: string;
-  };
+  desc: string;
+  img: string;
+  read: string;
+  date: string;
+  author: string;
 }
 
 export interface BlogRequest {
