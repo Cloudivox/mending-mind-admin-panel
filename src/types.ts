@@ -71,6 +71,17 @@ export interface IUsers {
   status: string;
   _id: string;
 }
+
+export interface IBlogs {
+  title: string;
+  desc: string;
+  img: string;
+  read: string;
+  date: string;
+  author: string;
+  _id: string;
+}
+
 export interface IAllTherapist {
   email: string;
   name: string;
