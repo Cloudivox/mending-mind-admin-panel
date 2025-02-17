@@ -165,7 +165,7 @@ const Nav = () => {
             {!isCollapsed && <span>Session</span>}
           </Link>
           <Link
-            to="#"
+            to="/package"
             onClick={() => setIsActive("Package")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Package"

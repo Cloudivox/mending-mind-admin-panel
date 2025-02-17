@@ -17,7 +17,7 @@ const AdminRoutes = () => {
   return (
     <div className="min-h-screen bg-mint/5">
       <Nav />
-      <div className="pl-64">
+      <div className="pl-64 bg-mint/5">
         <main className="w-full">
           <Routes>
             <Route path="/" element={<Home />} />
