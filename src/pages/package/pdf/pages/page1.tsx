@@ -77,7 +77,7 @@ function PageOne() {
         className="Rectangle14"
         style={{
           width: "478px",
-          height: "82px",
+          height: "110px",
           left: "59px",
           top: "608px",
           position: "absolute",
@@ -750,7 +750,7 @@ function PageOne() {
         data-svg-wrapper
         data-layer="Group 4"
         className="Group4"
-        style={{ left: "10px", top: "816px", position: "absolute" }}
+        style={{ left: "10px", top: "900px", position: "absolute" }}
       >
         <svg
           width="62"

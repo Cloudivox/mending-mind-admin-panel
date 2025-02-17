@@ -539,6 +539,7 @@ function PageTwo() {
               fontWeight: 700,
               textDecoration: "underline",
               wordWrap: "break-word",
+              marginRight: "10px",
             }}
           >
             Your
@@ -860,6 +861,7 @@ function PageTwo() {
               fontWeight: 700,
               textDecoration: "underline",
               wordWrap: "break-word",
+              marginRight: "10px",
             }}
           >
             your
@@ -1130,7 +1132,7 @@ function PageTwo() {
           width: "105px",
           height: "26px",
           left: "252px",
-          top: "776px",
+          top: "795px",
           position: "absolute",
           background: "#f1b749",
           boxShadow: "0px 2px 1.5px rgba(0, 0, 0, 0.25)",
@@ -1145,7 +1147,7 @@ function PageTwo() {
           width: "116px",
           height: "12px",
           left: "247px",
-          top: "781px",
+          top: "800px",
           position: "absolute",
           textAlign: "center",
           color: "black",
@@ -1161,7 +1163,7 @@ function PageTwo() {
         data-svg-wrapper
         data-layer="Group 4"
         className="Group4"
-        style={{ left: "12px", top: "812px", position: "absolute" }}
+        style={{ left: "12px", top: "900px", position: "absolute" }}
       >
         <svg
           width="62"

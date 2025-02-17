@@ -289,6 +289,7 @@ function PageThree() {
               fontWeight: 700,
               textDecoration: "underline",
               wordWrap: "break-word",
+              marginRight: "10px",
             }}
           >
             Your
@@ -801,7 +802,7 @@ function PageThree() {
           width: "105px",
           height: "26px",
           left: "245px",
-          top: "777px",
+          top: "795px",
           position: "absolute",
           background: "#f1b749",
           boxShadow: "0px 2px 1.5px rgba(0, 0, 0, 0.25)",
@@ -814,7 +815,7 @@ function PageThree() {
           width: "116px",
           height: "12px",
           left: "240px",
-          top: "782px",
+          top: "800px",
           position: "absolute",
           textAlign: "center",
           color: "black",
@@ -852,7 +853,7 @@ function PageThree() {
       ></div>
       <div
         data-svg-wrapper
-        style={{ left: "11px", top: "814px", position: "absolute" }}
+        style={{ left: "11px", top: "900px", position: "absolute" }}
       >
         <svg
           width="62"

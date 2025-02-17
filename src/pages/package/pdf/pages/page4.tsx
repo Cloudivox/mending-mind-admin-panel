@@ -45,9 +45,9 @@ function PageFour() {
         <div
           style={{
             width: "485px",
-            height: "41px",
+            height: "50px",
             left: "94px",
-            top: "35.11px",
+            top: "37.11px",
             position: "absolute",
             background: "#b0dad9",
             borderRadius: "1.93px",
@@ -75,7 +75,7 @@ function PageFour() {
             width: "446.51px",
             height: "35.76px",
             left: "124.63px",
-            top: "40.8px",
+            top: "38.8px",
             position: "absolute",
           }}
         >
@@ -88,7 +88,8 @@ function PageFour() {
               wordWrap: "break-word",
             }}
           >
-            How long does each therapy session last? Each session lasts for
+            How long does each therapy session last? <br /> Each session lasts
+            for{" "}
           </span>
           <span
             style={{
@@ -116,9 +117,9 @@ function PageFour() {
         <div
           style={{
             width: "485.17px",
-            height: "56.06px",
+            height: "69.06px",
             left: "93.7px",
-            top: "83px",
+            top: "93px",
             position: "absolute",
             background: "#b0dad9",
             borderRadius: "1.93px",
@@ -129,7 +130,7 @@ function PageFour() {
             width: "44.46px",
             height: "23.2px",
             left: "85px",
-            top: "83px",
+            top: "90px",
             position: "absolute",
             textAlign: "center",
             color: "#61acc1",
@@ -159,7 +160,8 @@ function PageFour() {
               wordWrap: "break-word",
             }}
           >
-            How often should I schedule my sessions? Initially,{" "}
+            How often should I schedule my sessions?
+            <br /> Initially,{" "}
           </span>
           <span
             style={{
@@ -170,7 +172,7 @@ function PageFour() {
               wordWrap: "break-word",
             }}
           >
-            weekly sessions
+            weekly sessions{" "}
           </span>
           <span
             style={{
@@ -209,9 +211,9 @@ function PageFour() {
         <div
           style={{
             width: "485.17px",
-            height: "57.02px",
+            height: "75.02px",
             left: "93.73px",
-            top: "145px",
+            top: "168px",
             position: "absolute",
             background: "#b0dad9",
             borderRadius: "1.93px",
@@ -222,7 +224,7 @@ function PageFour() {
             width: "44.46px",
             height: "23.2px",
             left: "86px",
-            top: "145.97px",
+            top: "165.97px",
             position: "absolute",
             textAlign: "center",
             color: "#61acc1",
@@ -239,7 +241,7 @@ function PageFour() {
             width: "446.51px",
             height: "51.22px",
             left: "125.63px",
-            top: "150.8px",
+            top: "170.8px",
             position: "absolute",
           }}
         >
@@ -252,8 +254,8 @@ function PageFour() {
               wordWrap: "break-word",
             }}
           >
-            How long will I need to be in therapy? Therapy duration varies. Some
-            people see progress in a{" "}
+            How long will I need to be in therapy?
+            <br /> Therapy duration varies. Some people see progress in a{" "}
           </span>
           <span
             style={{
@@ -292,9 +294,9 @@ function PageFour() {
         <div
           style={{
             width: "485.17px",
-            height: "57.02px",
+            height: "80.02px",
             left: "93.73px",
-            top: "208px",
+            top: "254px",
             position: "absolute",
             background: "#b0dad9",
             borderRadius: "1.93px",
@@ -305,7 +307,7 @@ function PageFour() {
             width: "44.46px",
             height: "23.2px",
             left: "86px",
-            top: "212.83px",
+            top: "252.83px",
             position: "absolute",
             textAlign: "center",
             color: "#61acc1",
@@ -322,7 +324,7 @@ function PageFour() {
             width: "446.51px",
             height: "51.22px",
             left: "125.63px",
-            top: "213.8px",
+            top: "258.8px",
             position: "absolute",
           }}
         >
@@ -335,9 +337,9 @@ function PageFour() {
               wordWrap: "break-word",
             }}
           >
-            What if I don’t feel comfortable with my therapist? Feeling
-            comfortable in therapy is essential. If something doesn’t feel
-            right, you can{" "}
+            What if I don’t feel comfortable with my therapist?
+            <br /> Feeling comfortable in therapy is essential. If something
+            doesn’t feel right, you can{" "}
           </span>
           <span
             style={{
@@ -365,9 +367,9 @@ function PageFour() {
         <div
           style={{
             width: "426.22px",
-            height: "68.62px",
+            height: "97px",
             left: "93.73px",
-            top: "271px",
+            top: "344px",
             position: "absolute",
             background: "#b0dad9",
             borderRadius: "1.93px",
@@ -378,7 +380,7 @@ function PageFour() {
             width: "44.46px",
             height: "23.2px",
             left: "86px",
-            top: "271px",
+            top: "344px",
             position: "absolute",
             textAlign: "center",
             color: "#61acc1",
@@ -395,7 +397,7 @@ function PageFour() {
             width: "340.2px",
             height: "51.22px",
             left: "125.63px",
-            top: "276.8px",
+            top: "345.8px",
             position: "absolute",
           }}
         >
@@ -408,7 +410,8 @@ function PageFour() {
               wordWrap: "break-word",
             }}
           >
-            Can I switch or stop therapy at any time? Yes, you can{" "}
+            Can I switch or stop therapy at any time?
+            <br /> Yes, you can{" "}
           </span>
           <span
             style={{
@@ -437,9 +440,9 @@ function PageFour() {
         <div
           style={{
             width: "406px",
-            height: "71px",
+            height: "100px",
             left: "94px",
-            top: "346px",
+            top: "450px",
             position: "absolute",
             background: "#b0dad9",
             borderRadius: "1.93px",
@@ -450,7 +453,7 @@ function PageFour() {
             width: "44.46px",
             height: "23.2px",
             left: "86px",
-            top: "346px",
+            top: "450px",
             position: "absolute",
             textAlign: "center",
             color: "#61acc1",
@@ -467,7 +470,7 @@ function PageFour() {
             width: "312.17px",
             height: "51.22px",
             left: "125.63px",
-            top: "351.8px",
+            top: "450.8px",
             position: "absolute",
           }}
         >
@@ -480,7 +483,8 @@ function PageFour() {
               wordWrap: "break-word",
             }}
           >
-            Is there a fixed sequence to therapy? No, therapy is{" "}
+            Is there a fixed sequence to therapy? <br />
+            No, therapy is{" "}
           </span>
           <span
             style={{
@@ -548,9 +552,9 @@ function PageFour() {
         <img
           style={{
             width: "159.38px",
-            height: "191.48px",
+            height: "242.48px",
             left: "449px",
-            top: "239px",
+            top: "323px",
             position: "absolute",
           }}
           alt="prsn"
@@ -758,7 +762,7 @@ function PageFour() {
           width: "121.29px",
           height: "30.03px",
           left: "237.78px",
-          top: "771px",
+          top: "875px",
           position: "absolute",
           background: "#f1b749",
           boxShadow:
@@ -772,7 +776,7 @@ function PageFour() {
           width: "134px",
           height: "13.86px",
           left: "232px",
-          top: "776.78px",
+          top: "880px",
           position: "absolute",
           textAlign: "center",
           color: "black",
@@ -798,7 +802,7 @@ function PageFour() {
             width: "493px",
             height: "31px",
             left: "3px",
-            top: "32px",
+            top: "137px",
             position: "absolute",
             textAlign: "justify",
             color: "black",
@@ -817,7 +821,7 @@ function PageFour() {
             width: "403.82px",
             height: "35.47px",
             left: "0px",
-            top: "0px",
+            top: "113px",
             position: "absolute",
             color: "black",
             fontSize: "20px",
@@ -832,7 +836,7 @@ function PageFour() {
       </div>
       <div
         data-svg-wrapper
-        style={{ left: "11px", top: "814px", position: "absolute" }}
+        style={{ left: "11px", top: "900px", position: "absolute" }}
       >
         <svg
           width="62"
