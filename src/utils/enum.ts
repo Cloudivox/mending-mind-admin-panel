@@ -9,6 +9,8 @@ export const API_QUERY_KEY = {
   GET_ALL_THERAPIST: "get-all-therapist",
   SEARCH_USER: "search-user",
   GET_ALL_BLOGS: "get-all-blogs",
+  GET_ALL_SESSION_PACKAGES: "get-all-session-packages",
+  GET_SESSION_PACKAGE_BY_ID: "get-session-package-by-id",
 };
 
 export const API_MUTATION_KEY = {
@@ -22,6 +24,8 @@ export const API_MUTATION_KEY = {
   DELETE_USER: "delete-user",
   RESCHEDULE_REQUEST: "reschedule-request",
   CREATE_BLOG: "create-blog",
+  APPROVE_SESSION_PACKAGE: "approve-session-package",
+  REJECT_SESSION_PACKAGE: "reject-session-package",
 };
 
 export const APIS_ROUTES = {
@@ -44,6 +48,7 @@ export const APIS_ROUTES = {
   RESCHEDULE_REQUEST: "/reschedule-session-service/v1/reschedule/reschedule-request",
   CREATE_BLOG: "/blog-service/v1/blog/create-blog",
   GET_ALL_BLOGS: "/blog-service/v1/blog/get-all-blogs",
+  SESSION_PACKAGE_SERVICE: "/session-package-service/v1/session-package",
 };
 
 export const formatDate = (date: Date): string => {
