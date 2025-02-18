@@ -1,6 +1,9 @@
 import logo from "../../../../assets/images/logo.png";
 
-function PageTwo() {
+function PageTwo({ formData }: any) {
+  const goals = Object.keys(formData.selectedGoals).filter(
+    (key) => formData.selectedGoals[key]
+  );
   return (
     <div
       data-layer="A4 - 3"
@@ -569,7 +572,19 @@ function PageTwo() {
             background: "#b0dad9",
             borderRadius: "7.47px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "145px",
+              height: "87px",
+              left: "6px",
+              top: "20px",
+              position: "absolute",
+            }}
+          >
+            {goals?.[0]}
+          </h3>
+        </div>
         <div
           data-layer="Rectangle 2"
           className="Rectangle2"
@@ -582,7 +597,19 @@ function PageTwo() {
             background: "#b0dad9",
             borderRadius: "7.47px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "145px",
+              height: "87px",
+              left: "6px",
+              top: "20px",
+              position: "absolute",
+            }}
+          >
+            {goals?.[1]}
+          </h3>
+        </div>
         <div
           data-layer="Rectangle 4"
           className="Rectangle4"
@@ -595,7 +622,17 @@ function PageTwo() {
             background: "#b0dad9",
             borderRadius: "7.47px",
           }}
-        ></div>
+        >
+          <h3
+          style={{
+            width: "145px",
+            height: "87px",
+            left: "6px",
+            top: "20px",
+            position: "absolute",
+          }}
+          >{goals?.[3]}</h3>
+        </div>
         <div
           data-layer="Rectangle 5"
           className="Rectangle5"
@@ -608,7 +645,17 @@ function PageTwo() {
             background: "#b0dad9",
             borderRadius: "7.47px",
           }}
-        ></div>
+        >
+          <h3
+          style={{
+            width: "145px",
+            height: "87px",
+            left: "6px",
+            top: "20px",
+            position: "absolute",
+          }}
+          >{goals?.[4]}</h3>
+        </div>
         <div
           data-layer="Rectangle 3"
           className="Rectangle3"
@@ -621,7 +668,17 @@ function PageTwo() {
             background: "#b0dad9",
             borderRadius: "7.47px",
           }}
-        ></div>
+        >
+          <h3
+          style={{
+            width: "145px",
+            height: "87px",
+            left: "6px",
+            top: "20px",
+            position: "absolute",
+          }}
+          >{goals?.[2]}</h3>
+        </div>
         <div
           data-layer="01"
           style={{
@@ -688,7 +745,17 @@ function PageTwo() {
             background: "#b0dad9",
             borderRadius: "7.47px",
           }}
-        ></div>
+        >
+          <h3
+          style={{
+            width: "145px",
+            height: "87px",
+            left: "6px",
+            top: "20px",
+            position: "absolute",
+          }}
+          >{goals?.[5]}</h3>
+        </div>
         <div
           data-layer="06"
           style={{
@@ -941,7 +1008,7 @@ function PageTwo() {
               wordWrap: "break-word",
             }}
           >
-            XYZ,
+            {formData?.name},
           </span>
         </div>
         <div
@@ -1066,7 +1133,7 @@ function PageTwo() {
             wordWrap: "break-word",
           }}
         >
-          06
+          {String(formData?.therapist).padStart(2, "0")}
         </div>
         <div
           data-svg-wrapper

@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import apiClient from "../../../../apis/api-client";
-import { IAPIError, IAxiosResponse, IBlogs, IUsers } from "../../../../types";
+import { IAPIError, IAxiosResponse, IBlogs } from "../../../../types";
 import { API_QUERY_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
 interface BlogsResponse {

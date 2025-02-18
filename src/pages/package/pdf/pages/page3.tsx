@@ -1,5 +1,8 @@
 import logo from "../../../../assets/images/logo.png";
-function PageThree() {
+function PageThree({ formData }: any) {
+  const therapies = Object.keys(formData.selectedTherapies).filter(
+    (key) => formData.selectedTherapies[key]
+  );
   return (
     <div
       style={{
@@ -75,7 +78,19 @@ function PageThree() {
             background: "#b0dad9",
             borderRadius: "7.37px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "140px",
+              height: "113px",
+              top: "20px",
+              left: "8px",
+              position: "absolute",
+            }}
+          >
+            {therapies?.[0]}
+          </h3>
+        </div>
         <div
           style={{
             width: "145px",
@@ -86,7 +101,20 @@ function PageThree() {
             background: "#b0dad9",
             borderRadius: "7.37px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "140px",
+              height: "113px",
+              top: "20px",
+              left: "8px",
+              position: "absolute",
+            }}
+          >
+            {" "}
+            {therapies?.[1]}
+          </h3>
+        </div>
         <div
           style={{
             width: "146px",
@@ -97,7 +125,19 @@ function PageThree() {
             background: "#b0dad9",
             borderRadius: "7.37px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "140px",
+              height: "113px",
+              top: "20px",
+              left: "8px",
+              position: "absolute",
+            }}
+          >
+            {therapies?.[3]}
+          </h3>
+        </div>
         <div
           style={{
             width: "145px",
@@ -108,7 +148,19 @@ function PageThree() {
             background: "#b0dad9",
             borderRadius: "7.37px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "140px",
+              height: "113px",
+              top: "20px",
+              left: "8px",
+              position: "absolute",
+            }}
+          >
+            {therapies?.[4]}
+          </h3>
+        </div>
         <div
           style={{
             width: "145px",
@@ -119,7 +171,19 @@ function PageThree() {
             background: "#b0dad9",
             borderRadius: "7.37px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "140px",
+              height: "113px",
+              top: "20px",
+              left: "8px",
+              position: "absolute",
+            }}
+          >
+            {therapies?.[2]}
+          </h3>
+        </div>
         <div
           style={{
             width: "42px",
@@ -181,7 +245,19 @@ function PageThree() {
             background: "#b0dad9",
             borderRadius: "7.37px",
           }}
-        ></div>
+        >
+          <h3
+            style={{
+              width: "140px",
+              height: "113px",
+              top: "20px",
+              left: "8px",
+              position: "absolute",
+            }}
+          >
+            {therapies?.[5]}
+          </h3>
+        </div>
         <div
           style={{
             width: "42.39px",

@@ -1,7 +1,7 @@
 import grp1 from "../../../../assets/images/page-one-grp.png";
 import logo from "../../../../assets/images/logo.png";
 
-function PageOne() {
+function PageOne({ formData }: any) {
   return (
     <div
       data-layer="A4 - 3"
@@ -173,7 +173,7 @@ function PageOne() {
           wordWrap: "break-word",
         }}
       >
-        Age :
+        Age : {formData?.age}
       </div>
       <div
         data-layer="Gender :"
@@ -192,7 +192,7 @@ function PageOne() {
           wordWrap: "break-word",
         }}
       >
-        Gender :
+        Gender : {formData?.gender}
       </div>
       <div
         data-layer="Date :"
@@ -211,7 +211,7 @@ function PageOne() {
           wordWrap: "break-word",
         }}
       >
-        Date :
+        Date : {new Date(Date.now()).toISOString()}
       </div>
       <div
         data-layer="Hey"
@@ -232,6 +232,26 @@ function PageOne() {
         }}
       >
         Hey
+      </div>
+      <div
+        data-layer="Hey"
+        className="Hey"
+        style={{
+          width: "178px",
+          height: "39px",
+          left: "210px",
+          top: "480px",
+          position: "absolute",
+          textAlign: "center",
+          color: "#F1B749",
+          fontSize: "30px",
+          fontFamily: "Playfair Display",
+          fontStyle: "italic",
+          fontWeight: "500",
+          wordWrap: "break-word",
+        }}
+      >
+        {formData?.name}
       </div>
       <div
         data-layer="!"
