@@ -1,30 +1,15 @@
-import { useState } from "react";
-import { Sessions } from "../../utils/types";
+import Loader from "../../components/loader";
 import CreateSessionModal from "./create-session-modal";
-
-const initialSessions: Sessions[] = [
-  {
-    patientName: "John Doe",
-    patientEmail: "john.doe@example.com",
-    patientPhone: "+1 234 567 8900",
-    therapistName: "Dr. Smith",
-    sessionDate: "2023-06-15",
-    duration: "60 mins",
-  },
-  {
-    patientName: "Jane Smith",
-    patientEmail: "jane.smith@example.com",
-    patientPhone: "+1 234 567 8901",
-    therapistName: "Dr. Johnson",
-    sessionDate: "2023-06-16",
-    duration: "45 mins",
-  },
-];
+import useSessionController from "./session-controller";
 
 const Session = () => {
-  const [sessions, setSessions] = useState<Sessions[]>(initialSessions);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-console.log(setSessions);
+  
+  const {
+    sessions,
+    isModalOpen,
+    setIsModalOpen,
+    isLoading
+} = useSessionController();
 
   return (
     <div className="p-6">
@@ -38,7 +23,11 @@ console.log(setSessions);
         </button>
       </div>
 
-       <div className="overflow-x-auto">
+    {isLoading ? (
+      <Loader />
+    ) :(
+      <>
+      <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-[#ECF0F1]">
@@ -52,23 +41,23 @@ console.log(setSessions);
             </tr>
           </thead>
           <tbody>
-            {sessions.map((session, index) => (
+            {sessions && sessions.map((session, index) => (
               <tr key={index} className="border-b border-[#ECF0F1] hover:bg-black/5 transition-colors">
                 <td className="py-4 px-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-[#9747FF]/10 flex items-center justify-center text-[#9747FF] font-medium text-lg">
-                      {session.patientName
+                      {session.clientName
                         .split(" ")
                         .map((n) => n[0])
                         .join("")}
                     </div>
-                    <span className="font-montserrat text-[#2C3E50] font-medium">{session.patientName}</span>
+                    <span className="font-montserrat text-[#2C3E50] font-medium">{session.clientName}</span>
                   </div>
                 </td>
-                <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.patientEmail}</td>
-                <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.patientPhone}</td>
+                <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.clientEmail}</td>
+                <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.clientPhone}</td>
                 <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.therapistName}</td>
-                <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.sessionDate}</td>
+                <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.sessionDateTime}</td>
                 <td className="py-4 px-4 font-montserrat text-[#34495E]">{session.duration}</td>
                 <td className="py-4 px-4 text-center">
                   <button className="text-[#3498DB] hover:text-[#2980B9] transition-colors font-montserrat text-sm font-medium">
@@ -80,6 +69,9 @@ console.log(setSessions);
           </tbody>
         </table>
       </div>
+      </>
+    )}
+       
 
       <CreateSessionModal
         isOpen={isModalOpen}

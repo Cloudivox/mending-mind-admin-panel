@@ -48,12 +48,21 @@ export interface BlogRequest {
 }
 
 export interface Sessions {
-  patientName: string;
-  patientEmail: string;
-  patientPhone: string;
-  therapistName: string;
-  sessionDate: string;
+  _id: string;
+  name: string;
+  therapistId: string;
+  clientId: string;
+  status: string;
+  type: string;
+  sessionDateTime: string;
   duration: string;
+  location: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  therapistName: string;
+  packageId: string;
+  isPackageCreated: boolean;
 }
 
 export interface CreateSessionForm {
