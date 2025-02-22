@@ -13,7 +13,14 @@ interface ISessionPackage {
     therapistId: string;
     clientId: string;
     sessionId: string;
-
+    status: string;
+    totalSessions: string;
+    sessions: string[];
+    goals: string[];
+    installmentStatus: string;
+    date: string;
+    clientName: string;
+    therapistName: string;
 }
 
 const getAllSessionPackage = async () => {

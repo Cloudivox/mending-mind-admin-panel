@@ -24,6 +24,7 @@ export const API_MUTATION_KEY = {
   DELETE_USER: "delete-user",
   RESCHEDULE_REQUEST: "reschedule-request",
   CREATE_BLOG: "create-blog",
+  CREATE_SESSION_PACKAGE: "create-session-package",
   APPROVE_SESSION_PACKAGE: "approve-session-package",
   REJECT_SESSION_PACKAGE: "reject-session-package",
 };
