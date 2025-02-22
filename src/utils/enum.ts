@@ -11,6 +11,8 @@ export const API_QUERY_KEY = {
   GET_ALL_BLOGS: "get-all-blogs",
   GET_ALL_SESSION_PACKAGES: "get-all-session-packages",
   GET_SESSION_PACKAGE_BY_ID: "get-session-package-by-id",
+  GET_ALL_SESSION: "get-all-session",
+  GET_SESSION_BY_ID: " get-session-by-id",
 };
 
 export const API_MUTATION_KEY = {
@@ -27,6 +29,7 @@ export const API_MUTATION_KEY = {
   CREATE_SESSION_PACKAGE: "create-session-package",
   APPROVE_SESSION_PACKAGE: "approve-session-package",
   REJECT_SESSION_PACKAGE: "reject-session-package",
+  CREATE_SESSION: "create-session",
 };
 
 export const APIS_ROUTES = {
@@ -50,6 +53,7 @@ export const APIS_ROUTES = {
   CREATE_BLOG: "/blog-service/v1/blog/create-blog",
   GET_ALL_BLOGS: "/blog-service/v1/blog/get-all-blogs",
   SESSION_PACKAGE_SERVICE: "/session-package-service/v1/session-package",
+  SESSION_SERVICE: "/session-service/v1/session"
 };
 
 export const formatDate = (date: Date): string => {

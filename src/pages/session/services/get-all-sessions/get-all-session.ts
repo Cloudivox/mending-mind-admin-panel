@@ -7,34 +7,36 @@ import {
 } from "../../../../types";
 import { API_QUERY_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
-interface ISessionPackage {
+interface ISession {
     _id: string;
     name: string;
     therapistId: string;
     clientId: string;
-    sessionId: string;
     status: string;
-    totalSessions: string;
-    sessions: string[];
-    goals: string[];
-    installmentStatus: string;
-    date: string;
+    type: string;
+    sessionDateTime: string;
+    duration: string;
+    location: string;
     clientName: string;
+    clientEmail: string;
+    clientPhone: string;
     therapistName: string;
+    packageId: string;
+    isPackageCreated: boolean;
 }
 
 const getAllSessionPackage = async () => {
     const result = await apiClient.get<
         null,
-        IAxiosResponse<{ pendingPackages: ISessionPackage[], approvedPackages: ISessionPackage[], totalPendingCount: number, totalApprovedCount: number }>
-    >(`${APIS_ROUTES.SESSION_PACKAGE_SERVICE}/get-all-session-packages`);
+        IAxiosResponse<ISession[]>
+    >(`${APIS_ROUTES.SESSION_SERVICE}/get-all-sessions`);
 
     return result.data.Data;
 };
 
 const useGetAllSessionPackage = () =>
-    useQuery<{ pendingPackages: ISessionPackage[], approvedPackages: ISessionPackage[], totalPendingCount: number, totalApprovedCount: number }, IAPIError>(
-        [API_QUERY_KEY.GET_ALL_SESSION_PACKAGES],
+    useQuery<ISession[], IAPIError>(
+        [API_QUERY_KEY.GET_ALL_SESSION],
         () => getAllSessionPackage(),
         {
             cacheTime: 0,
