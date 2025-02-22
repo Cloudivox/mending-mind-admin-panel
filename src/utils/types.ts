@@ -70,6 +70,7 @@ export interface CreateSessionForm {
   patient: string;
   meetingName: string;
   duration: string;
+  type: string;
   date: string;
   time: string;
   autoConfirm: boolean;

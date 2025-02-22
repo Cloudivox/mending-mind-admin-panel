@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import useGetAllUsers from "./services/get-all-users/get-all-users";
-import useAddUser from "./services/add-user/add-user";
-import useUpdateUser from "./services/update-user/update-user";
-import useDeleteUser from "./services/delete-user/delete-user";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import { IUsers } from "../../types";
+import { useAddUser, useDeleteUser, useGetAllUsers, useUpdateUser } from "./services";
 
 function useTeamManagementController() {
   const [page, setPage] = useState(1);
@@ -150,6 +147,7 @@ function useTeamManagementController() {
     handleEdit,
     handleDelete,
     Pagination,
+    searchTerm
   };
 }
 

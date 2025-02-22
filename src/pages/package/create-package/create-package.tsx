@@ -369,7 +369,7 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
   };
 
   useEffect(() => {
-    if (getSessionById.isSuccess) {
+    if (getSessionById.isSuccess && getSessionById.data) {
       setFormData((prev: any) => ({
         ...prev,
         name: getSessionById.data.clientName,
@@ -381,13 +381,14 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
         therapistName: getSessionById.data.therapistName,
       }));
     }
-  }, [getSessionById.isSuccess]);
+  }, [getSessionById.isSuccess, getSessionById.data]);
 
   useEffect(() => {
     if (createPackage.isSuccess) {
       navigate("/package");
       toast.success("Session Package created successfully!");
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createPackage.isSuccess]);
 
   return (

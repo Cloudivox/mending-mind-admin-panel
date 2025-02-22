@@ -13,7 +13,7 @@ const createAvailibility = async (availibility: IAvailabilityData) => {
   const result = await apiClient.post<
     IAvailabilityData,
     IAxiosResponse<IAvailabilityResponse>
-  >(APIS_ROUTES.CREATE_AVAILABILITY, availibility);
+  >(`${APIS_ROUTES.AVAILIBILITY_SERVICE}/create-availibility`, availibility);
 
   return result.data.Data;
 };

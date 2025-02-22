@@ -19,7 +19,7 @@ const updateAvailibility = async (availibility: IUpdateAvailability) => {
   const result = await apiClient.put<
     IUpdateAvailability,
     IAxiosResponse<IAvailabilityResponse>
-  >(APIS_ROUTES.UPDATE_AVAILABILITY, availibility);
+  >(`${APIS_ROUTES.AVAILIBILITY_SERVICE}/update-availibility`, availibility);
 
   return result.data.Data;
 };

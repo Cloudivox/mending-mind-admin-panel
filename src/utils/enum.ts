@@ -36,14 +36,7 @@ export const APIS_ROUTES = {
   SIGNUP: "/auth-service/v1/auth/signup",
   SIGNIN: "/auth-service/v1/auth/signin",
   GET_USER_DETAILS: "/auth-service/v1/auth/get-user-details",
-  GET_AVAILABILITY: "/availability-service/v1/availability/get-availibility",
   GET_ALL_THERAPIST: "/auth-service/v1/auth/get-all-therapists",
-  CREATE_AVAILABILITY:
-    "/availability-service/v1/availability/create-availibility",
-  UPDATE_AVAILABILITY:
-    "/availability-service/v1/availability/update-availibility",
-  DELETE_AVAILABILITY:
-    "/availability-service/v1/availability/delete-availibility",
   GET_ALL_USERS: "/auth-service/v1/auth/get-all-users",
   ADD_USER: "/auth-service/v1/auth/create",
   UPDATE_USER: "/auth-service/v1/auth/update-user",
@@ -53,7 +46,8 @@ export const APIS_ROUTES = {
   CREATE_BLOG: "/blog-service/v1/blog/create-blog",
   GET_ALL_BLOGS: "/blog-service/v1/blog/get-all-blogs",
   SESSION_PACKAGE_SERVICE: "/session-package-service/v1/session-package",
-  SESSION_SERVICE: "/session-service/v1/session"
+  SESSION_SERVICE: "/session-service/v1/session",
+  AVAILIBILITY_SERVICE: "/availability-service/v1/availability",
 };
 
 export const formatDate = (date: Date): string => {

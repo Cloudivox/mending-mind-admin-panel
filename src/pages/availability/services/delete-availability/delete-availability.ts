@@ -6,7 +6,7 @@ import { API_MUTATION_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
 const deleteAvailibility = async (availibilityId: string) => {
   await apiClient.delete<null, { response: string }>(
-    APIS_ROUTES.DELETE_AVAILABILITY,
+    `${APIS_ROUTES.AVAILIBILITY_SERVICE}/delete-availibility`,
     { data: { availibilityId } }
   );
 };

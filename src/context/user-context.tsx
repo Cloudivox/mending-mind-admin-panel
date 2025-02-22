@@ -47,6 +47,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         Cookies.remove(USER_ACCESS_KEY.TOKEN);
         setUser(null);
       }
+      if(!window.location.pathname.includes("/signin")) {
+        window.location.href = "/signin";
+      }
     }
   }, [getUserDetails.isError]);
 

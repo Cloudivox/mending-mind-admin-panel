@@ -45,9 +45,9 @@ apiClient.interceptors.response.use(
       window.location.href = "/not-access";
     } else if (error?.response?.status === 405) {
       toast.error("token is expired please login and continue");
-      
       // setUser(null);
       Cookies.remove(USER_ACCESS_KEY.TOKEN);
+      window.location.href = "/signin";
     } else if (
       error?.response?.status === 500 ||
       error?.response?.status === 503

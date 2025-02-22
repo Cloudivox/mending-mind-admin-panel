@@ -12,15 +12,6 @@ const searchUser = async (query: string) => {
   return result.data.Data;
 };
 
-// const useSearchUser = (query: string) =>
-//   useQuery<{ users: IUsers[] }, IAPIError>(
-//     [API_QUERY_KEY.SEARCH_USER],
-//     () => searchUser(query),
-//     {
-//       enabled: !!query,
-//       cacheTime: 0,
-//     }
-//   );
 
 const useSearchUser = (query: string, options = {}) =>
   useQuery<{ users: IUsers[] }, IAPIError>(

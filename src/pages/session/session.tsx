@@ -89,10 +89,13 @@ const Session = () => {
         </>
       )}
 
-      <CreateSessionModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {
+        isModalOpen && (
+          <CreateSessionModal
+            onClose={() => setIsModalOpen(false)}
+            />
+      )}
+    
     </div>
   );
 };

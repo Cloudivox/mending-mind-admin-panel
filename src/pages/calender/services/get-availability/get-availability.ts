@@ -12,7 +12,7 @@ const getAvailibility = async (date: string) => {
   const result = await apiClient.get<
     null,
     IAxiosResponse<{ availibility: IAvailabilityResponse[]; count: number }>
-  >(APIS_ROUTES.GET_AVAILABILITY, { params: { date } });
+  >(`${APIS_ROUTES.AVAILIBILITY_SERVICE}/get-availibility`, { params: { date } });
 
   return result.data.Data;
 };
