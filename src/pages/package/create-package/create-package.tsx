@@ -1,8 +1,12 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pdf from "../pdf";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
+import { useCreateSessionPackage } from "../services";
+import { useGetSessionById } from "../../session/services";
+import { useNavigate, useParams } from "react-router-dom";
+import Loader from "../../../components/loader";
 type TherapyGoalFormProps = {};
 
 interface StylesType {
@@ -167,7 +171,6 @@ const Card: React.FC<{
   );
 };
 
-
 // Main component
 const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
   // Style definitions
@@ -286,11 +289,23 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
     age: "",
     gender: "",
     therapist: "",
+    clientId: "",
+    therapistId: "",
+    therapistName: "",
+    sessionId: "",
     selectedTherapies: {},
     selectedGoals: {},
   });
   const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
+  const { sessionId } = useParams<{ sessionId: string }>();
   // const [modalIsOpen, setModalIsOpen] = useState(false);
+  const getSessionById = useGetSessionById(sessionId);
+  const createPackage = useCreateSessionPackage();
+  const navigate = useNavigate();
+
+  const handlePrint = () => {
+    navigate("/pdf?print=true");
+  };
 
   // Handle therapy checkbox changes
   const handleTherapyChange = (therapy: string) => {
@@ -329,8 +344,43 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
 
   // Send request
   const handleSubmit = () => {
-    toast.success("Form submitted successfully!");
+    const newFormData = {
+      name: formData?.name + formData?.therapistName,
+      clientId: formData?.clientId,
+      therapistId: formData?.therapistId,
+      sessionId: formData?.sessionId,
+      totalSessions: formData?.therapist,
+      sessions: Object.keys(formData?.selectedTherapies).filter(
+        (key) => formData?.selectedTherapies[key]
+      ),
+      goals: Object.keys(formData.selectedGoals).filter(
+        (key) => formData.selectedGoals[key]
+      ),
+    };
+    createPackage.mutate(newFormData);
   };
+
+  useEffect(() => {
+    if (getSessionById.isSuccess) {
+      setFormData((prev: any) => ({
+        ...prev,
+        name: getSessionById.data.clientName,
+        age: getSessionById.data.clientAge,
+        gender: getSessionById.data.clientGender,
+        clientId: getSessionById.data.clientId,
+        therapistId: getSessionById.data.therapistId,
+        sessionId: getSessionById.data._id,
+        therapistName: getSessionById.data.therapistName,
+      }));
+    }
+  }, [getSessionById.isSuccess]);
+
+  useEffect(() => {
+    if (createPackage.isSuccess) {
+      navigate("/package");
+      toast.success("Session Package created successfully!");
+    }
+  }, [createPackage.isSuccess]);
 
   return (
     <div
@@ -384,223 +434,237 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
         </Modal>
       ) : (
         <>
-          <h1
-            style={{
-              fontFamily: styles.playfairFont,
-              fontSize: "2.5rem",
-              fontWeight: "bold",
-              textAlign: "center",
-              marginBottom: "2rem",
-              color: styles.primaryBlack,
-            }}
-          >
-            Please Add Details
-          </h1>
-          <Card
-            borderColor={styles.primaryYellow}
-            headerColor={styles.primaryYellow}
-            title="Personal Information"
-            styles={styles}
-          >
-            <div style={{ display: "grid", gap: "1rem" }}>
-              <div>
-                <label
-                  htmlFor="name"
-                  style={{
-                    display: "block",
-                    fontFamily: styles.montserratFont,
-                    fontWeight: "600",
-                    color: styles.primaryBlack,
-                    marginBottom: "0.5rem",
-                  }}
-                >
-                  Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Enter your name"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    borderRadius: "6px",
-                    border: `1px solid ${styles.secondaryPurple}`,
-                    fontFamily: styles.montserratFont,
-                  }}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="age"
-                  style={{
-                    display: "block",
-                    fontWeight: "600",
-                    color: styles.primaryBlack,
-                    marginBottom: "0.5rem",
-                  }}
-                >
-                  Age
-                </label>
-                <input
-                  id="age"
-                  type="number"
-                  name="age"
-                  value={formData.age}
-                  onChange={handleInputChange}
-                  placeholder="Enter your age"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    borderRadius: "6px",
-                    border: `1px solid ${styles.secondaryPurple}`,
-                    fontFamily: styles.montserratFont,
-                  }}
-                />
-              </div>
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontWeight: "600",
-                    color: styles.primaryBlack,
-                    marginBottom: "0.5rem",
-                  }}
-                  htmlFor="gender"
-                >
-                  Gender
-                </label>
-                <select
-                  id="gender"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    borderRadius: "6px",
-                    border: `1px solid ${styles.secondaryPurple}`,
-                    fontFamily: styles.montserratFont,
-                  }}
-                  onChange={(event: any) =>
-                    handleSelectChange(event.target.value, "gender")
-                  }
-                  value={formData.gender}
-                >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontWeight: "600",
-                    color: styles.primaryBlack,
-                    marginBottom: "0.5rem",
-                  }}
-                  htmlFor="therapist"
-                >
-                  Total session number
-                </label>
-                <input
-                  id="therapist"
-                  name="therapist"
-                  type="number"
-                  value={formData.therapist}
-                  onChange={handleInputChange}
-                  placeholder="Enter total session number"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    borderRadius: "6px",
-                    border: `1px solid ${styles.secondaryPurple}`,
-                    fontFamily: styles.montserratFont,
-                  }}
-                />
-              </div>
-            </div>
-          </Card>
+          {getSessionById.isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <h1
+                style={{
+                  fontFamily: styles.playfairFont,
+                  fontSize: "2.5rem",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  marginBottom: "2rem",
+                  color: styles.primaryBlack,
+                }}
+              >
+                Please Add Details
+              </h1>
+              <Card
+                borderColor={styles.primaryYellow}
+                headerColor={styles.primaryYellow}
+                title="Personal Information"
+                styles={styles}
+              >
+                <div style={{ display: "grid", gap: "1rem" }}>
+                  <div>
+                    <label
+                      htmlFor="name"
+                      style={{
+                        display: "block",
+                        fontFamily: styles.montserratFont,
+                        fontWeight: "600",
+                        color: styles.primaryBlack,
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter your name"
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "6px",
+                        border: `1px solid ${styles.secondaryPurple}`,
+                        fontFamily: styles.montserratFont,
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="age"
+                      style={{
+                        display: "block",
+                        fontWeight: "600",
+                        color: styles.primaryBlack,
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      Age
+                    </label>
+                    <input
+                      id="age"
+                      type="number"
+                      name="age"
+                      value={formData.age}
+                      onChange={handleInputChange}
+                      placeholder="Enter your age"
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "6px",
+                        border: `1px solid ${styles.secondaryPurple}`,
+                        fontFamily: styles.montserratFont,
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontWeight: "600",
+                        color: styles.primaryBlack,
+                        marginBottom: "0.5rem",
+                      }}
+                      htmlFor="gender"
+                    >
+                      Gender
+                    </label>
+                    <select
+                      id="gender"
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "6px",
+                        border: `1px solid ${styles.secondaryPurple}`,
+                        fontFamily: styles.montserratFont,
+                      }}
+                      onChange={(event: any) =>
+                        handleSelectChange(event.target.value, "gender")
+                      }
+                      value={formData.gender}
+                    >
+                      <option value="">Select gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        fontWeight: "600",
+                        color: styles.primaryBlack,
+                        marginBottom: "0.5rem",
+                      }}
+                      htmlFor="therapist"
+                    >
+                      Total session number
+                    </label>
+                    <input
+                      id="therapist"
+                      name="therapist"
+                      type="number"
+                      value={formData.therapist}
+                      onChange={handleInputChange}
+                      placeholder="Enter total session number"
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "6px",
+                        border: `1px solid ${styles.secondaryPurple}`,
+                        fontFamily: styles.montserratFont,
+                      }}
+                    />
+                  </div>
+                </div>
+              </Card>
 
-          <Card
-            borderColor={styles.primaryLightBlue}
-            headerColor={styles.primaryLightBlue}
-            title="Therapies"
-            styles={styles}
-          >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-                gap: "1rem",
-              }}
-            >
-              {therapies.map((therapy) => (
-                <CustomCheckbox
-                  key={therapy}
-                  id={`therapy-${therapy}`}
-                  label={therapy}
-                  checked={formData.selectedTherapies[therapy] || false}
-                  onChange={() => handleTherapyChange(therapy)}
-                  accentColor={styles.secondaryRed}
+              <Card
+                borderColor={styles.primaryLightBlue}
+                headerColor={styles.primaryLightBlue}
+                title="Therapies"
+                styles={styles}
+              >
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(250px, 1fr))",
+                    gap: "1rem",
+                  }}
+                >
+                  {therapies.map((therapy) => (
+                    <CustomCheckbox
+                      key={therapy}
+                      id={`therapy-${therapy}`}
+                      label={therapy}
+                      checked={formData.selectedTherapies[therapy] || false}
+                      onChange={() => handleTherapyChange(therapy)}
+                      accentColor={styles.secondaryRed}
+                      styles={styles}
+                    />
+                  ))}
+                </div>
+              </Card>
+
+              <Card
+                borderColor={styles.primaryYellow}
+                headerColor={styles.primaryYellow}
+                title="Goals"
+                styles={styles}
+              >
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(250px, 1fr))",
+                    gap: "1rem",
+                  }}
+                >
+                  {goals.map((goal) => (
+                    <CustomCheckbox
+                      key={goal}
+                      id={`goal-${goal}`}
+                      label={goal}
+                      checked={formData.selectedGoals[goal] || false}
+                      onChange={() => handleGoalChange(goal)}
+                      accentColor={styles.secondaryRed}
+                      styles={styles}
+                    />
+                  ))}
+                </div>
+              </Card>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "1rem",
+                  marginTop: "2rem",
+                }}
+              >
+                <CustomButton
+                  onClick={handlePreview}
+                  backgroundColor={styles.secondaryOrange}
+                  textColor="white"
                   styles={styles}
-                />
-              ))}
-            </div>
-          </Card>
-
-          <Card
-            borderColor={styles.primaryYellow}
-            headerColor={styles.primaryYellow}
-            title="Goals"
-            styles={styles}
-          >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-                gap: "1rem",
-              }}
-            >
-              {goals.map((goal) => (
-                <CustomCheckbox
-                  key={goal}
-                  id={`goal-${goal}`}
-                  label={goal}
-                  checked={formData.selectedGoals[goal] || false}
-                  onChange={() => handleGoalChange(goal)}
-                  accentColor={styles.secondaryRed}
+                >
+                  Preview PDF
+                </CustomButton>
+                <CustomButton
+                  onClick={handleSubmit}
+                  backgroundColor={styles.secondaryPurple}
+                  textColor="white"
                   styles={styles}
-                />
-              ))}
-            </div>
-          </Card>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "1rem",
-              marginTop: "2rem",
-            }}
-          >
-            <CustomButton
-              onClick={handlePreview}
-              backgroundColor={styles.secondaryOrange}
-              textColor="white"
-              styles={styles}
-            >
-              Preview PDF
-            </CustomButton>
-            <CustomButton
-              onClick={handleSubmit}
-              backgroundColor={styles.secondaryPurple}
-              textColor="white"
-              styles={styles}
-            >
-              Submit Request
-            </CustomButton>
-          </div>
+                >
+                  Submit Request
+                </CustomButton>
+                <button
+                  onClick={handlePrint}
+                  className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
+                >
+                  Print
+                </button>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

@@ -1,6 +1,6 @@
 import logo from "../../../../assets/images/logo.png";
 function PageThree({ formData }: any) {
-  const therapies = Object.keys(formData.selectedTherapies).filter(
+  const therapies =formData?.selectedTherapies&& Object.keys(formData.selectedTherapies).filter(
     (key) => formData.selectedTherapies[key]
   );
   return (

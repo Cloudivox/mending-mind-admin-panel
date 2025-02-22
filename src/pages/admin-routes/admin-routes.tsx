@@ -12,6 +12,8 @@ import Availability from "../availability";
 import Blog from "../blog";
 import Session from "../session";
 import TeamManagement from "../team-management";
+import Package from "../package";
+import CreatePackage from "../package/create-package";
 
 const AdminRoutes = () => {
   return (
@@ -31,6 +33,11 @@ const AdminRoutes = () => {
             <Route path="availability" element={<Availability />} />
             <Route path="blog" element={<Blog />} />
             <Route path="session" element={<Session />} />
+            <Route path="package" element={<Package />} />
+            <Route
+              path="create-package/:sessionId"
+              element={<CreatePackage />}
+            />
             <Route path="team" element={<TeamManagement />} />
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>

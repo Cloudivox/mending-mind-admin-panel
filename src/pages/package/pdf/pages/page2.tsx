@@ -1,9 +1,11 @@
 import logo from "../../../../assets/images/logo.png";
 
 function PageTwo({ formData }: any) {
-  const goals = Object.keys(formData.selectedGoals).filter(
-    (key) => formData.selectedGoals[key]
-  );
+  const goals =
+    formData?.selectedGoals &&
+    Object.keys(formData.selectedGoals).filter(
+      (key) => formData.selectedGoals[key]
+    );
   return (
     <div
       data-layer="A4 - 3"
@@ -624,14 +626,16 @@ function PageTwo({ formData }: any) {
           }}
         >
           <h3
-          style={{
-            width: "145px",
-            height: "87px",
-            left: "6px",
-            top: "20px",
-            position: "absolute",
-          }}
-          >{goals?.[3]}</h3>
+            style={{
+              width: "145px",
+              height: "87px",
+              left: "6px",
+              top: "20px",
+              position: "absolute",
+            }}
+          >
+            {goals?.[3]}
+          </h3>
         </div>
         <div
           data-layer="Rectangle 5"
@@ -647,14 +651,16 @@ function PageTwo({ formData }: any) {
           }}
         >
           <h3
-          style={{
-            width: "145px",
-            height: "87px",
-            left: "6px",
-            top: "20px",
-            position: "absolute",
-          }}
-          >{goals?.[4]}</h3>
+            style={{
+              width: "145px",
+              height: "87px",
+              left: "6px",
+              top: "20px",
+              position: "absolute",
+            }}
+          >
+            {goals?.[4]}
+          </h3>
         </div>
         <div
           data-layer="Rectangle 3"
@@ -670,14 +676,16 @@ function PageTwo({ formData }: any) {
           }}
         >
           <h3
-          style={{
-            width: "145px",
-            height: "87px",
-            left: "6px",
-            top: "20px",
-            position: "absolute",
-          }}
-          >{goals?.[2]}</h3>
+            style={{
+              width: "145px",
+              height: "87px",
+              left: "6px",
+              top: "20px",
+              position: "absolute",
+            }}
+          >
+            {goals?.[2]}
+          </h3>
         </div>
         <div
           data-layer="01"
@@ -747,14 +755,16 @@ function PageTwo({ formData }: any) {
           }}
         >
           <h3
-          style={{
-            width: "145px",
-            height: "87px",
-            left: "6px",
-            top: "20px",
-            position: "absolute",
-          }}
-          >{goals?.[5]}</h3>
+            style={{
+              width: "145px",
+              height: "87px",
+              left: "6px",
+              top: "20px",
+              position: "absolute",
+            }}
+          >
+            {goals?.[5]}
+          </h3>
         </div>
         <div
           data-layer="06"
@@ -1008,7 +1018,7 @@ function PageTwo({ formData }: any) {
               wordWrap: "break-word",
             }}
           >
-            {formData?.name},
+            {formData?.therapistName},
           </span>
         </div>
         <div
@@ -1133,7 +1143,9 @@ function PageTwo({ formData }: any) {
             wordWrap: "break-word",
           }}
         >
-          {String(formData?.therapist).padStart(2, "0")}
+          {formData?.therapist
+            ? String(formData?.therapist).padStart(2, "0")
+            : "00"}
         </div>
         <div
           data-svg-wrapper

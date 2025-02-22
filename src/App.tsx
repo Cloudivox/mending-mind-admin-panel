@@ -6,8 +6,6 @@ import ForgotPassword from "./pages/forgot-password";
 import Signup from "./pages/auth/signup";
 import Signin from "./pages/auth/signin";
 import { UserProvider } from "./context/user-context";
-import CreatePackage from "./pages/package/create-package";
-import Package from "./pages/package";
 import Pdf from "./pages/package/pdf";
 const App = () => {
   return (
@@ -18,8 +16,6 @@ const App = () => {
             <Route path="/*" element={<AdminRoutes />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/package" element={<Package />} />
-            <Route path="/create-package" element={<CreatePackage />} />
             <Route path="/pdf" element={<Pdf />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
