@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Pdf from "../pdf";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
@@ -302,9 +302,17 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
   const getSessionById = useGetSessionById(sessionId);
   const createPackage = useCreateSessionPackage();
   const navigate = useNavigate();
+  const pdfRef = useRef<any>("");
 
   const handlePrint = () => {
-    navigate("/pdf?print=true");
+    const printContent = pdfRef.current.innerHTML;
+    const originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = printContent; 
+    window.print();
+
+    document.body.innerHTML = originalContent; 
+    window.location.reload(); 
   };
 
   // Handle therapy checkbox changes
@@ -421,15 +429,27 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
         >
           <div className="mt-16 flex justify-between items-center w-full p-4 bg-white border-b">
             <h2 className="text-lg font-semibold">PDF Viewer</h2>
-            <button
-              onClick={() => setIsPreviewing(false)}
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-            >
-              X
-            </button>
+            <div className="flex gap-2 justify-end items-center">
+              <CustomButton
+                onClick={handlePrint}
+                backgroundColor={styles.primaryBlack}
+                textColor="white"
+                styles={styles}
+              >
+                Print
+              </CustomButton>
+              <button
+                onClick={() => setIsPreviewing(false)}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+              >
+                X
+              </button>
+            </div>
           </div>
           <div className="w-full h-full p-4 bg-gray-100">
-            <Pdf formData={formData} />
+            <div ref={pdfRef}>
+              <Pdf formData={formData} />
+            </div>
           </div>
         </Modal>
       ) : (
@@ -656,12 +676,6 @@ const CreatePackage: React.FC<TherapyGoalFormProps> = () => {
                 >
                   Submit Request
                 </CustomButton>
-                <button
-                  onClick={handlePrint}
-                  className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
-                >
-                  Print
-                </button>
               </div>
             </>
           )}
