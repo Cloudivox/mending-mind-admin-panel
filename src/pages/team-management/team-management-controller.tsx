@@ -61,7 +61,6 @@ function useTeamManagementController() {
       }
       setIsModalOpen(false);
       resetForm();
-      refetch(); // Refresh the user list
     } catch (error) {
       toast.error("Operation failed. Please try again.");
     }

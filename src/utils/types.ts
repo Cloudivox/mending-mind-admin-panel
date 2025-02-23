@@ -71,6 +71,7 @@ export interface CreateSessionForm {
   meetingName: string;
   duration: string;
   type: string;
+  isNewClient: boolean;
   date: string;
   time: string;
   autoConfirm: boolean;
