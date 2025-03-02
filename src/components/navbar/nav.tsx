@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import NavHomeIcon from "../../assets/icons/nav-home-icon";
 import NavDashboardIcon from "../../assets/icons/nav-dashboard-icon";
 import NavCalendarIcon from "../../assets/icons/nav-calendar-icon";
@@ -21,6 +21,9 @@ import { useUser } from "../../context/user-context";
 import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-icon";
 
 const Nav = () => {
+  const { organizationId } = useParams<{
+    organizationId: string;
+  }>();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isActive, setIsActive] = useState("Home");
@@ -40,7 +43,7 @@ const Nav = () => {
         <div className="p-6 flex items-center">
           <img
             onClick={() => {
-              navigate("/");
+              navigate(`/${organizationId}`);
               setIsActive("Home");
             }}
             src={logo}
@@ -68,7 +71,7 @@ const Nav = () => {
           {user && user.role === "admin" && (
             <>
               <Link
-                to="/dashboard/overall"
+                to={`/${organizationId}/dashboard/overall`}
                 onClick={() => {
                   setIsDropdownOpen(!isDropdownOpen);
                   setIsActive("OverAll");
@@ -91,7 +94,7 @@ const Nav = () => {
               {isDropdownOpen && !isCollapsed && (
                 <div className="pl-10 space-y-2 mt-2">
                   <Link
-                    to="/dashboard/overall"
+                    to={`/${organizationId}/dashboard/overall`}
                     onClick={() => setIsActive("OverAll")}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                       isActive === "OverAll"
@@ -102,7 +105,7 @@ const Nav = () => {
                     <span>Overall</span>
                   </Link>
                   <Link
-                    to="/dashboard/therapist"
+                    to={`/${organizationId}/dashboard/therapist`}
                     onClick={() => setIsActive("Therapist")}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                       isActive === "Therapist"
@@ -113,7 +116,7 @@ const Nav = () => {
                     Therapist
                   </Link>
                   <Link
-                    to="/dashboard/client"
+                    to={`/${organizationId}/dashboard/client`}
                     onClick={() => setIsActive("Client")}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                       isActive === "Client"
@@ -124,7 +127,7 @@ const Nav = () => {
                     Client
                   </Link>
                   <Link
-                    to="/dashboard/products"
+                    to={`/${organizationId}/dashboard/products`}
                     onClick={() => setIsActive("Product")}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                       isActive === "Product"
@@ -139,22 +142,35 @@ const Nav = () => {
             </>
           )}
           {user && user.role !== "client" && (
-             <Link
-             to="/organization"
-             onClick={() => setIsActive("Organization")}
-             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-               isActive === "Organization"
-                 ? "text-black bg-mint/20"
-                 : "text-black/70 hover:text-black hover:bg-mint/10"
-             }`}
-           >
-           <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M16 17v8H6v-8zm0-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2m11-9v5H17V6zm0-2H17a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 13v5h-5v-5zm0-2h-5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2M11 6v5H6V6zm0-2H6a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2" stroke-width="0.3" stroke="currentColor"/></svg>
-             {!isCollapsed && <span>Organization</span>}
-           </Link>
+            <Link
+              to={`/${organizationId}/organization`}
+              onClick={() => setIsActive("Organization")}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "Organization"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <svg
+                className="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+              >
+                <path
+                  fill="currentColor"
+                  d="M16 17v8H6v-8zm0-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2m11-9v5H17V6zm0-2H17a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 13v5h-5v-5zm0-2h-5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2M11 6v5H6V6zm0-2H6a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"
+                  stroke-width="0.3"
+                  stroke="currentColor"
+                />
+              </svg>
+              {!isCollapsed && <span>Organization</span>}
+            </Link>
           )}
           {user && user.role === "admin" && (
             <Link
-              to="/calendar"
+              to={`/${organizationId}/calendar`}
               onClick={() => setIsActive("Calender")}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                 isActive === "Calender"
@@ -167,7 +183,7 @@ const Nav = () => {
             </Link>
           )}
           <Link
-            to="/session"
+            to={`/${organizationId}/session`}
             onClick={() => setIsActive("Session")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Session"
@@ -179,7 +195,7 @@ const Nav = () => {
             {!isCollapsed && <span>Session</span>}
           </Link>
           <Link
-            to="/package"
+            to={`/${organizationId}/package`}
             onClick={() => setIsActive("Package")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Package"
@@ -192,7 +208,7 @@ const Nav = () => {
           </Link>
           {user && user.role !== "admin" && (
             <Link
-              to="/availability"
+              to={`/${organizationId}/availability`}
               onClick={() => setIsActive("Availability")}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                 isActive === "Availability"
@@ -217,7 +233,7 @@ const Nav = () => {
             {!isCollapsed && <span>Payment</span>}
           </Link>
           <Link
-            to="/blog"
+            to={`/${organizationId}/blog`}
             onClick={() => setIsActive("blog")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "blog"
@@ -230,7 +246,7 @@ const Nav = () => {
           </Link>
           {user && user.role === "admin" && (
             <Link
-              to="/event"
+              to={`/${organizationId}/event`}
               onClick={() => setIsActive("Event")}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                 isActive === "Event"
@@ -244,7 +260,7 @@ const Nav = () => {
           )}
           {user && user.role === "admin" && (
             <Link
-              to="/team"
+              to={`/${organizationId}/team`}
               onClick={() => setIsActive("Team")}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                 isActive === "Team"
@@ -257,7 +273,7 @@ const Nav = () => {
             </Link>
           )}
           <Link
-            to="/profile"
+            to={`/${organizationId}/profile`}
             onClick={() => setIsActive("Profile")}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
               isActive === "Profile"
@@ -270,7 +286,7 @@ const Nav = () => {
           </Link>
           {user && user.role !== "therapist" && (
             <Link
-              to="/f&c"
+              to={`/${organizationId}/f&c`}
               onClick={() => setIsActive("f&c")}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
                 isActive === "f&c"

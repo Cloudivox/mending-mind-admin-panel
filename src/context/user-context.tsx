@@ -31,6 +31,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null);
     Cookies.remove(USER_ACCESS_KEY.TOKEN);
+    Cookies.remove(USER_ACCESS_KEY.ORGANIZATION_ID);
   };
 
   useEffect(() => {
@@ -47,7 +48,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         Cookies.remove(USER_ACCESS_KEY.TOKEN);
         setUser(null);
       }
-      if(!window.location.pathname.includes("/signin")) {
+      if (
+        !window.location.pathname.includes("/signin") &&
+        !window.location.pathname.includes("/signup") &&
+        !window.location.pathname.includes("/join-organization") &&
+        !window.location.pathname.includes("/forgot-password")
+      ) {
         window.location.href = "/signin";
       }
     }

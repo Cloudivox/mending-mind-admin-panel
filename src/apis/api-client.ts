@@ -43,10 +43,17 @@ apiClient.interceptors.response.use(
       (error?.response?.status === 400 || error?.response?.status === 404)
     ) {
       window.location.href = "/not-access";
-    } else if (error?.response?.status === 405) {
+    } else if (
+      error?.response?.status === 405 ||
+      (window.location.href !== "/signin" &&
+        window.location.href !== "/signup" &&
+        window.location.href !== "/join-organization" &&
+        window.location.href !== "/forgot-password")
+    ) {
       toast.error("token is expired please login and continue");
       // setUser(null);
       Cookies.remove(USER_ACCESS_KEY.TOKEN);
+      Cookies.remove(USER_ACCESS_KEY.ORGANIZATION_ID);
       window.location.href = "/signin";
     } else if (
       error?.response?.status === 500 ||

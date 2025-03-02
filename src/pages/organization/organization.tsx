@@ -4,6 +4,8 @@ import { useGetAllTherapist } from "../calender/services";
 import { IAllTherapist } from "../../types";
 import Loader from "../../components/loader";
 import { useNavigate, useParams } from "react-router-dom";
+import Cookies from "js-cookie";
+import { USER_ACCESS_KEY } from "../../utils/enum";
 
 interface IOrganization {
   id: string;
@@ -79,7 +81,7 @@ function Organization() {
         code: generateCode(activeWorkspace.name),
       });
     }
-  }, [activeWorkspace.name]);
+  }, [activeWorkspace, activeWorkspace.name]);
 
   // Toggle dropdown menu
   const toggleDropdown = (id: string) => {
@@ -248,6 +250,14 @@ function Organization() {
     fileInputRef.current?.click();
   };
 
+  const navigateHome = (workspaceId: string) => {
+    navigate(`/${workspaceId}`);
+    Cookies.set(USER_ACCESS_KEY.ORGANIZATION_ID, workspaceId, {
+      secure: true,
+      sameSite: "lax",
+    });
+  };
+
   useEffect(() => {
     if (getAllOrganization.isSuccess && getAllOrganization.data) {
       setWorkspaces(getAllOrganization.data);
@@ -258,7 +268,8 @@ function Organization() {
     if (createOrganization.isSuccess) {
       getAllOrganization.refetch();
     }
-  }, [createOrganization.isSuccess, createOrganization.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createOrganization.isSuccess]);
 
   useEffect(() => {
     if (allTherapist.isSuccess && allTherapist.data) {
@@ -310,7 +321,7 @@ function Organization() {
               <div
                 key={workspace.id}
                 onClick={() => {
-                  !organizationId && navigate(`/${workspace.id}/organization`);
+                  !organizationId && navigateHome(workspace.id);
                 }}
                 className={`${
                   !organizationId ? "cursor-pointer" : ""

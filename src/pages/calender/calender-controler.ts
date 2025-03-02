@@ -58,7 +58,6 @@ const useCalenderController = () => {
       getAllAvailibility.isSuccess &&
       getAllAvailibility.data?.availibility
     ) {
-      console.log(getAllAvailibility.data);
       // Convert therapists and their availability into the required format
       const formattedUsers = allTherapists.data.therapists.map(
         (therapist: Therapist) => {

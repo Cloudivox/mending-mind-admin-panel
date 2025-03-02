@@ -1,4 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import Cookies from "js-cookie";
+
 import { QueryClientProvider } from "react-query";
 import queryClient from "./query-client";
 import AdminRoutes from "./pages/admin-routes";
@@ -9,12 +17,40 @@ import { UserProvider } from "./context/user-context";
 import Pdf from "./pages/package/pdf";
 import Organization from "./pages/organization";
 import JoinOrganization from "./client/join-organization";
+import { USER_ACCESS_KEY } from "./utils/enum";
+
+const RedirectHandler = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = Cookies.get(USER_ACCESS_KEY.TOKEN);
+    const organizationId = Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID);
+
+    if (token && organizationId) {
+      navigate(`/${organizationId}`, { replace: true });
+    } else {
+      if (
+        !window.location.pathname.includes("/signin") &&
+        !window.location.pathname.includes("/signup") &&
+        !window.location.pathname.includes("/join-organization") &&
+        !window.location.pathname.includes("/organization") &&
+        !window.location.pathname.includes("/forgot-password")
+      ) {
+        navigate("/signin", { replace: true });
+      }
+    }
+  }, [navigate]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <Router>
           <Routes>
+            <Route path="/" element={<RedirectHandler />} />
             <Route path="/:organizationId/*" element={<AdminRoutes />} />
             <Route path="/organization" element={<Organization />} />
             <Route path="/signin" element={<Signin />} />

@@ -1,5 +1,6 @@
 export const USER_ACCESS_KEY = {
   TOKEN: "mendingMindAccessToken",
+  ORGANIZATION_ID: "organizationId",
 };
 
 export const API_QUERY_KEY = {
