@@ -101,7 +101,11 @@ const SignIn = () => {
         email: signin.data?.user?.email,
         role: signin.data?.user?.role,
       });
-      navigate("/");
+      if ((signin.data?.user?.role).toLowerCase() === "client") {
+        navigate(`/${signin.data?.user?.organizationId}`);
+      } else {
+        navigate("/organization");
+      }
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signin.isSuccess]);

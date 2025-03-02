@@ -138,6 +138,20 @@ const Nav = () => {
               )}
             </>
           )}
+          {user && user.role !== "client" && (
+             <Link
+             to="/organization"
+             onClick={() => setIsActive("Organization")}
+             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+               isActive === "Organization"
+                 ? "text-black bg-mint/20"
+                 : "text-black/70 hover:text-black hover:bg-mint/10"
+             }`}
+           >
+           <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M16 17v8H6v-8zm0-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2m11-9v5H17V6zm0-2H17a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 13v5h-5v-5zm0-2h-5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2M11 6v5H6V6zm0-2H6a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2" stroke-width="0.3" stroke="currentColor"/></svg>
+             {!isCollapsed && <span>Organization</span>}
+           </Link>
+          )}
           {user && user.role === "admin" && (
             <Link
               to="/calendar"

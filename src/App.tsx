@@ -7,13 +7,15 @@ import Signup from "./pages/auth/signup";
 import Signin from "./pages/auth/signin";
 import { UserProvider } from "./context/user-context";
 import Pdf from "./pages/package/pdf";
+import Organization from "./pages/organization";
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <Router>
           <Routes>
-            <Route path="/*" element={<AdminRoutes />} />
+            <Route path="/:organizationId/*" element={<AdminRoutes />} />
+            <Route path="/organization" element={<Organization />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/pdf" element={<Pdf />} />

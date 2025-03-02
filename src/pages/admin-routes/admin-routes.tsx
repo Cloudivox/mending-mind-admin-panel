@@ -14,6 +14,7 @@ import Session from "../session";
 import TeamManagement from "../team-management";
 import Package from "../package";
 import CreatePackage from "../package/create-package";
+import Organization from "../organization";
 
 const AdminRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AdminRoutes = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="calendar" element={<Calender />} />
+            <Route path="organization" element={<Organization />} />
             <Route path="dashboard/products" element={<Products />} />
             <Route path="dashboard/client" element={<Clients />} />
             <Route path="dashboard/therapist" element={<Therapists />} />

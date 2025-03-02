@@ -1,8 +1,8 @@
 import { useMutation } from "react-query";
 
-import apiClient from "../../apis/api-client";
-import { IAPIError, IAxiosResponse } from "../../types";
-import { API_MUTATION_KEY, APIS_ROUTES } from "../../utils/enum";
+import apiClient from "../../../../apis/api-client";
+import { IAPIError, IAxiosResponse } from "../../../../types";
+import { API_MUTATION_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
 interface IOrganization {
   name: string;
@@ -13,6 +13,7 @@ interface IOrganization {
   therapists: string[];
   country: string;
 }
+
 const createOrganization = async (organization: IOrganization) => {
   const result = await apiClient.post<null, IAxiosResponse<void>>(
     `${APIS_ROUTES.ORGANIZATION_SERVICE}/create-organization`,

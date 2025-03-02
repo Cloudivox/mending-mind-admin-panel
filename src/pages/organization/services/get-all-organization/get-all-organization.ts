@@ -1,17 +1,26 @@
 import { useQuery } from "react-query";
 
-import apiClient from "../../apis/api-client";
-import { IAPIError, IAxiosResponse } from "../../types";
-import { API_QUERY_KEY, APIS_ROUTES } from "../../utils/enum";
+import apiClient from "../../../../apis/api-client";
+import { IAPIError, IAxiosResponse } from "../../../../types";
+import { API_QUERY_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
 interface IOrganization {
   id: string;
   name: string;
   description: string;
   country: string;
-  therapists: string[];
+  therapists: Therapist[];
   logo: string;
+  users: number;
+  location: string;
+  code: string;
 }
+
+interface Therapist {
+  _id: string;
+  name: string;
+}
+
 
 const getAllSessionPackage = async () => {
   const result = await apiClient.get<null, IAxiosResponse<IOrganization[]>>(

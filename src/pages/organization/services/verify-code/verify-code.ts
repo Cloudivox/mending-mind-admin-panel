@@ -1,8 +1,8 @@
 import { useMutation } from "react-query";
 
-import apiClient from "../../apis/api-client";
-import { IAPIError, IAxiosResponse } from "../../types";
-import { API_MUTATION_KEY, APIS_ROUTES } from "../../utils/enum";
+import apiClient from "../../../../apis/api-client";
+import { IAPIError, IAxiosResponse } from "../../../../types";
+import { API_MUTATION_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
 interface IVerifyCode {
   code: string;

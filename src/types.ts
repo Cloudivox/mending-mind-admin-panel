@@ -22,6 +22,7 @@ export interface IAxiosResponse<T> {
 
 export interface IAuthResponse {
   user: {
+    organizationId: any;
     id: string;
     email: string;
     phone: string;
