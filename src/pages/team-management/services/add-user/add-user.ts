@@ -11,19 +11,19 @@ export interface IAddUser {
   phone?: string;
 }
 
-const addUser = async (user: IAddUser) => {
+const addUser = async (user: IAddUser, organizationId?: string) => {
   const result = await apiClient.post<IAddUser, IAxiosResponse<IUsers>>(
-    APIS_ROUTES.ADD_USER,
+    `${APIS_ROUTES.ADD_USER}/${organizationId}`,
     user
   );
 
   return result.data.Data;
 };
 
-const useAddUser = () =>
+const useAddUser = (organizationId?: string) =>
   useMutation<IUsers, IAPIError, IAddUser>(
-    [API_MUTATION_KEY.ADD_USER],
-    addUser
+    [API_MUTATION_KEY.ADD_USER, organizationId],
+    (user: IAddUser) => addUser(user, organizationId)
   );
 
 export default useAddUser;

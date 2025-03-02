@@ -2,9 +2,18 @@ import React, { useState } from "react";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import { IUsers } from "../../types";
-import { useAddUser, useDeleteUser, useGetAllUsers, useUpdateUser } from "./services";
+import {
+  useAddUser,
+  useDeleteUser,
+  useGetAllUsers,
+  useUpdateUser,
+} from "./services";
+import { useParams } from "react-router-dom";
 
 function useTeamManagementController() {
+  const { organizationId } = useParams<{
+    organizationId: string;
+  }>();
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,8 +32,8 @@ function useTeamManagementController() {
     data: userData,
     isLoading,
     refetch,
-  } = useGetAllUsers(page, limit, searchTerm);
-  const adduser = useAddUser();
+  } = useGetAllUsers(page, limit, searchTerm, organizationId);
+  const adduser = useAddUser(organizationId);
   const updateUser = useUpdateUser();
   const deleteUser = useDeleteUser();
 
@@ -146,7 +155,7 @@ function useTeamManagementController() {
     handleEdit,
     handleDelete,
     Pagination,
-    searchTerm
+    searchTerm,
   };
 }
 
