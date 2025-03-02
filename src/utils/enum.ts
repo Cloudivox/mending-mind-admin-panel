@@ -3,6 +3,8 @@ export const USER_ACCESS_KEY = {
   ORGANIZATION_ID: "organizationId",
 };
 
+export const MENDING_MIND_ID = "67c42246019b4349af563057";
+
 export const API_QUERY_KEY = {
   GET_USER_DETAILS: "get-user-details",
   GET_AVAILABILITY: "get-availability",

@@ -3,25 +3,25 @@ import apiClient from "../../../../apis/api-client";
 import { IAPIError, IAxiosResponse, IUsers } from "../../../../types";
 import { API_QUERY_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
-
 interface UsersResponse {
   users: IUsers[];
 }
-const getAllUsers = async () => {
+const getAllUsers = async (organizationId?: string) => {
   const result = await apiClient.get<null, IAxiosResponse<UsersResponse>>(
-    APIS_ROUTES.GET_ALL_USERS, {
-    params: {
-      role: "therapist,client",
+    `${APIS_ROUTES.GET_ALL_USERS}/${organizationId}`,
+    {
+      params: {
+        role: "therapist,client",
+      },
     }
-  }
   );
   return result.data.Data;
 };
 
-const useGetAllUsers = () =>
+const useGetAllUsers = (organizationId?: string) =>
   useQuery<UsersResponse, IAPIError>(
     [API_QUERY_KEY.GET_ALL_USERS],
-    () => getAllUsers(),
+    () => getAllUsers(organizationId),
     {
       cacheTime: 0,
     }

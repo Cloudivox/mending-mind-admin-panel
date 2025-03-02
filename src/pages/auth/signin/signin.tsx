@@ -103,6 +103,14 @@ const SignIn = () => {
       });
       if ((signin.data?.user?.role).toLowerCase() === "client") {
         navigate(`/${signin.data?.user?.organizationId}`);
+        Cookies.set(
+          USER_ACCESS_KEY.ORGANIZATION_ID,
+          signin.data?.user?.organizationId,
+          {
+            secure: true,
+            sameSite: "lax",
+          }
+        );
       } else {
         navigate("/organization");
       }

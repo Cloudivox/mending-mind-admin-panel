@@ -38,7 +38,7 @@ const useCreateSessionController = ({
     location: "",
   });
 
-  const getAllUsers = useGetAllUsers();
+  const getAllUsers = useGetAllUsers(organizationId);
   const availabilityQuery = useCheckAvailibility(form.therapist, form.date);
   const createNewClient = useAddUser(organizationId);
   const createSessionMutation = useCreateSession();

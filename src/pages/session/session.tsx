@@ -1,21 +1,24 @@
 import Loader from "../../components/loader";
+import { MENDING_MIND_ID } from "../../utils/enum";
 import CreateSessionModal from "./create-session-modal";
 import useSessionController from "./session-controller";
 
 const Session = () => {
-  const { sessions, isModalOpen, setIsModalOpen, isLoading } =
+  const { sessions, isModalOpen, setIsModalOpen, isLoading, organizationId } =
     useSessionController();
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Sessions</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
-        >
-          Create Session
-        </button>
+        {organizationId === MENDING_MIND_ID && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
+          >
+            Create Session
+          </button>
+        )}
       </div>
 
       {isLoading ? (
@@ -89,13 +92,9 @@ const Session = () => {
         </>
       )}
 
-      {
-        isModalOpen && (
-          <CreateSessionModal
-            onClose={() => setIsModalOpen(false)}
-            />
+      {isModalOpen && (
+        <CreateSessionModal onClose={() => setIsModalOpen(false)} />
       )}
-    
     </div>
   );
 };
