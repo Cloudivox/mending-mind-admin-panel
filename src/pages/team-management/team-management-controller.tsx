@@ -33,6 +33,7 @@ function useTeamManagementController() {
     isLoading,
     refetch,
   } = useGetAllUsers(page, limit, searchTerm, organizationId);
+  //@ts-ignore
   const adduser = useAddUser(organizationId);
   const updateUser = useUpdateUser();
   const deleteUser = useDeleteUser();

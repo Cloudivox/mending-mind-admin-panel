@@ -8,6 +8,7 @@ import Signin from "./pages/auth/signin";
 import { UserProvider } from "./context/user-context";
 import Pdf from "./pages/package/pdf";
 import Organization from "./pages/organization";
+import JoinOrganization from "./client/join-organization";
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="/organization" element={<Organization />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/join-organization" element={<JoinOrganization />} />
             <Route path="/pdf" element={<Pdf />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
