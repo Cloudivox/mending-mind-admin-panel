@@ -46,8 +46,8 @@ function App() {
   return isLoading ? (
     <Loader />
   ) : (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-mint via-white to-purple/20">
+      <div className="">
         {organizationData && Object.keys(organizationData).length > 0 ? (
           <RegistrationForm organizationData={organizationData} />
         ) : (

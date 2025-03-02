@@ -55,27 +55,34 @@ const CodeVerificationForm: React.FC<CodeVerificationFormProps> = ({
   }, [verifyCode.isError]);
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg m-4">
+      <h2 className="font-playfair text-3xl font-bold text-black mb-5">
         Enter Code for Organization
       </h2>
 
-      <div className="mb-6">
+      <div className="space-y-2 mb-5">
+        <label
+          htmlFor="email"
+          className="block font-montserrat text-sm font-medium text-black"
+        >
+          Organization code
+        </label>
         <input
           type="text"
           value={code}
           onChange={handleInputChange}
           placeholder="Enter organization code"
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          disabled={verifyCode.isLoading}
+          className={`w-full h-12 px-3 py-2 bg-white border ${
+            error ? "border-red-500" : "border-gray-300"
+          } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
         />
-        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
 
       <button
         onClick={handleVerify}
         disabled={verifyCode.isLoading}
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors flex items-center justify-center"
+        className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
       >
         {verifyCode.isLoading ? (
           <>

@@ -103,25 +103,28 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
-        {organizationData.organizationName}
-      </h2>
-      <p className="text-center text-gray-600 mb-6">Join the organization</p>
-
+    <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-lg m-4">
+      <div className="text-center space-y-2">
+        <h2 className="font-playfair text-3xl font-bold text-black">
+          {organizationData.organizationName}
+        </h2>
+        <p className="font-montserrat text-sm text-gray-500">
+          Join the organization
+        </p>
+      </div>
       {successMessage && (
         <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-md">
           {successMessage}
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div className="space-y-4">
-          {/* Name Field */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Name & Email in one line */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-montserrat text-sm font-medium text-black"
             >
               Name <span className="text-red-500">*</span>
             </label>
@@ -131,20 +134,19 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className={`mt-1 block w-full px-3 py-2 border ${
+              className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.name ? "border-red-500" : "border-gray-300"
-              } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
             />
             {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
             )}
           </div>
 
-          {/* Email Field */}
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-montserrat text-sm font-medium text-black"
             >
               Email <span className="text-red-500">*</span>
             </label>
@@ -154,20 +156,22 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`mt-1 block w-full px-3 py-2 border ${
+              className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.email ? "border-red-500" : "border-gray-300"
-              } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-600">{errors.email}</p>
             )}
           </div>
+        </div>
 
-          {/* Phone Number Field */}
+        {/* Phone & Password in one line */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label
               htmlFor="phoneNumber"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-montserrat text-sm font-medium text-black"
             >
               Phone Number <span className="text-red-500">*</span>
             </label>
@@ -177,20 +181,19 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}
-              className={`mt-1 block w-full px-3 py-2 border ${
+              className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.phoneNumber ? "border-red-500" : "border-gray-300"
-              } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
             />
             {errors.phoneNumber && (
               <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>
             )}
           </div>
 
-          {/* Password Field */}
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-montserrat text-sm font-medium text-black"
             >
               Password <span className="text-red-500">*</span>
             </label>
@@ -200,20 +203,22 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`mt-1 block w-full px-3 py-2 border ${
+              className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.password ? "border-red-500" : "border-gray-300"
-              } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
             />
             {errors.password && (
               <p className="mt-1 text-sm text-red-600">{errors.password}</p>
             )}
           </div>
+        </div>
 
-          {/* Confirm Password Field */}
+        {/* Confirm Password, Age & Gender in one line */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-montserrat text-sm font-medium text-black"
             >
               Confirm Password <span className="text-red-500">*</span>
             </label>
@@ -223,9 +228,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={`mt-1 block w-full px-3 py-2 border ${
+              className={`w-full h-12 px-3 py-2 bg-white border ${
                 errors.confirmPassword ? "border-red-500" : "border-gray-300"
-              } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
             />
             {errors.confirmPassword && (
               <p className="mt-1 text-sm text-red-600">
@@ -234,11 +239,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             )}
           </div>
 
-          {/* Age Field */}
           <div>
             <label
               htmlFor="age"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-montserrat text-sm font-medium text-black"
             >
               Age
             </label>
@@ -248,15 +252,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               name="age"
               value={formData.age || ""}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full h-12 px-3 py-2 bg-white border rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple"
             />
           </div>
 
-          {/* Gender Field */}
           <div>
             <label
               htmlFor="gender"
-              className="block text-sm font-medium text-gray-700"
+              className="block font-montserrat text-sm font-medium text-black"
             >
               Gender
             </label>
@@ -265,7 +268,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               name="gender"
               value={formData.gender || ""}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full h-12 px-3 py-2 bg-white border rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple"
             >
               <option value="">Select gender</option>
               <option value="male">Male</option>
@@ -273,74 +276,74 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               <option value="other">Other</option>
             </select>
           </div>
-
-          {errors.submit && (
-            <div className="p-3 bg-red-100 text-red-700 rounded-md">
-              {errors.submit}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            {isLoading ? (
-              <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
-                  <g
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-dasharray="16"
-                      stroke-dashoffset="16"
-                      d="M12 3c4.97 0 9 4.03 9 9"
-                    >
-                      <animate
-                        fill="freeze"
-                        attributeName="stroke-dashoffset"
-                        dur="0.3s"
-                        values="16;0"
-                      />
-                      <animateTransform
-                        attributeName="transform"
-                        dur="1.5s"
-                        repeatCount="indefinite"
-                        type="rotate"
-                        values="0 12 12;360 12 12"
-                      />
-                    </path>
-                    <path
-                      stroke-dasharray="64"
-                      stroke-dashoffset="64"
-                      stroke-opacity="0.3"
-                      d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z"
-                    >
-                      <animate
-                        fill="freeze"
-                        attributeName="stroke-dashoffset"
-                        dur="1.2s"
-                        values="64;0"
-                      />
-                    </path>
-                  </g>
-                </svg>
-                Submitting...
-              </>
-            ) : (
-              "Submit"
-            )}
-          </button>
         </div>
+
+        {/* Error message covering full width */}
+        {errors.submit && (
+          <div className="text-red-500 text-xs mt-1">{errors.submit}</div>
+        )}
+
+        {/* Submit Button with Full Width */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
+        >
+          {isLoading ? (
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeDasharray="16"
+                    strokeDashoffset="16"
+                    d="M12 3c4.97 0 9 4.03 9 9"
+                  >
+                    <animate
+                      fill="freeze"
+                      attributeName="stroke-dashoffset"
+                      dur="0.3s"
+                      values="16;0"
+                    />
+                    <animateTransform
+                      attributeName="transform"
+                      dur="1.5s"
+                      repeatCount="indefinite"
+                      type="rotate"
+                      values="0 12 12;360 12 12"
+                    />
+                  </path>
+                  <path
+                    strokeDasharray="64"
+                    strokeDashoffset="64"
+                    strokeOpacity="0.3"
+                    d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z"
+                  >
+                    <animate
+                      fill="freeze"
+                      attributeName="stroke-dashoffset"
+                      dur="1.2s"
+                      values="64;0"
+                    />
+                  </path>
+                </g>
+              </svg>
+              Submitting...
+            </>
+          ) : (
+            "Submit"
+          )}
+        </button>
       </form>
     </div>
   );
