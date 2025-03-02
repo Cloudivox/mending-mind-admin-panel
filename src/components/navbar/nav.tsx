@@ -19,6 +19,7 @@ import ArrowLeft from "../../assets/icons/arrow-left";
 import ArrowRight from "../../assets/icons/arrow-right";
 import { useUser } from "../../context/user-context";
 import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-icon";
+import { toast } from "react-toastify";
 
 const Nav = () => {
   const { organizationId } = useParams<{
@@ -28,7 +29,7 @@ const Nav = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isActive, setIsActive] = useState("Home");
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   return (
     <aside
@@ -298,6 +299,64 @@ const Nav = () => {
               {!isCollapsed && <span>Feedback & Complains</span>}
             </Link>
           )}
+          <div className="absolute bottom-1">
+            {user && user.role !== "client" && (
+              <Link
+                to={"/organization"}
+                onClick={() => setIsActive("switch")}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                  isActive === "switch"
+                    ? "text-black bg-mint/20"
+                    : "text-black/70 hover:text-black hover:bg-mint/10"
+                }`}
+              >
+                <svg
+                  className="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 48 48"
+                >
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="4"
+                    d="M42 19H6M30 7l12 12M6.799 29h36m-36 0l12 12"
+                  />
+                </svg>
+                {!isCollapsed && <span>Switch Organization</span>}
+              </Link>
+            )}
+            <Link
+              to={"/signin"}
+              onClick={() => {
+                setIsActive("logout");
+                toast.success("Signout successfully");
+                logout();
+              }}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "logout"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <svg
+                className="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h6q.425 0 .713.288T12 4t-.288.713T11 5H5v14h6q.425 0 .713.288T12 20t-.288.713T11 21zm12.175-8H10q-.425 0-.712-.288T9 12t.288-.712T10 11h7.175L15.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L20.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288t-.713-.313q-.275-.3-.262-.712t.287-.688z"
+                />
+              </svg>
+              {!isCollapsed && <span>Signout</span>}
+            </Link>
+          </div>
         </div>
       </nav>
       <button

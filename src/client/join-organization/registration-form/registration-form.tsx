@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 // import { registerUser } from "../services/api";
+import logo from "../../../assets/logo.png";
 
 interface RegistrationFormProps {
   organizationData: OrganizationData;
@@ -105,6 +106,28 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
   return (
     <div className="w-full max-w-2xl p-8 space-y-8 bg-white rounded-2xl shadow-lg m-4">
       <div className="text-center space-y-2">
+        <div className="flex items-center justify-center rounded-3xl">
+          {/* Logo */}
+          <div className="w-36 h-36 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center shadow-md">
+            <img
+              src={logo}
+              alt="Mending Mind Logo"
+              className="w-28 h-auto object-contain drop-shadow-lg"
+            />
+          </div>
+
+          {/* X Symbol */}
+          <span className="text-black text-5xl mx-6 font-extrabold drop-shadow-lg">
+            X
+          </span>
+
+          {/* Letter P */}
+          <div className="w-36 h-36 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center shadow-md">
+            <span className="text-cyan-700 text-5xl font-extrabold drop-shadow-lg">
+              {organizationData.organizationName.slice(0, 1).toUpperCase()}
+            </span>
+          </div>
+        </div>
         <h2 className="font-playfair text-3xl font-bold text-black">
           {organizationData.organizationName}
         </h2>
