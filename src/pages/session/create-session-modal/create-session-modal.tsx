@@ -253,7 +253,7 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
                 type="submit"
                 className={`px-4 py-2 rounded-md transition-colors ${isSlotAvailable && Boolean(form.therapist) && Boolean(form.date) && Boolean(form.time)
                   ? 'bg-teal-600 text-white hover:bg-teal-700'
-                  : 'bg-teal-300 text-white cursor-not-allowed'
+                  : 'bg-teal-500 text-white cursor-not-allowed'
                   }`}
                 disabled={!Boolean(isSlotAvailable && form.therapist && form.date && form.time)}
                 onClick={handleCreateSession}
