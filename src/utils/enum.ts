@@ -36,6 +36,8 @@ export const API_MUTATION_KEY = {
   CREATE_SESSION: "create-session",
   CREATE_ORGANIZATION: "crate-organization",
   VERIFY_CODE: "verify-code",
+  UPDATE_ORGANIZATION: "update-organization",
+  DELETE_ORGANIZATION: "delete-organization",
 };
 
 export const APIS_ROUTES = {
