@@ -12,7 +12,7 @@ function Package() {
 
   useEffect(() => {
     if (getAllSessions.isSuccess && getAllSessions.data) {
-      setSessions(getAllSessions.data);
+      setSessions(getAllSessions.data.previous);
     }
   }, [getAllSessions.isSuccess, getAllSessions.data]);
   return (
