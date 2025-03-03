@@ -20,6 +20,8 @@ import ArrowRight from "../../assets/icons/arrow-right";
 import { useUser } from "../../context/user-context";
 import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-icon";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import { MENDING_MIND_ID, USER_ACCESS_KEY } from "../../utils/enum";
 
 const Nav = () => {
   const { organizationId } = useParams<{
@@ -207,20 +209,23 @@ const Nav = () => {
             <NavPackageIcon />
             {!isCollapsed && <span>Package</span>}
           </Link>
-          {user && user.role !== "admin" && (
-            <Link
-              to={`/${organizationId}/availability`}
-              onClick={() => setIsActive("Availability")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "Availability"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
-            >
-              <NavAvailabilityIcon />
-              {!isCollapsed && <span>Availability</span>}
-            </Link>
-          )}
+          {user &&
+            user.role === "therapist" &&
+            Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID) ===
+              MENDING_MIND_ID && (
+              <Link
+                to={`/${organizationId}/availability`}
+                onClick={() => setIsActive("Availability")}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                  isActive === "Availability"
+                    ? "text-black bg-mint/20"
+                    : "text-black/70 hover:text-black hover:bg-mint/10"
+                }`}
+              >
+                <NavAvailabilityIcon />
+                {!isCollapsed && <span>Availability</span>}
+              </Link>
+            )}
           <Link
             to="#"
             onClick={() => setIsActive("Payment")}

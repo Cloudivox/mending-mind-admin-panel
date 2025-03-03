@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useRequestReschedule from "./services/reschedule-request";
 import { IRequestRescheduleData } from "../../types";
 import { toast } from "react-toastify";
+import { useGetAllOrganization } from "../organization/services";
 
 const useAvailabilityController = () => {
   const { user } = useUser();
@@ -26,11 +27,15 @@ const useAvailabilityController = () => {
   const getAvailibility = useGetAvailibility(
     formatDate(selectedDate).toString()
   );
+
+  const getAllOrganization = useGetAllOrganization();
   const addAvailability = useCreateAvailibility();
   const deleteAvailibility = useDeleteAvailibility();
   const updateAvailibility = useUpdateAvailibility();
   const requestReschedule = useRequestReschedule();
 
+  const isUserInOrganization =
+    getAllOrganization.data && getAllOrganization?.data?.length > 1;
   const formatTimeRange = (startTime: string, endTime: string) => {
     const formatTime = (time: string) => {
       const [hours, minutes] = time.split(":");
@@ -70,7 +75,6 @@ const useAvailabilityController = () => {
       return;
     }
     addAvailability.mutate(newSlot);
-    
   };
 
   const handleDeleteSlot = (slotId: string) => {
@@ -82,6 +86,15 @@ const useAvailabilityController = () => {
     today.setHours(0, 0, 0, 0);
     date.setHours(0, 0, 0, 0);
     return date < today;
+  };
+
+  const isWeekend = (date: Date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6; // 0 is Sunday, 6 is Saturday
+  };
+
+  const isDayDisabled = (date: Date) => {
+    return isPastDate(date) || (isUserInOrganization && isWeekend(date));
   };
 
   const getDaySlots = (date: Date) => {
@@ -112,17 +125,20 @@ const useAvailabilityController = () => {
         date.getFullYear() === selectedDate.getFullYear();
       const daySlots = getDaySlots(date);
       const hasSlots = daySlots && daySlots.length > 0;
+      const isDisabled = isDayDisabled(date);
+      const isWeekendDay = isWeekend(date);
 
       days.push(
         <button
           key={day}
           onClick={() => handleDateClick(date)}
-          disabled={isPastDate(new Date(year, month, day))}
+          disabled={isDisabled}
           className={`h-14 rounded-2xl flex items-center justify-center relative
               ${isSelected ? "bg-emerald-600 text-white" : "hover:bg-gray-100"}
               ${hasSlots ? "font-semibold" : ""}
+              ${isDisabled ? "text-gray-400 cursor-not-allowed" : ""}
               ${
-                isPastDate(new Date(year, month, day))
+                isUserInOrganization && isWeekendDay && !isPastDate(date)
                   ? "text-gray-400 cursor-not-allowed"
                   : ""
               }
@@ -153,22 +169,24 @@ const useAvailabilityController = () => {
     const now = new Date();
     const slotDate = new Date(selectedDate);
     const [startHours, startMinutes] = slot.startTime.split(":").map(Number);
-    const slotStartTime = new Date(slotDate.setHours(startHours, startMinutes, 0, 0));
-  
-    return slotStartTime < now; 
+    const slotStartTime = new Date(
+      slotDate.setHours(startHours, startMinutes, 0, 0)
+    );
+
+    return slotStartTime < now;
   };
 
- const onRescheduleModalSubmit = (data: IRequestRescheduleData) => {
+  const onRescheduleModalSubmit = (data: IRequestRescheduleData) => {
     requestReschedule.mutate(data);
   };
 
   useEffect(() => {
-    if(requestReschedule.isSuccess){
+    if (requestReschedule.isSuccess) {
       setIsRescheduleModalVisible(false);
       setEditSlot(undefined);
       toast.success("Reschedule request sent successfully");
     }
-  },[requestReschedule.isSuccess]);
+  }, [requestReschedule.isSuccess]);
 
   useEffect(() => {
     if (getAvailibility.isSuccess && getAvailibility.data) {
@@ -216,11 +234,12 @@ const useAvailabilityController = () => {
     handleAddSlot,
     handleDeleteSlot,
     isPastDate,
+    isDayDisabled,
     selectedDaySlots,
     generateCalendarDays,
     formatDate,
     formatTimeRange,
-    isLoading: getAvailibility.isLoading,
+    isLoading: getAvailibility.isLoading || getAllOrganization.isLoading,
     editSlot,
     onEditClick,
     setEditSlot,
@@ -228,7 +247,8 @@ const useAvailabilityController = () => {
     setIsRescheduleModalVisible,
     onRescheduleClick,
     isSlotInPast,
-    onRescheduleModalSubmit
+    onRescheduleModalSubmit,
+    isUserInOrganization,
   };
 };
 

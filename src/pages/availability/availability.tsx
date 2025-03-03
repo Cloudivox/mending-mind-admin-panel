@@ -13,7 +13,7 @@ export default function AvailabilityPage() {
     setIsModalOpen,
     handleAddSlot,
     handleDeleteSlot,
-    isPastDate,
+    isDayDisabled,
     selectedDaySlots,
     generateCalendarDays,
     formatTimeRange,
@@ -48,7 +48,7 @@ export default function AvailabilityPage() {
                   }
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  <ArrowLeft/>
+                  <ArrowLeft />
                 </button>
                 <h2 className="text-lg font-medium mx-2">
                   {selectedDate.toLocaleString("default", {
@@ -100,10 +100,10 @@ export default function AvailabilityPage() {
                 </h2>
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  disabled={isPastDate(selectedDate)}
+                  disabled={isDayDisabled(selectedDate)}
                   className={`bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2 
                       ${
-                        isPastDate(selectedDate)
+                        isDayDisabled(selectedDate)
                           ? "bg-gray-300 cursor-not-allowed"
                           : "bg-emerald-600 hover:bg-emerald-700 text-white"
                       }`}
@@ -139,62 +139,62 @@ export default function AvailabilityPage() {
                             Booked
                           </span>
                         )}
-                        {!isPastDate(selectedDate) && !isSlotInPast(slot) && (
-                          <div className="flex items-center gap-2">
-                            {slot.clientId ? (
-                              <button
-                                // size="sm"
-                                onClick={() => {
-                                  onRescheduleClick(slot);
-                                }}
-                                className="text-orange-500 hover:text-orange-600 border-orange-200 hover:bg-orange-50"
-                              >
-                                Reschedule
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => onEditClick(slot)}
-                                className="text-gray-500 hover:text-gray-600"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
+                        {!isDayDisabled(selectedDate) &&
+                          !isSlotInPast(slot) && (
+                            <div className="flex items-center gap-2">
+                              {slot.clientId ? (
+                                <button
+                                  onClick={() => {
+                                    onRescheduleClick(slot);
+                                  }}
+                                  className="text-orange-500 hover:text-orange-600 border-orange-200 hover:bg-orange-50"
                                 >
-                                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                </svg>
-                              </button>
-                            )}
-                            {!slot.clientId && (
-                              <button
-                                onClick={() => handleDeleteSlot(slot._id)}
-                                className="text-red-500 hover:text-red-600"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                  Reschedule
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => onEditClick(slot)}
+                                  className="text-gray-500 hover:text-gray-600"
                                 >
-                                  <path d="M3 6h18"></path>
-                                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                </svg>
-                              </button>
-                            )}
-                          </div>
-                        )}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                  </svg>
+                                </button>
+                              )}
+                              {!slot.clientId && (
+                                <button
+                                  onClick={() => handleDeleteSlot(slot._id)}
+                                  className="text-red-500 hover:text-red-600"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                          )}
                       </div>
                     ))
                   )}
@@ -214,7 +214,7 @@ export default function AvailabilityPage() {
           }}
           onSubmit={handleAddSlot}
           selectedDate={selectedDate}
-          isPastDate={isPastDate(selectedDate)}
+          isPastDate={isDayDisabled(selectedDate)}
           slot={editSlot}
         />
       )}
