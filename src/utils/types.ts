@@ -78,3 +78,16 @@ export interface CreateSessionForm {
   paymentType: "free" | "paid" | "no-booking-fee";
   location: string;
 }
+
+export interface IProfile {
+  userId: string;
+  bio: string;
+  qualification: string;
+  specialization: string;
+  experience: string;
+  phone: string;
+  name: string;
+  email: string;
+  age: string;
+  gender: string;
+}

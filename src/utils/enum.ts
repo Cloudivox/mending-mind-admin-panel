@@ -18,6 +18,7 @@ export const API_QUERY_KEY = {
   GET_SESSION_BY_ID: " get-session-by-id",
   GET_ALL_ORGANIZATION: "get-all-organization",
   GET_ALL_SESSION_NOTES: "get-all-session-notes",
+  GET_PROFILE_DETAILS: "get-profile-details",
 };
 
 export const API_MUTATION_KEY = {
@@ -43,6 +44,7 @@ export const API_MUTATION_KEY = {
   DELETE_SESSION_NOTE: "delete-session-note",
   ADD_USER_IN_ORGANIZATION: "add-user-organization",
   DELETE_USER_ORGANIZATION: "delete-user-organization",
+  UPDATE_PROFILE: "update-profile",
 };
 
 export const APIS_ROUTES = {
@@ -64,6 +66,7 @@ export const APIS_ROUTES = {
   AVAILIBILITY_SERVICE: "/availability-service/v1/availability",
   ORGANIZATION_SERVICE: "/organization-service/v1/organization",
   SESSION_NOTE_SERVICE: "/session-notes-service/v1/session-notes",
+  PROFILE_SERVICE: "/auth-service/v1/profile",
 };
 
 export const formatDate = (date: Date): string => {
