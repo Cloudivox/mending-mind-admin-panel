@@ -13,6 +13,7 @@ const SessionDetails = () => {
     notes,
     isLoading,
     handleDeleteNote,
+    userId,
   } = useSessionDetailsController();
   return (
     <div className="min-h-screen bg-gray-50">
@@ -168,7 +169,10 @@ const SessionDetails = () => {
                         {note.date}
                       </span>
                       <div className="flex space-x-2">
-                        <p className="text-gray-500">~ {note.name}</p>
+                        <p className="text-gray-500">
+                          ~ {note.name}{" "}
+                          {userId && userId === note.authorId ? "(You)" : ""}{" "}
+                        </p>
                         <button
                           className="text-gray-400 hover:text-[#E07A5F]"
                           onClick={() => handleDeleteNote(note.id)}

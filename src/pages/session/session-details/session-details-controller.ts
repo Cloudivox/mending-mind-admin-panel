@@ -7,12 +7,15 @@ import {
   useGetSessionById,
 } from "../services";
 import { toast } from "react-toastify";
+import { useUser } from "../../../context/user-context";
 
 const useSessionDetailsController = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams<{
     sessionId: string;
   }>();
+
+  const { user } = useUser();
 
   const getSessionDetails = useGetSessionById(sessionId);
   const getSessionNotes = useGetAllSessionNotes(sessionId);
@@ -31,6 +34,7 @@ const useSessionDetailsController = () => {
       content: string;
       date: string;
       name: string;
+      authorId: string;
     }[]
   >([]);
 
@@ -95,6 +99,7 @@ const useSessionDetailsController = () => {
           hour: "2-digit",
           minute: "2-digit",
         }),
+        authorId: note.authorId,
       }));
       setNotes(notesData);
     }
@@ -111,6 +116,7 @@ const useSessionDetailsController = () => {
     navigate,
     notes,
     handleDeleteNote,
+    userId: user?.id,
   };
 };
 export default useSessionDetailsController;
