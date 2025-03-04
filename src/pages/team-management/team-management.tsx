@@ -7,7 +7,6 @@ const TeamManagement = () => {
     isLoading,
     handleSearch,
     resetForm,
-    isModalOpen,
     setIsModalOpen,
     isEditing,
     handleSubmit,
@@ -25,7 +24,6 @@ const TeamManagement = () => {
     handleCreateNew,
     selectedTherapists,
     setShowTherapistList,
-    setSelectedOption,
     handleAddUser,
   } = useTeamManagementController();
 
@@ -77,17 +75,20 @@ const TeamManagement = () => {
               <div className="bg-white rounded-lg p-6 w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-xl font-bold text-gray-800">
-                    Add Team Member
+                    {isEditing ? "Update User Details" : "Add Team Member"}
                   </h2>
                   <button
-                    onClick={() => setShowTherapistList(false)}
+                    onClick={() => {
+                      setShowTherapistList(false);
+                      resetForm();
+                    }}
                     className="text-gray-500 hover:text-gray-700"
                   >
                     &times;
                   </button>
                 </div>
 
-                {selectedOption === null && (
+                {selectedOption === null && therapistsList.length > 0 && (
                   <>
                     <h3 className="font-medium text-gray-700 mb-3">
                       Select from existing therapists:
@@ -146,7 +147,9 @@ const TeamManagement = () => {
                   </>
                 )}
 
-                {selectedOption === "new" && (
+                {(selectedOption === "new" ||
+                  therapistsList.length === 0 ||
+                  isEditing) && (
                   <>
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div>

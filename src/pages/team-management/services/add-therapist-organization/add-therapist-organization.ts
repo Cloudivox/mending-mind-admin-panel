@@ -10,7 +10,7 @@ const addUserInOrganization = async (
 ) => {
   const result = await apiClient.post<void, IAxiosResponse<IUsers>>(
     `${APIS_ROUTES.ORGANIZATION_SERVICE}/add-therapist/${organizationId}`,
-    userIds
+    { therapistIds: userIds }
   );
 
   return result.data.Data;

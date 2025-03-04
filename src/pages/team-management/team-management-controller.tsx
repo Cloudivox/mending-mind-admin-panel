@@ -5,9 +5,9 @@ import { IAllTherapist, IUsers } from "../../types";
 import {
   useAddUser,
   useAddUserInOrganization,
-  useDeleteUser,
+  // useDeleteUser,
   useGetAllUsers,
-  // useRemoveUserFromOrganization,
+  useRemoveUserFromOrganization,
   useUpdateUser,
 } from "./services";
 import { useParams } from "react-router-dom";
@@ -46,9 +46,9 @@ function useTeamManagementController() {
   //@ts-ignore
   const adduser = useAddUser(organizationId);
   const updateUser = useUpdateUser();
-  const deleteUser = useDeleteUser();
-  // const removeUserFromOrganization =
-  //   useRemoveUserFromOrganization(organizationId);
+  // const deleteUser = useDeleteUser();
+  const removeUserFromOrganization =
+    useRemoveUserFromOrganization(organizationId);
   const addUserInOrganization = useAddUserInOrganization(organizationId);
   const allTherapist = useGetAllTherapist();
 
@@ -119,12 +119,13 @@ function useTeamManagementController() {
       phone: "",
     });
     setIsEditing(true);
-    setIsModalOpen(true);
+    setShowTherapistList(true);
+    setSelectedOption("new");
   };
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteUser.mutateAsync(id);
+      await removeUserFromOrganization.mutateAsync(id);
       toast.success("User deleted successfully");
       refetch(); // Refresh the user list
     } catch (error) {
@@ -190,6 +191,15 @@ function useTeamManagementController() {
       setTherapistsList(filteredTherapists);
     }
   }, [allTherapist.isSuccess, allTherapist.data, userData?.users]);
+
+  useEffect(() => {
+    if (addUserInOrganization.isSuccess) {
+      toast.success("user added successfully");
+      refetch();
+      setShowTherapistList(false);
+    }
+    // eslint-disable-next-line
+  }, [addUserInOrganization.isSuccess]);
 
   return {
     isLoading,

@@ -61,11 +61,12 @@ export interface IRequestRescheduleData {
   endTime: string;
   type: string;
   clientId: string;
-  reason:string;
-  availibilityId: string
+  reason: string;
+  availibilityId: string;
 }
 
 export interface IUsers {
+  phone: string;
   name: string;
   email: string;
   role: string;
