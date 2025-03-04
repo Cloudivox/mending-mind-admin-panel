@@ -22,19 +22,19 @@ interface ISession {
   isPackageCreated: boolean;
 }
 
-const getAllSessionPackage = async () => {
+const getAllSessionPackage = async (organizationId?: string) => {
   const result = await apiClient.get<
     null,
     IAxiosResponse<{ previous: ISession[]; upcoming: ISession[] }>
-  >(`${APIS_ROUTES.SESSION_SERVICE}/get-all-sessions`);
+  >(`${APIS_ROUTES.SESSION_SERVICE}/get-all-sessions/${organizationId}`);
 
   return result.data.Data;
 };
 
-const useGetAllSessionPackage = () =>
+const useGetAllSessionPackage = (organizationId?: string) =>
   useQuery<{ previous: ISession[]; upcoming: ISession[] }, IAPIError>(
     [API_QUERY_KEY.GET_ALL_SESSION],
-    () => getAllSessionPackage(),
+    () => getAllSessionPackage(organizationId),
     {
       cacheTime: 0,
     }

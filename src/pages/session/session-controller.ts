@@ -11,7 +11,7 @@ const useSessionController = () => {
   const [pastSessions, setPastSessions] = useState<Sessions[]>();
   const [upcomingSessions, setUpcomingSessions] = useState<Sessions[]>();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const getAllSessions = useGetAllSessions();
+  const getAllSessions = useGetAllSessions(organizationId);
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -22,6 +22,10 @@ const useSessionController = () => {
     }
   }, [getAllSessions.isSuccess, getAllSessions.data]);
 
+  const navigateBookSession = () => {
+    navigate(`/${organizationId}/book-session`);
+  };
+
   return {
     isModalOpen,
     setIsModalOpen,
@@ -30,7 +34,7 @@ const useSessionController = () => {
     pastSessions,
     upcomingSessions,
     user,
-    navigate,
+    navigateBookSession,
   };
 };
 

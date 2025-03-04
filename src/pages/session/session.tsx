@@ -13,7 +13,7 @@ const Session = () => {
     isLoading,
     organizationId,
     user,
-    navigate,
+    navigateBookSession,
   } = useSessionController();
 
   return (
@@ -30,15 +30,14 @@ const Session = () => {
               Create Session
             </button>
           )}
-        {user && user.role === "client"}
-        {
+        {user && user.role === "client" && (
           <button
-            onClick={() => navigate("book-session")}
+            onClick={navigateBookSession}
             className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
           >
             Book Session
           </button>
-        }
+        )}
       </div>
 
       {isLoading ? (

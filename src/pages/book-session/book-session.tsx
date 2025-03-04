@@ -1,70 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import SessionDetails from "./session-details";
 import TimeSlots from "./time-slots";
+import { MENDING_MIND_ID } from "../../utils/enum";
+import useBookSessionController from "./book-session-controller";
 
 function BookSession() {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date(2025, 1, 4)); // February 4, 2025
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 1, 4));
-  const [showMonthYearSelector, setShowMonthYearSelector] =
-    useState<boolean>(false);
+  const {
+    currentDate,
+    selectedDate,
+    showMonthYearSelector,
+    months,
+    years,
+    goToPreviousMonth,
+    goToNextMonth,
+    handleSelectMonth,
+    handleSelectYear,
+    formatMonthYear,
+    setShowMonthYearSelector,
+    handleDateSelect,
+    organizationId,
+    selectedSlot,
+    setSelectedSlot,
+    hasLatestSession,
+    setSelectedTherapistId,
+    therapists,
+    selectedTherapistId,
+    handleBookSession,
+    isBookingSession,
+  } = useBookSessionController();
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const years = Array.from({ length: 10 }, (_, i) => 2025 + i - 5);
-
-  const goToPreviousMonth = () => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() - 1);
-      return newDate;
-    });
-  };
-
-  const goToNextMonth = () => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() + 1);
-      return newDate;
-    });
-  };
-
-  const handleSelectMonth = (monthIndex: number) => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setMonth(monthIndex);
-      return newDate;
-    });
-    setShowMonthYearSelector(false);
-  };
-
-  const handleSelectYear = (year: number) => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setFullYear(year);
-      return newDate;
-    });
-    setShowMonthYearSelector(false);
-  };
-
-  const formatMonthYear = (date: Date) => {
-    return `${months[date.getMonth()]} ${date.getFullYear()}`;
-  };
-
-  const handleDateSelect = (date: Date) => {
-    setSelectedDate(date);
+  const isBookingPossible = () => {
+    if (!selectedTherapistId) {
+      return false;
+    }
+    if (!selectedDate) {
+      return false;
+    }
+    if (!selectedSlot) {
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -74,15 +49,34 @@ function BookSession() {
           {/* Left Panel */}
           <div className="border-r border-gray-200 p-6 md:w-1/3">
             <h2 className="font-playfair text-xl font-bold text-black mb-6">
-              Individual session - new clients(residing in india)
+              Individual session
             </h2>
 
-            <div className="flex items-center mb-4">
-              <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center mr-3">
-                <span className="text-black text-sm">KT</span>
+            {hasLatestSession ? (
+              <div className="flex items-center mt-2">
+                {/* <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center mr-3">
+                  <span className="text-black text-sm">KT</span>
+                </div> */}
+                <span className="font-montserrat text-sm">
+                  {therapists.find(
+                    (therapist) => therapist._id === selectedTherapistId
+                  )?.name || ""}
+                </span>
               </div>
-              <span className="font-montserrat text-sm">Kasturi Tahlani</span>
-            </div>
+            ) : (
+              <select
+                className="w-full border p-2 rounded mt-2"
+                value={selectedTherapistId}
+                onChange={(e) => setSelectedTherapistId(e.target.value)}
+              >
+                <option value="">Select Therapist</option>
+                {therapists.map((therapist) => (
+                  <option key={therapist._id} value={therapist._id}>
+                    {therapist.name}
+                  </option>
+                ))}
+              </select>
+            )}
 
             <div className="space-y-3 mt-6">
               <div className="flex items-center">
@@ -101,46 +95,50 @@ function BookSession() {
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
                 </div>
-                <span className="font-montserrat text-sm">50 Min</span>
+                <span className="font-montserrat text-sm">60 Min</span>
               </div>
 
-              <div className="flex items-center">
-                <div className="w-5 h-5 mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-yellow"
-                  >
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                </div>
-                <span className="font-montserrat text-sm">Google Meet</span>
-              </div>
+              {organizationId === MENDING_MIND_ID && (
+                <>
+                  <div className="flex items-center">
+                    <div className="w-5 h-5 mr-3">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-yellow"
+                      >
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                    </div>
+                    <span className="font-montserrat text-sm">Google Meet</span>
+                  </div>
 
-              <div className="flex items-center">
-                <div className="w-5 h-5 mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-yellow"
-                  >
-                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                  </svg>
-                </div>
-                <span className="font-montserrat text-sm">INR 2500</span>
-              </div>
+                  <div className="flex items-center">
+                    <div className="w-5 h-5 mr-3">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-yellow"
+                      >
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                      </svg>
+                    </div>
+                    <span className="font-montserrat text-sm">INR 2500</span>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="mt-12 flex items-center">
@@ -166,7 +164,7 @@ function BookSession() {
               <span className="font-montserrat text-sm text-gray-500 ml-2">
                 +05:30
               </span>
-              <div className="w-4 h-4 ml-1">
+              {/* <div className="w-4 h-4 ml-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -179,7 +177,7 @@ function BookSession() {
                 >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -287,9 +285,33 @@ function BookSession() {
                 currentDate={currentDate}
                 onSelectDate={handleDateSelect}
               />
-              <TimeSlots selectedDate={selectedDate} />
+              <TimeSlots
+                selectedDate={selectedDate}
+                selectedSlot={selectedSlot}
+                setSelectedSlot={setSelectedSlot}
+              />
             </div>
           </div>
+        </div>
+        <div className="p-6 border-t border-gray-200 flex justify-end">
+          <button
+            onClick={() => {
+              if (isBookingPossible()) {
+                handleBookSession();
+              }
+            }}
+            disabled={isBookingPossible() === false || isBookingSession}
+            className={`
+              px-6 py-3 rounded-md text-white font-semibold 
+              ${
+                isBookingPossible() && !isBookingSession
+                  ? "bg-yellow hover:bg-yellow-600"
+                  : "bg-gray-400 cursor-not-allowed"
+              }
+            `}
+          >
+            {isBookingSession ? "Booking..." : "Book Session"}
+          </button>
         </div>
       </div>
     </div>
