@@ -18,6 +18,7 @@ const useGetProfileDetails = (userId: string | undefined) =>
     () => getProfileDetails(userId),
     {
       cacheTime: 0,
+      enabled: !!userId,
     }
   );
 
