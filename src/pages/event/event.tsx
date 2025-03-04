@@ -5,6 +5,7 @@ import useCreateEvent, { IEvents } from "./services/create-event/create-event";
 import useGetAllEvents from "./services/get-all-events/get-all-events";
 import useJoinEvent from "./services/join-event/join-event";
 import { toast } from "react-toastify";
+import { useUser } from "../../context/user-context";
 
 interface Event {
   id: string;
@@ -28,7 +29,7 @@ const Event = () => {
   const createEvent = useCreateEvent();
   const getAllEvents = useGetAllEvents();
   const joinEvent = useJoinEvent();
-
+  const { user } = useUser();
   const handleCreateEvent = (eventData: any) => {
     // Calculate end time
     const [hours, minutes] = eventData.time.split(":").map(Number);
@@ -104,24 +105,26 @@ const Event = () => {
           <h1 className="font-playfair font-bold text-4xl text-[#2C3E50]">
             Events
           </h1>
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+          {user && user.role === "admin" && (
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
             >
-              <path
-                fillRule="evenodd"
-                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Create New Event
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Create New Event
+            </button>
+          )}
         </div>
 
         <section className="mb-16">
