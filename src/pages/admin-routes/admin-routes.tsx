@@ -16,6 +16,7 @@ import Package from "../package";
 import CreatePackage from "../package/create-package";
 import Organization from "../organization";
 import SessionDetails from "../session/session-details";
+import BookSession from "../book-session/book-session";
 
 const AdminRoutes = () => {
   return (
@@ -37,6 +38,7 @@ const AdminRoutes = () => {
             <Route path="blog" element={<Blog />} />
             <Route path="session" element={<Session />} />
             <Route path="session/:sessionId" element={<SessionDetails />} />
+            <Route path="book-session" element={<BookSession />} />
             <Route path="package" element={<Package />} />
             <Route
               path="create-package/:sessionId"
