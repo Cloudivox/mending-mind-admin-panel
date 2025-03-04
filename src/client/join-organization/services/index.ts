@@ -1,3 +1,3 @@
 import useVerifyCode from "./verify-code";
-
-export { useVerifyCode };
+import useRegisterUser from "./add-user";
+export { useVerifyCode, useRegisterUser };

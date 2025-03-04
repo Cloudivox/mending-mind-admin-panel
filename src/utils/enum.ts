@@ -45,6 +45,7 @@ export const API_MUTATION_KEY = {
   ADD_USER_IN_ORGANIZATION: "add-user-organization",
   DELETE_USER_ORGANIZATION: "delete-user-organization",
   UPDATE_PROFILE: "update-profile",
+  REGISTER_USER: "register-user",
 };
 
 export const APIS_ROUTES = {

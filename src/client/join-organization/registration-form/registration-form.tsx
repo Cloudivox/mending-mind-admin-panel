@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-// import { registerUser } from "../services/api";
 import logo from "../../../assets/logo.png";
+import { useRegisterUser } from "../services";
+import Cookies from "js-cookie";
+import { USER_ACCESS_KEY } from "../../../utils/enum";
+import { useUser } from "../../../context/user-context";
+import { useNavigate } from "react-router-dom";
 
 interface RegistrationFormProps {
   organizationData: OrganizationData;
@@ -18,8 +22,8 @@ export interface UserFormData {
   phoneNumber: string;
   password: string;
   confirmPassword: string;
-  age?: number;
-  gender?: "male" | "female" | "other";
+  age: string;
+  gender: "male" | "female" | "other" | "";
 }
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({
@@ -31,13 +35,20 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     phoneNumber: "",
     password: "",
     confirmPassword: "",
-    age: undefined,
-    gender: undefined,
+    age: "",
+    gender: "",
   });
 
+  const { setUser } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // Use the mutation hook with organizationId
+  const { mutateAsync: registerUser } = useRegisterUser(
+    organizationData.organizationId
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -45,7 +56,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "age" ? (value ? parseInt(value) : undefined) : value,
+      [name]: value,
     }));
   };
 
@@ -73,8 +84,25 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
       newErrors.password = "Password must be at least 8 characters";
     }
 
-    if (formData.password !== formData.confirmPassword) {
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password";
+    } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    // Add validation for age
+    if (!formData.age) {
+      newErrors.age = "Age is required";
+    } else {
+      const ageValue = parseInt(formData.age);
+      if (isNaN(ageValue) || ageValue <= 0) {
+        newErrors.age = "Please enter a valid age";
+      }
+    }
+
+    // Add validation for gender
+    if (!formData.gender) {
+      newErrors.gender = "Gender is required";
     }
 
     setErrors(newErrors);
@@ -90,14 +118,61 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     setSuccessMessage(null);
 
     try {
-      //   await registerUser(formData, organizationData.organizationId);
+      // Format the data to match API requirements
+      const userData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phoneNumber,
+        password: formData.password,
+        age: formData.age,
+        gender: formData.gender,
+        role: "user", // Assuming default role for registration
+      };
+
+      const response = await registerUser(userData);
+
+      Cookies.set(USER_ACCESS_KEY.TOKEN, response.user.token, {
+        secure: true,
+        sameSite: "lax",
+      });
+      Cookies.set(
+        USER_ACCESS_KEY.ORGANIZATION_ID,
+        organizationData.organizationId,
+        {
+          secure: true,
+          sameSite: "lax",
+        }
+      );
+
+      setUser({
+        email: response.user.email,
+        role: response.user.role,
+        id: response.user.id,
+        name: response.user.name,
+      });
+
       setSuccessMessage(
         "Registration successful! Welcome to " +
           organizationData.organizationName
       );
-      // You could redirect the user or clear the form here
-    } catch (error) {
-      setErrors({ submit: "Registration failed. Please try again." });
+
+      navigate(`/${organizationData.organizationId}`, { replace: true });
+      sessionStorage.removeItem("organizationCode");
+
+      // Reset form after successful registration
+      setFormData({
+        name: "",
+        email: "",
+        phoneNumber: "",
+        password: "",
+        confirmPassword: "",
+        age: "",
+        gender: "",
+      });
+    } catch (error: any) {
+      const errorMessage =
+        error?.message || "Registration failed. Please try again.";
+      setErrors({ submit: errorMessage });
     } finally {
       setIsLoading(false);
     }
@@ -267,16 +342,21 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               htmlFor="age"
               className="block font-montserrat text-sm font-medium text-black"
             >
-              Age
+              Age <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
               id="age"
               name="age"
-              value={formData.age || ""}
+              value={formData.age}
               onChange={handleChange}
-              className="w-full h-12 px-3 py-2 bg-white border rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple"
+              className={`w-full h-12 px-3 py-2 bg-white border ${
+                errors.age ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
             />
+            {errors.age && (
+              <p className="mt-1 text-sm text-red-600">{errors.age}</p>
+            )}
           </div>
 
           <div>
@@ -284,26 +364,33 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               htmlFor="gender"
               className="block font-montserrat text-sm font-medium text-black"
             >
-              Gender
+              Gender <span className="text-red-500">*</span>
             </label>
             <select
               id="gender"
               name="gender"
-              value={formData.gender || ""}
+              value={formData.gender}
               onChange={handleChange}
-              className="w-full h-12 px-3 py-2 bg-white border rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple"
+              className={`w-full h-12 px-3 py-2 bg-white border ${
+                errors.gender ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple`}
             >
               <option value="">Select gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
+            {errors.gender && (
+              <p className="mt-1 text-sm text-red-600">{errors.gender}</p>
+            )}
           </div>
         </div>
 
         {/* Error message covering full width */}
         {errors.submit && (
-          <div className="text-red-500 text-xs mt-1">{errors.submit}</div>
+          <div className="p-3 bg-red-100 text-red-700 rounded-md">
+            {errors.submit}
+          </div>
         )}
 
         {/* Submit Button with Full Width */}
@@ -313,56 +400,29 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
         >
           {isLoading ? (
-            <>
+            <div className="flex items-center justify-center">
               <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                fill="none"
                 viewBox="0 0 24 24"
               >
-                <g
-                  fill="none"
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
                   stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeDasharray="16"
-                    strokeDashoffset="16"
-                    d="M12 3c4.97 0 9 4.03 9 9"
-                  >
-                    <animate
-                      fill="freeze"
-                      attributeName="stroke-dashoffset"
-                      dur="0.3s"
-                      values="16;0"
-                    />
-                    <animateTransform
-                      attributeName="transform"
-                      dur="1.5s"
-                      repeatCount="indefinite"
-                      type="rotate"
-                      values="0 12 12;360 12 12"
-                    />
-                  </path>
-                  <path
-                    strokeDasharray="64"
-                    strokeDashoffset="64"
-                    strokeOpacity="0.3"
-                    d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z"
-                  >
-                    <animate
-                      fill="freeze"
-                      attributeName="stroke-dashoffset"
-                      dur="1.2s"
-                      values="64;0"
-                    />
-                  </path>
-                </g>
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Submitting...
-            </>
+            </div>
           ) : (
             "Submit"
           )}
