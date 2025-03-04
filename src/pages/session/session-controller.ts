@@ -7,23 +7,25 @@ const useSessionController = () => {
   const { organizationId } = useParams<{
     organizationId: string;
   }>();
-  const [sessions, setSessions] = useState<Sessions[]>();
+  const [pastSessions, setPastSessions] = useState<Sessions[]>();
+  const [upcomingSessions, setUpcomingSessions] = useState<Sessions[]>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const getAllSessions = useGetAllSessions();
 
   useEffect(() => {
     if (getAllSessions.isSuccess && getAllSessions.data) {
-      setSessions(getAllSessions.data.previous);
+      setPastSessions(getAllSessions.data.previous);
+      setUpcomingSessions(getAllSessions.data.upcoming);
     }
   }, [getAllSessions.isSuccess, getAllSessions.data]);
 
   return {
-    sessions,
     isModalOpen,
-    setSessions,
     setIsModalOpen,
     isLoading: getAllSessions.isLoading,
     organizationId,
+    pastSessions,
+    upcomingSessions,
   };
 };
 

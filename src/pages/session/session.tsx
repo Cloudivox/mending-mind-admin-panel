@@ -5,8 +5,14 @@ import CreateSessionModal from "./create-session-modal";
 import useSessionController from "./session-controller";
 
 const Session = () => {
-  const { sessions, isModalOpen, setIsModalOpen, isLoading, organizationId } =
-    useSessionController();
+  const {
+    pastSessions,
+    upcomingSessions,
+    isModalOpen,
+    setIsModalOpen,
+    isLoading,
+    organizationId,
+  } = useSessionController();
 
   return (
     <div className="p-6">
@@ -57,8 +63,8 @@ const Session = () => {
                 </tr>
               </thead>
               <tbody>
-                {sessions &&
-                  sessions.map((session, index) => (
+                {pastSessions &&
+                  pastSessions.map((session, index) => (
                     <tr
                       key={index}
                       className="border-b border-[#ECF0F1] hover:bg-black/5 transition-colors"
@@ -133,8 +139,8 @@ const Session = () => {
                 </tr>
               </thead>
               <tbody>
-                {sessions && sessions.length > 0 ? (
-                  sessions.map((session, index) => (
+                {upcomingSessions && upcomingSessions.length > 0 ? (
+                  upcomingSessions.map((session, index) => (
                     <tr
                       key={index}
                       className="border-b border-[#ECF0F1] hover:bg-black/5 transition-colors"
