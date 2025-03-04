@@ -197,18 +197,23 @@ const Nav = () => {
             <NavSessionIcon />
             {!isCollapsed && <span>Session</span>}
           </Link>
-          <Link
-            to={`/${organizationId}/package`}
-            onClick={() => setIsActive("Package")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Package"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
-          >
-            <NavPackageIcon />
-            {!isCollapsed && <span>Package</span>}
-          </Link>
+          {user &&
+            ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
+              user.role === "admin" ||
+              user.role === "therapist") && (
+              <Link
+                to={`/${organizationId}/package`}
+                onClick={() => setIsActive("Package")}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                  isActive === "Package"
+                    ? "text-black bg-mint/20"
+                    : "text-black/70 hover:text-black hover:bg-mint/10"
+                }`}
+              >
+                <NavPackageIcon />
+                {!isCollapsed && <span>Package</span>}
+              </Link>
+            )}
           {user &&
             user.role === "therapist" &&
             Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID) ===
@@ -226,31 +231,41 @@ const Nav = () => {
                 {!isCollapsed && <span>Availability</span>}
               </Link>
             )}
-          <Link
-            to="#"
-            onClick={() => setIsActive("Payment")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Payment"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
-          >
-            <NavPaymentIcon />
-            {!isCollapsed && <span>Payment</span>}
-          </Link>
-          <Link
-            to={`/${organizationId}/blog`}
-            onClick={() => setIsActive("blog")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "blog"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
-          >
-            <NavBlogIcon />
-            {!isCollapsed && <span>Blog</span>}
-          </Link>
-          {user && user.role === "admin" && (
+          {user &&
+            ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
+              user.role === "admin" ||
+              user.role === "therapist") && (
+              <Link
+                to="#"
+                onClick={() => setIsActive("Payment")}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                  isActive === "Payment"
+                    ? "text-black bg-mint/20"
+                    : "text-black/70 hover:text-black hover:bg-mint/10"
+                }`}
+              >
+                <NavPaymentIcon />
+                {!isCollapsed && <span>Payment</span>}
+              </Link>
+            )}
+          {user &&
+            ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
+              user.role === "admin" ||
+              user.role === "therapist") && (
+              <Link
+                to={`/${organizationId}/blog`}
+                onClick={() => setIsActive("blog")}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                  isActive === "blog"
+                    ? "text-black bg-mint/20"
+                    : "text-black/70 hover:text-black hover:bg-mint/10"
+                }`}
+              >
+                <NavBlogIcon />
+                {!isCollapsed && <span>Blog</span>}
+              </Link>
+            )}
+          {user && (user.role === "admin" || user.role === "client") && (
             <Link
               to={`/${organizationId}/event`}
               onClick={() => setIsActive("Event")}

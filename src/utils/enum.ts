@@ -19,6 +19,7 @@ export const API_QUERY_KEY = {
   GET_ALL_ORGANIZATION: "get-all-organization",
   GET_ALL_SESSION_NOTES: "get-all-session-notes",
   GET_PROFILE_DETAILS: "get-profile-details",
+  GET_ALL_EVENTS: "get-all-events",
 };
 
 export const API_MUTATION_KEY = {
@@ -46,6 +47,8 @@ export const API_MUTATION_KEY = {
   DELETE_USER_ORGANIZATION: "delete-user-organization",
   UPDATE_PROFILE: "update-profile",
   REGISTER_USER: "register-user",
+  CREATE_EVENT: "create-event",
+  JOIN_EVENT: "join-event",
 };
 
 export const APIS_ROUTES = {
@@ -68,6 +71,7 @@ export const APIS_ROUTES = {
   ORGANIZATION_SERVICE: "/organization-service/v1/organization",
   SESSION_NOTE_SERVICE: "/session-notes-service/v1/session-notes",
   PROFILE_SERVICE: "/auth-service/v1/profile",
+  EVENT_SERVICE: "event-service/v1/event",
 };
 
 export const formatDate = (date: Date): string => {

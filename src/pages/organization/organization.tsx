@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import Loader from "../../components/loader";
 import useOrganizationController from "./organization-controller";
 
@@ -24,6 +25,9 @@ function Organization() {
     therapistsList,
     isTherapistSelected,
     handleSaveWorkspace,
+    isCopied,
+    setIsCopied,
+    handleCopy,
   } = useOrganizationController();
   return (
     <>
@@ -105,7 +109,54 @@ function Organization() {
                     </div>
                   </div>
                   {organizationId && (
-                    <div className="relative">
+                    <div className="relative flex">
+                      <button
+                      title="Copy organization link"
+                        className="flex items-center gap-2 text-white px-4 py-2 rounded-md transition"
+                        onClick={() =>
+                          workspace.id &&
+                          workspace.code &&
+                          handleCopy(workspace.id, workspace.code)
+                        }
+                      >
+                        {" "}
+                        {isCopied[workspace.id] ? (
+                          <svg
+                            className="text-gray-500"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-linejoin="round"
+                              d="M4.5 7.5L7 10l4.5-4.5m-9-3h11v11h-11z"
+                              stroke-width="1"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            className="text-gray-500"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
+                            <g
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="1.5"
+                            >
+                              <path d="M19.4 20H9.6a.6.6 0 0 1-.6-.6V9.6a.6.6 0 0 1 .6-.6h9.8a.6.6 0 0 1 .6.6v9.8a.6.6 0 0 1-.6.6" />
+                              <path d="M15 9V4.6a.6.6 0 0 0-.6-.6H4.6a.6.6 0 0 0-.6.6v9.8a.6.6 0 0 0 .6.6H9" />
+                            </g>
+                          </svg>
+                        )}
+                      </button>
                       <button
                         onClick={() => toggleDropdown(workspace.id)}
                         className="p-1 rounded-md hover:bg-gray-100"

@@ -7,6 +7,7 @@ import useUpdateOrganization from "./services/update-organization/update-organiz
 import useDeleteOrganization from "./services/delete-organization/delete-organization";
 import Cookies from "js-cookie";
 import { USER_ACCESS_KEY } from "../../utils/enum";
+import { toast } from "react-toastify";
 interface IOrganization {
   id: string;
   name: string;
@@ -39,6 +40,7 @@ const useOrganizationController = () => {
 
   const [therapistsList, setTherapistsList] = useState<IAllTherapist[]>([]);
   const [workspaces, setWorkspaces] = useState<IOrganization[]>([]);
+  const [isCopied, setIsCopied] = useState<any>(0);
   const navigate = useNavigate();
   // Combined UI state
   const [uiState, setUIState] = useState<UIState>({
@@ -103,8 +105,6 @@ const useOrganizationController = () => {
 
   // Open modal for editing workspace
   const openEditModal = (workspace: IOrganization) => {
-    console.log(workspace);
-
     setActiveWorkspace({ ...workspace });
     setUIState({
       activeDropdownId: null,
@@ -150,12 +150,6 @@ const useOrganizationController = () => {
       };
       createOrganization.mutate(newWorkspace);
     } else if (uiState.modalMode === "edit") {
-      console.log(
-        activeWorkspace,
-        activeWorkspace.therapists.map((t) => t._id),
-        "the"
-      );
-
       const updatedWorkspace = {
         ...activeWorkspace,
         therapists: activeWorkspace.therapists.map((t) => t._id),
@@ -249,6 +243,24 @@ const useOrganizationController = () => {
     });
   };
 
+  const handleCopy = (workspaceId: number, text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setIsCopied((prev: any) => ({ ...prev, [workspaceId]: true }));
+
+        // // Reset copied state after 2 seconds
+        setTimeout(() => {
+          setIsCopied((prev: any) => ({ ...prev, [workspaceId]: false }));
+        }, 2000);
+
+        toast.success("Copied to clipboard!");
+      })
+      .catch(() => {
+        toast.error("Error copying text!");
+      });
+  };
+
   useEffect(() => {
     if (getAllOrganization.isSuccess && getAllOrganization.data) {
       setWorkspaces(getAllOrganization.data);
@@ -304,6 +316,9 @@ const useOrganizationController = () => {
     therapistsList,
     isTherapistSelected,
     handleSaveWorkspace,
+    isCopied,
+    setIsCopied,
+    handleCopy,
   };
 };
 
