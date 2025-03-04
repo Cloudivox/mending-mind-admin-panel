@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Sessions } from "../../utils/types";
 import { useGetAllSessions } from "./services";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUser } from "../../context/user-context";
 
 const useSessionController = () => {
   const { organizationId } = useParams<{
@@ -11,6 +12,8 @@ const useSessionController = () => {
   const [upcomingSessions, setUpcomingSessions] = useState<Sessions[]>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const getAllSessions = useGetAllSessions();
+  const { user } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (getAllSessions.isSuccess && getAllSessions.data) {
@@ -26,6 +29,8 @@ const useSessionController = () => {
     organizationId,
     pastSessions,
     upcomingSessions,
+    user,
+    navigate,
   };
 };
 

@@ -12,20 +12,33 @@ const Session = () => {
     setIsModalOpen,
     isLoading,
     organizationId,
+    user,
+    navigate,
   } = useSessionController();
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Sessions</h1>
-        {organizationId === MENDING_MIND_ID && (
+        {organizationId === MENDING_MIND_ID &&
+          user &&
+          user.role === "admin" && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
+            >
+              Create Session
+            </button>
+          )}
+        {user && user.role === "client"}
+        {
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => navigate("book-session")}
             className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
           >
-            Create Session
+            Book Session
           </button>
-        )}
+        }
       </div>
 
       {isLoading ? (
