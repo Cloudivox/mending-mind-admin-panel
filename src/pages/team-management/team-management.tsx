@@ -1,6 +1,5 @@
 import Loader from "../../components/loader";
 import PlusIcon from "../../assets/icons/plus-icon";
-import CrossIcon from "../../assets/icons/cross-icon";
 import useTeamManagementController from "./team-management-controller";
 
 const TeamManagement = () => {
@@ -18,6 +17,16 @@ const TeamManagement = () => {
     handleEdit,
     handleDelete,
     Pagination,
+    therapistsList,
+    handleAddExisting,
+    handleTherapistSelection,
+    showTherapistList,
+    selectedOption,
+    handleCreateNew,
+    selectedTherapists,
+    setShowTherapistList,
+    setSelectedOption,
+    handleAddUser,
   } = useTeamManagementController();
 
   return (
@@ -54,10 +63,7 @@ const TeamManagement = () => {
                 </svg>
               </div>
               <button
-                onClick={() => {
-                  resetForm();
-                  setIsModalOpen(true);
-                }}
+                onClick={handleAddUser}
                 className="bg-[#3498DB] hover:bg-[#2980B9] text-white px-6 py-2.5 rounded-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
               >
                 <PlusIcon />
@@ -66,109 +72,172 @@ const TeamManagement = () => {
             </div>
           </div>
 
-          {/* User Modal */}
-          {isModalOpen && (
+          {showTherapistList && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg p-6 w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold text-[#2C3E50]">
-                    {isEditing ? "Update User" : "Add New User"}
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Add Team Member
                   </h2>
                   <button
-                    onClick={() => setIsModalOpen(false)}
+                    onClick={() => setShowTherapistList(false)}
                     className="text-gray-500 hover:text-gray-700"
                   >
-                    <CrossIcon />
+                    &times;
                   </button>
                 </div>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="role"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Role
-                    </label>
-                    <select
-                      id="role"
-                      name="role"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
-                    >
-                      <option value="">Select role</option>
-                      <option value="admin">Admin</option>
-                      <option value="therapist">Therapist</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
-                    />
-                  </div>
-                  <div className="flex justify-end gap-2 mt-6">
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-4 py-2 bg-[#3498DB] text-white rounded-md hover:bg-[#2980B9]"
-                    >
-                      {isEditing ? "Update" : "Add"} User
-                    </button>
-                  </div>
-                </form>
+
+                {selectedOption === null && (
+                  <>
+                    <h3 className="font-medium text-gray-700 mb-3">
+                      Select from existing therapists:
+                    </h3>
+                    <div className="max-h-60 overflow-y-auto mb-4 border rounded-md">
+                      {therapistsList.map((therapist) => (
+                        <div
+                          key={therapist._id}
+                          className="px-3 py-2 hover:bg-gray-100 cursor-pointer flex items-center border-b last:border-b-0"
+                          onClick={() =>
+                            handleTherapistSelection(therapist._id)
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedTherapists.includes(therapist._id)}
+                            onChange={() => {}}
+                            className="mr-2"
+                          />
+                          <div>
+                            <div className="font-medium">{therapist.name}</div>
+                            <div className="text-sm text-gray-500">
+                              {therapist.email}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      <button
+                        onClick={handleAddExisting}
+                        disabled={selectedTherapists.length === 0}
+                        className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 rounded-md transition-colors"
+                      >
+                        Add Selected Therapists
+                      </button>
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                          <span className="px-2 bg-white text-gray-500">
+                            Or
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleCreateNew}
+                        className="w-full border border-blue-500 text-blue-500 hover:bg-blue-50 py-2 rounded-md transition-colors flex items-center justify-center gap-2"
+                      >
+                        <PlusIcon />
+                        Create New User
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {selectedOption === "new" && (
+                  <>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div>
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="role"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Role
+                        </label>
+                        <select
+                          id="role"
+                          name="role"
+                          value={formData.role}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
+                        >
+                          <option value="">Select role</option>
+                          <option value="admin">Admin</option>
+                          <option value="therapist">Therapist</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="phone"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3498DB]"
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2 mt-6">
+                        <button
+                          type="button"
+                          onClick={() => setIsModalOpen(false)}
+                          className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-[#3498DB] text-white rounded-md hover:bg-[#2980B9]"
+                        >
+                          {isEditing ? "Update" : "Add"} User
+                        </button>
+                      </div>
+                    </form>
+                  </>
+                )}
               </div>
             </div>
           )}
@@ -195,14 +264,12 @@ const TeamManagement = () => {
               <tbody>
                 {userData?.users
                   .sort((a: any, b: any) => {
-                      const roleOrder: Record<string, number> = {
-                        admin: 1,
-                        therapist: 2,
-                      };
+                    const roleOrder: Record<string, number> = {
+                      admin: 1,
+                      therapist: 2,
+                    };
 
-                      return (
-                        (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3)
-                      );
+                    return (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3);
                   })
                   .map((user: any) => (
                     <tr

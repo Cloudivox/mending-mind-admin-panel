@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
-import { IUsers } from "../../types";
+import { IAllTherapist, IUsers } from "../../types";
 import {
   useAddUser,
+  useAddUserInOrganization,
   useDeleteUser,
   useGetAllUsers,
+  // useRemoveUserFromOrganization,
   useUpdateUser,
 } from "./services";
 import { useParams } from "react-router-dom";
+import { useGetAllTherapist } from "../calender/services";
 
 function useTeamManagementController() {
   const { organizationId } = useParams<{
@@ -26,6 +29,13 @@ function useTeamManagementController() {
     phone: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [therapistsList, setTherapistsList] = useState<IAllTherapist[]>([]);
+
+  const [showTherapistList, setShowTherapistList] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<
+    "existing" | "new" | null
+  >(null);
+  const [selectedTherapists, setSelectedTherapists] = useState<string[]>([]);
 
   // Get users with pagination and search
   const {
@@ -37,7 +47,31 @@ function useTeamManagementController() {
   const adduser = useAddUser(organizationId);
   const updateUser = useUpdateUser();
   const deleteUser = useDeleteUser();
+  // const removeUserFromOrganization =
+  //   useRemoveUserFromOrganization(organizationId);
+  const addUserInOrganization = useAddUserInOrganization(organizationId);
+  const allTherapist = useGetAllTherapist();
 
+  const handleTherapistSelection = (id: string) => {
+    setSelectedTherapists((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleAddUser = () => {
+    setShowTherapistList(true);
+    setSelectedOption(null);
+  };
+
+  const handleCreateNew = () => {
+    setSelectedOption("new");
+  };
+
+  const handleAddExisting = () => {
+    setSelectedOption("existing");
+
+    addUserInOrganization.mutate(selectedTherapists);
+  };
   // Debounced search handler using lodash
   const handleSearch = debounce((value: string) => {
     setSearchTerm(value);
@@ -141,6 +175,21 @@ function useTeamManagementController() {
       </div>
     );
   };
+  useEffect(() => {
+    if (allTherapist.isSuccess && allTherapist.data && userData?.users) {
+      // Get all user emails from userData for comparison
+      const existingUserEmails = new Set(
+        userData.users.map((user) => user.email)
+      );
+
+      // Filter therapists that don't exist in userData
+      const filteredTherapists = allTherapist.data.therapists.filter(
+        (therapist) => !existingUserEmails.has(therapist.email)
+      );
+
+      setTherapistsList(filteredTherapists);
+    }
+  }, [allTherapist.isSuccess, allTherapist.data, userData?.users]);
 
   return {
     isLoading,
@@ -157,6 +206,16 @@ function useTeamManagementController() {
     handleDelete,
     Pagination,
     searchTerm,
+    therapistsList,
+    handleAddExisting,
+    handleTherapistSelection,
+    handleAddUser,
+    showTherapistList,
+    selectedOption,
+    handleCreateNew,
+    selectedTherapists,
+    setShowTherapistList,
+    setSelectedOption,
   };
 }
 

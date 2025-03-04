@@ -41,6 +41,8 @@ export const API_MUTATION_KEY = {
   DELETE_ORGANIZATION: "delete-organization",
   CREATE_SESSION_NOTE: "create-session-note",
   DELETE_SESSION_NOTE: "delete-session-note",
+  ADD_USER_IN_ORGANIZATION: "add-user-organization",
+  DELETE_USER_ORGANIZATION: "delete-user-organization",
 };
 
 export const APIS_ROUTES = {
