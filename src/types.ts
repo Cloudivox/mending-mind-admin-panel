@@ -19,3 +19,74 @@ export interface IAxiosResponse<T> {
     Status: string;
   };
 }
+
+export interface IAuthResponse {
+  user: {
+    organizationId: any;
+    id: string;
+    email: string;
+    phone: string;
+    role: string;
+    token: string;
+  };
+}
+
+export interface IAuthData {
+  email?: string;
+  phone?: string;
+  password?: string;
+}
+
+export interface IAvailabilityResponse {
+  _id: string;
+  userId: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: "online" | "offline";
+  status: string;
+  clientId: string;
+}
+
+export interface IAvailabilityData {
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: string;
+  therapistId?: string;
+}
+
+export interface IRequestRescheduleData {
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: string;
+  clientId: string;
+  reason: string;
+  availibilityId: string;
+}
+
+export interface IUsers {
+  phone: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  _id: string;
+}
+
+export interface IBlogs {
+  title: string;
+  desc: string;
+  img: string;
+  read: string;
+  date: string;
+  author: string;
+  _id: string;
+}
+
+export interface IAllTherapist {
+  email: string;
+  name: string;
+  _id: string;
+}

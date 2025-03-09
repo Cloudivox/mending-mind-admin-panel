@@ -1,104 +1,33 @@
-import { useState } from "react";
+import ArrowLeft from "../../assets/icons/arrow-left";
+import ArrowRight from "../../assets/icons/arrow-right";
+import Loader from "../../components/loader";
 import AddSlotModal from "./add-slot-modal";
-import type { TimeSlot } from "../../utils/types";
+import useAvailabilityController from "./availability-controller";
+import RescheduleModal from "./reschedule-modal";
 
 export default function AvailabilityPage() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [slots, setSlots] = useState<TimeSlot[]>([]);
-
-  const formatDate = (date: Date) => {
-    return date.toISOString().split("T")[0];
-  };
-
-  const formatTimeRange = (startTime: string, endTime: string) => {
-    const formatTime = (time: string) => {
-      const [hours, minutes] = time.split(":");
-      const hour = Number.parseInt(hours);
-      const ampm = hour >= 12 ? "PM" : "AM";
-      const hour12 = hour % 12 || 12;
-      return `${hour12}:${minutes} ${ampm}`;
-    };
-    return `${formatTime(startTime)} - ${formatTime(endTime)}`;
-  };
-
-  const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
-  };
-
-  const handleAddSlot = (startTime: string, endTime: string) => {
-    const newSlot: TimeSlot = {
-      id: Math.random().toString(36).substr(2, 9),
-      date: formatDate(selectedDate),
-      startTime,
-      endTime,
-    };
-    setSlots([...slots, newSlot]);
-  };
-
-  const handleDeleteSlot = (slotId: string) => {
-    setSlots(slots.filter((slot) => slot.id !== slotId));
-  };
-
-  const isPastDate = (date: Date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    date.setHours(0, 0, 0, 0);
-    return date < today;
-  };
-
-  const getDaySlots = (date: Date) => {
-    return slots.filter((slot) => slot.date === formatDate(date));
-  };
-
-  const selectedDaySlots = getDaySlots(selectedDate);
-
-  const generateCalendarDays = () => {
-    const year = selectedDate.getFullYear();
-    const month = selectedDate.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const days = [];
-
-    // Add empty cells for days before the first day of the month
-    for (let i = 0; i < firstDay.getDay(); i++) {
-      days.push(<div key={`empty-${i}`} className="h-14" />);
-    }
-
-    // Add days of the month
-    for (let day = 1; day <= lastDay.getDate(); day++) {
-      const date = new Date(year, month, day);
-      const isSelected =
-        date.getDate() === selectedDate.getDate() &&
-        date.getMonth() === selectedDate.getMonth() &&
-        date.getFullYear() === selectedDate.getFullYear();
-      const hasSlots = getDaySlots(date).length > 0;
-
-      days.push(
-        <button
-          key={day}
-          onClick={() => handleDateClick(date)}
-          disabled={isPastDate(new Date(year, month, day))}
-          className={`h-14 rounded-2xl flex items-center justify-center relative
-              ${isSelected ? "bg-emerald-600 text-white" : "hover:bg-gray-100"}
-              ${hasSlots ? "font-semibold" : ""}
-              ${
-                isPastDate(new Date(year, month, day))
-                  ? "text-gray-400 cursor-not-allowed"
-                  : ""
-              }
-            `}
-        >
-          {day}
-          {hasSlots && (
-            <div className="absolute bottom-2 w-1 h-1 bg-emerald-600 rounded-full" />
-          )}
-        </button>
-      );
-    }
-
-    return days;
-  };
+  const {
+    selectedDate,
+    setSelectedDate,
+    isModalOpen,
+    setIsModalOpen,
+    handleAddSlot,
+    handleDeleteSlot,
+    isDayDisabled,
+    selectedDaySlots,
+    generateCalendarDays,
+    formatTimeRange,
+    isLoading,
+    editSlot,
+    onEditClick,
+    setEditSlot,
+    isRescheduleModalVisible,
+    onRescheduleClick,
+    setIsRescheduleModalVisible,
+    isSlotInPast,
+    onRescheduleModalSubmit,
+    therapists,
+  } = useAvailabilityController();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -120,7 +49,7 @@ export default function AvailabilityPage() {
                   }
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  ←
+                  <ArrowLeft />
                 </button>
                 <h2 className="text-lg font-medium mx-2">
                   {selectedDate.toLocaleString("default", {
@@ -138,7 +67,7 @@ export default function AvailabilityPage() {
                   }
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  →
+                  <ArrowRight />
                 </button>
               </div>
 
@@ -172,10 +101,10 @@ export default function AvailabilityPage() {
                 </h2>
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  disabled={isPastDate(selectedDate)}
+                  disabled={isDayDisabled(selectedDate)}
                   className={`bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2 
                       ${
-                        isPastDate(selectedDate)
+                        isDayDisabled(selectedDate)
                           ? "bg-gray-300 cursor-not-allowed"
                           : "bg-emerald-600 hover:bg-emerald-700 text-white"
                       }`}
@@ -183,60 +112,123 @@ export default function AvailabilityPage() {
                   Add Slot
                 </button>
               </div>
-
-              <div className="space-y-3">
-                {selectedDaySlots.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">
-                    No availability slots for this day
-                  </p>
-                ) : (
-                  selectedDaySlots.map((slot) => (
-                    <div
-                      key={slot.id}
-                      className="p-4 bg-gray-50 hover:bg-gray-100 rounded-lg flex items-center justify-between transition-colors"
-                    >
-                      <span className="text-gray-900 font-medium">
-                        {formatTimeRange(slot.startTime, slot.endTime)}
-                      </span>
-                      {!isPastDate(selectedDate) && (
-                        <button
-                          onClick={() => handleDeleteSlot(slot.id)}
-                          className="text-red-500 hover:text-red-600 transition-colors"
-                          aria-label="Delete slot"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M3 6h18"></path>
-                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  ))
-                )}
-              </div>
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <Loader isFullScreen={false} />
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {selectedDaySlots.length === 0 ? (
+                    <p className="text-gray-500 text-center py-8">
+                      No availability slots for this day
+                    </p>
+                  ) : (
+                    selectedDaySlots.map((slot) => (
+                      <div
+                        key={slot._id}
+                        className="p-4 bg-gray-50 hover:bg-gray-100 rounded-lg flex items-center justify-between transition-colors"
+                      >
+                        <div className="flex flex-col">
+                          <span className="text-gray-900 font-medium">
+                            {formatTimeRange(slot.startTime, slot.endTime)}
+                          </span>
+                          {/* <span className="text-gray-600">{slot.type}</span> */}
+                        </div>
+                        <span className="text-gray-600">{slot.type}</span>
+                        {slot.clientId && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                            Booked
+                          </span>
+                        )}
+                        {!isDayDisabled(selectedDate) &&
+                          !isSlotInPast(slot) && (
+                            <div className="flex items-center gap-2">
+                              {slot.clientId ? (
+                                <button
+                                  onClick={() => {
+                                    onRescheduleClick(slot);
+                                  }}
+                                  className="text-orange-500 hover:text-orange-600 border-orange-200 hover:bg-orange-50"
+                                >
+                                  Reschedule
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => onEditClick(slot)}
+                                  className="text-gray-500 hover:text-gray-600"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                  </svg>
+                                </button>
+                              )}
+                              {!slot.clientId && (
+                                <button
+                                  onClick={() => handleDeleteSlot(slot._id)}
+                                  className="text-red-500 hover:text-red-600"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                          )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <AddSlotModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddSlot}
-        selectedDate={selectedDate}
-        isPastDate={isPastDate(selectedDate)}
-      />
+      {isModalOpen && (
+        <AddSlotModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditSlot(undefined);
+          }}
+          onSubmit={handleAddSlot}
+          selectedDate={selectedDate}
+          isPastDate={isDayDisabled(selectedDate)}
+          slot={editSlot}
+          therapists={therapists}
+        />
+      )}
+
+      {isRescheduleModalVisible && editSlot && (
+        <RescheduleModal
+          isOpen={isRescheduleModalVisible}
+          slot={editSlot}
+          onClose={() => setIsRescheduleModalVisible(false)}
+          onSubmit={onRescheduleModalSubmit}
+        />
+      )}
     </div>
   );
 }
