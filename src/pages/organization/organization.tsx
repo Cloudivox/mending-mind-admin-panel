@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import Loader from "../../components/loader";
 import useOrganizationController from "./organization-controller";
 
@@ -26,7 +25,6 @@ function Organization() {
     isTherapistSelected,
     handleSaveWorkspace,
     isCopied,
-    setIsCopied,
     handleCopy,
   } = useOrganizationController();
   return (
@@ -111,7 +109,7 @@ function Organization() {
                   {organizationId && (
                     <div className="relative flex">
                       <button
-                      title="Copy organization link"
+                        title="Copy organization link"
                         className="flex items-center gap-2 text-white px-4 py-2 rounded-md transition"
                         onClick={() =>
                           workspace.id &&
