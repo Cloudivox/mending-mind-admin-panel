@@ -1,17 +1,7 @@
 import { useMutation } from "react-query";
 import apiClient from "../../../../apis/api-client";
-import { IAPIError, IAxiosResponse } from "../../../../types";
+import { IAPIError } from "../../../../types";
 import { API_MUTATION_KEY, APIS_ROUTES } from "../../../../utils/enum";
-
-interface IOrganization {
-  name: string;
-  location: string;
-  code: string;
-  description: string;
-  logo: string;
-  therapists: string[];
-  country: string;
-}
 
 const deleteOrganization = async (id: string) => {
   await apiClient.delete<null, { response: string }>(
