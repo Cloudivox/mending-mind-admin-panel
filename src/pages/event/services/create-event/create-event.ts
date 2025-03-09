@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import apiClient from "../../../../apis/api-client";
-import { IAPIError, IAxiosResponse, IBlogs } from "../../../../types";
+import { IAPIError, IAxiosResponse } from "../../../../types";
 import { API_MUTATION_KEY, APIS_ROUTES } from "../../../../utils/enum";
 
 export interface ICreateEvent {
