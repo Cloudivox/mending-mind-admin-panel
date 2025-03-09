@@ -53,6 +53,7 @@ export interface IAvailabilityData {
   startTime: string;
   endTime: string;
   type: string;
+  therapistId?: string;
 }
 
 export interface IRequestRescheduleData {

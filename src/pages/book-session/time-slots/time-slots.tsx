@@ -2,21 +2,20 @@ import React from "react";
 
 export interface TimeSlotsProps {
   selectedDate: Date;
-  timeSlots?: Array<{ time: string; available: boolean }>;
+  timeSlots?: Array<{
+    time: string;
+    available: boolean;
+    therapistName: string;
+    therapistId: string;
+    availibilityId: string;
+  }>;
   selectedSlot: string | null;
   setSelectedSlot: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const defaultTimeSlotsList = [
-  { time: "11:30 AM", available: true },
-  { time: "03:30 PM", available: true },
-  { time: "05:00 PM", available: true },
-  { time: "06:30 PM", available: true },
-];
-
 const TimeSlots: React.FC<TimeSlotsProps> = ({
   selectedDate = new Date(),
-  timeSlots = defaultTimeSlotsList,
+  timeSlots,
   selectedSlot,
   setSelectedSlot,
 }) => {
@@ -29,8 +28,8 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
     return date.toLocaleDateString("en-US", options);
   };
 
-  const handleSelectSlot = (time: string) => {
-    setSelectedSlot(time);
+  const handleSelectSlot = (availabilityId: string) => {
+    setSelectedSlot(availabilityId);
   };
 
   return (
@@ -42,22 +41,23 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
       </div>
 
       <div className="space-y-3">
-        {timeSlots.map((slot, index) => (
-          <div
-            key={index}
-            className={`
+        {timeSlots &&
+          timeSlots.map((slot, index) => (
+            <div
+              key={index}
+              className={`
               border rounded-md p-3 text-center cursor-pointer transition-colors
               ${
-                selectedSlot === slot.time
+                selectedSlot === slot.availibilityId
                   ? "border-yellow bg-yellow bg-opacity-10"
                   : "border-gray-200 hover:border-yellow"
               }
             `}
-            onClick={() => handleSelectSlot(slot.time)}
-          >
-            <span className="font-montserrat text-sm">{slot.time}</span>
-          </div>
-        ))}
+              onClick={() => handleSelectSlot(slot.availibilityId)}
+            >
+              <span className="font-montserrat text-sm">{slot.time}</span>
+            </div>
+          ))}
       </div>
     </div>
   );

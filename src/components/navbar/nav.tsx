@@ -1,6 +1,8 @@
 import { useState } from "react";
-import logo from "../../assets/logo.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import logo from "../../assets/logo.png";
 import NavHomeIcon from "../../assets/icons/nav-home-icon";
 import NavDashboardIcon from "../../assets/icons/nav-dashboard-icon";
 import NavCalendarIcon from "../../assets/icons/nav-calendar-icon";
@@ -19,8 +21,6 @@ import ArrowLeft from "../../assets/icons/arrow-left";
 import ArrowRight from "../../assets/icons/arrow-right";
 import { useUser } from "../../context/user-context";
 import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-icon";
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
 import { MENDING_MIND_ID, USER_ACCESS_KEY } from "../../utils/enum";
 
 const Nav = () => {
@@ -214,23 +214,25 @@ const Nav = () => {
                 {!isCollapsed && <span>Package</span>}
               </Link>
             )}
-          {user &&
-            user.role === "therapist" &&
-            Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID) ===
-              MENDING_MIND_ID && (
-              <Link
-                to={`/${organizationId}/availability`}
-                onClick={() => setIsActive("Availability")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "Availability"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
-              >
-                <NavAvailabilityIcon />
-                {!isCollapsed && <span>Availability</span>}
-              </Link>
-            )}
+          {(user?.role === "therapist" &&
+            Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID) === MENDING_MIND_ID) ||
+          (user?.role === "admin" &&
+            Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID) !==
+              MENDING_MIND_ID) ? (
+            <Link
+              to={`/${organizationId}/availability`}
+              onClick={() => setIsActive("Availability")}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                isActive === "Availability"
+                  ? "text-black bg-mint/20"
+                  : "text-black/70 hover:text-black hover:bg-mint/10"
+              }`}
+            >
+              <NavAvailabilityIcon />
+              {!isCollapsed && <span>Availability</span>}
+            </Link>
+          ) : null}
+
           {user &&
             ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
               user.role === "admin" ||

@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { MENDING_MIND_ID } from "../../../utils/enum";
+import { useUser } from "../../../context/user-context";
 
 const useAddSlotModalController = (
   onSubmit: (
     startTime: string,
     endTime: string,
     type: "online" | "offline",
-    slotId?: string
+    slotId?: string,
+    therapistId?: string
   ) => void,
   onClose: () => void,
   selectedDate: Date,
@@ -16,12 +20,16 @@ const useAddSlotModalController = (
     type: "online" | "offline";
   }
 ) => {
+  const { user } = useUser();
+  const { organizationId } = useParams<{ organizationId: string }>();
   const [startTime, setStartTime] = useState(slot?.startTime || "");
   const [endTime, setEndTime] = useState(slot?.endTime || "");
+  const [selectedTherapist, setSelectedTherapist] = useState<string>("");
   const [type, setType] = useState<"online" | "offline">(
     slot?.type || "online"
   );
   const [minStartTime, setMinStartTime] = useState("00:00");
+  const isTherapistsVisible = organizationId !== MENDING_MIND_ID;
 
   // Function to check if selected date is today
   const isToday = (date: Date) => {
@@ -103,7 +111,9 @@ const useAddSlotModalController = (
       return;
     }
 
-    onSubmit(startTime, endTime, type, slot?._id);
+    const therapistId = isTherapistsVisible ? selectedTherapist : user?.id;
+
+    onSubmit(startTime, endTime, type, slot?._id, therapistId);
     setStartTime("");
     setEndTime("");
     onClose();
@@ -118,6 +128,10 @@ const useAddSlotModalController = (
     setType,
     type,
     minStartTime,
+    organizationId,
+    selectedTherapist,
+    setSelectedTherapist,
+    isTherapistsVisible,
   };
 };
 

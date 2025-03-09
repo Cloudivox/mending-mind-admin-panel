@@ -26,6 +26,7 @@ export default function AvailabilityPage() {
     setIsRescheduleModalVisible,
     isSlotInPast,
     onRescheduleModalSubmit,
+    therapists,
   } = useAvailabilityController();
 
   return (
@@ -216,6 +217,7 @@ export default function AvailabilityPage() {
           selectedDate={selectedDate}
           isPastDate={isDayDisabled(selectedDate)}
           slot={editSlot}
+          therapists={therapists}
         />
       )}
 

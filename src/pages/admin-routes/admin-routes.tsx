@@ -17,7 +17,7 @@ import CreatePackage from "../package/create-package";
 import Organization from "../organization";
 import SessionDetails from "../session/session-details";
 import BookSession from "../book-session/book-session";
-import EventDetails from "../event/event-details";
+// import EventDetails from "../event/event-details";
 
 const AdminRoutes = () => {
   return (

@@ -7,20 +7,20 @@ import { toast } from "react-toastify";
 import { useUser } from "../../context/user-context";
 import EventDetails from "./event-details";
 
-interface Event {
-  id: string;
-  name: string;
-  description: string;
-  location: string;
-  date: string;
-  time: string;
-  endTime: string;
-  participants: string[];
-  isPaid: boolean;
-  price: number;
-  host: string;
-  hostDescription?: string;
-}
+// interface IEvent {
+//   id: string;
+//   name: string;
+//   description: string;
+//   location: string;
+//   date: string;
+//   time: string;
+//   endTime: string;
+//   participants: string[];
+//   isPaid: boolean;
+//   price: number;
+//   host: string;
+//   hostDescription?: string;
+// }
 const Event = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [isEventDetails, setIsEventDetails] = useState<any>({
@@ -61,12 +61,14 @@ const Event = () => {
     if (getAllEvents.isSuccess && getAllEvents.data) {
       setEvents(getAllEvents.data);
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAllEvents.isSuccess && getAllEvents.data]);
 
   useEffect(() => {
     if (createEvent.isSuccess && createEvent.data) {
       getAllEvents.refetch();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createEvent.isSuccess && createEvent.data]);
 
   useEffect(() => {
@@ -74,6 +76,7 @@ const Event = () => {
       getAllEvents.refetch();
       toast.success("You've successfully joined the event!");
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [joinEvent.isSuccess && joinEvent.data]);
 
   return (

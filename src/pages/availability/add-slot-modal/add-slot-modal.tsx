@@ -8,6 +8,7 @@ const AddSlotModal = ({
   selectedDate,
   isPastDate,
   slot,
+  therapists,
 }: AddSlotModalProps) => {
   const {
     handleStartTimeChange,
@@ -18,6 +19,9 @@ const AddSlotModal = ({
     setType,
     type,
     minStartTime,
+    selectedTherapist,
+    setSelectedTherapist,
+    isTherapistsVisible,
   } = useAddSlotModalController(onSubmit, onClose, selectedDate, slot);
 
   if (!isOpen || isPastDate) return null;
@@ -69,6 +73,31 @@ const AddSlotModal = ({
               <option value="offline">Offline</option>
             </select>
           </div>
+          {isTherapistsVisible && therapists && (
+            <div>
+              <label
+                htmlFor="therapist"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Select Therapist
+              </label>
+              <select
+                id="therapist"
+                name="therapist"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                required
+                value={selectedTherapist}
+                onChange={(e) => setSelectedTherapist(e.target.value)}
+              >
+                <option value="">Select a Therapist</option>
+                {therapists.map((therapist) => (
+                  <option key={therapist._id} value={therapist._id}>
+                    {therapist.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div>
             <label
               htmlFor="startTime"

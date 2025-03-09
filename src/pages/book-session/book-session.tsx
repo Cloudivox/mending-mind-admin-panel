@@ -22,17 +22,15 @@ function BookSession() {
     selectedSlot,
     setSelectedSlot,
     hasLatestSession,
-    setSelectedTherapistId,
     therapists,
     selectedTherapistId,
     handleBookSession,
     isBookingSession,
+    timeSlots,
+    selectedTherapistName,
   } = useBookSessionController();
 
   const isBookingPossible = () => {
-    if (!selectedTherapistId) {
-      return false;
-    }
     if (!selectedDate) {
       return false;
     }
@@ -64,18 +62,11 @@ function BookSession() {
                 </span>
               </div>
             ) : (
-              <select
-                className="w-full border p-2 rounded mt-2"
-                value={selectedTherapistId}
-                onChange={(e) => setSelectedTherapistId(e.target.value)}
-              >
-                <option value="">Select Therapist</option>
-                {therapists.map((therapist) => (
-                  <option key={therapist._id} value={therapist._id}>
-                    {therapist.name}
-                  </option>
-                ))}
-              </select>
+              <div className="flex items-center mt-2">
+                <span className="font-montserrat text-sm">
+                  {selectedTherapistName}
+                </span>
+              </div>
             )}
 
             <div className="space-y-3 mt-6">
@@ -164,20 +155,6 @@ function BookSession() {
               <span className="font-montserrat text-sm text-gray-500 ml-2">
                 +05:30
               </span>
-              {/* <div className="w-4 h-4 ml-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-gray-500"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div> */}
             </div>
           </div>
 
@@ -289,6 +266,7 @@ function BookSession() {
                 selectedDate={selectedDate}
                 selectedSlot={selectedSlot}
                 setSelectedSlot={setSelectedSlot}
+                timeSlots={timeSlots}
               />
             </div>
           </div>

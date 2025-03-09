@@ -1,4 +1,6 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { MENDING_MIND_ID } from "../../../utils/enum";
 
 export interface CalendarProps {
   selectedDate: Date;
@@ -11,6 +13,7 @@ const SessionDetails: React.FC<CalendarProps> = ({
   currentDate = new Date(),
   onSelectDate = () => {},
 }) => {
+  const { organizationId } = useParams<{ organizationId: string }>();
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   // Generate days for the current month
@@ -38,6 +41,27 @@ const SessionDetails: React.FC<CalendarProps> = ({
   for (let i = 0; i < calendarDays.length; i += 7) {
     weeks.push(calendarDays.slice(i, i + 7));
   }
+
+  // Function to check if a date is in the past
+  const isPastDate = (date: Date | null) => {
+    if (!date) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
+  // Function to check if it's Saturday
+  const isSaturday = (date: Date | null) => {
+    return date ? date.getDay() === 6 : false;
+  };
+
+  // Function to check if a date should be enabled
+  const isDateEnabled = (date: Date | null) => {
+    if (!date) return false;
+    if (isPastDate(date)) return false; // Disable past dates
+    if (organizationId === MENDING_MIND_ID) return true; // Enable all days for MENDING_MIND_ID
+    return isSaturday(date); // Enable only Saturdays for other organizations
+  };
 
   const isSelectedDate = (date: Date | null) => {
     if (!date) return false;
@@ -73,28 +97,36 @@ const SessionDetails: React.FC<CalendarProps> = ({
 
       {weeks.map((week, weekIndex) => (
         <div key={weekIndex} className="grid grid-cols-7 gap-1 mb-1">
-          {week.map((day, dayIndex) => (
-            <div
-              key={dayIndex}
-              className={`
-                h-9 w-9 flex items-center justify-center rounded-md text-sm font-montserrat
-                ${day ? "cursor-pointer hover:bg-gray-100" : ""}
-                ${
-                  isSelectedDate(day)
-                    ? "bg-yellow text-white"
-                    : "text-gray-700"
-                }
-                ${
-                  isToday(day) && !isSelectedDate(day)
-                    ? "border border-yellow"
-                    : ""
-                }
-              `}
-              onClick={() => day && onSelectDate(day)}
-            >
-              {day ? day.getDate() : ""}
-            </div>
-          ))}
+          {week.map((day, dayIndex) => {
+            const enabled = isDateEnabled(day);
+            return (
+              <div
+                key={dayIndex}
+                className={`
+                  h-9 w-9 flex items-center justify-center rounded-md text-sm font-montserrat
+                  ${day ? "cursor-pointer" : ""}
+                  ${
+                    enabled
+                      ? "hover:bg-gray-100"
+                      : "opacity-50 cursor-not-allowed"
+                  }
+                  ${
+                    isSelectedDate(day)
+                      ? "bg-yellow text-white"
+                      : "text-gray-700"
+                  }
+                  ${
+                    isToday(day) && !isSelectedDate(day)
+                      ? "border border-yellow"
+                      : ""
+                  }
+                `}
+                onClick={() => enabled && day && onSelectDate(day)}
+              >
+                {day ? day.getDate() : ""}
+              </div>
+            );
+          })}
         </div>
       ))}
     </div>

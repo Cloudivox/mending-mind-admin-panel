@@ -1,3 +1,5 @@
+import { IUsers } from "../types";
+
 export interface TimeSlot {
   userId: string;
   date: string;
@@ -25,6 +27,7 @@ export interface AddSlotModalProps {
     endTime: string;
     type: "online" | "offline";
   };
+  therapists?: IUsers[];
 }
 
 export interface BlogPost {

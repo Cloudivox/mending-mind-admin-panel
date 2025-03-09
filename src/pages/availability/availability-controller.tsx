@@ -3,20 +3,23 @@ import type { TimeSlot } from "../../utils/types";
 import {
   useCreateAvailibility,
   useDeleteAvailibility,
+  useGetAllUsers,
   useGetAvailibility,
   useUpdateAvailibility,
 } from "./services";
 import { formatDate } from "../../utils/enum";
 import { useUser } from "../../context/user-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useRequestReschedule from "./services/reschedule-request";
 import { IRequestRescheduleData } from "../../types";
 import { toast } from "react-toastify";
 import { useGetAllOrganization } from "../organization/services";
+import { MENDING_MIND_ID } from "../../utils/enum";
 
 const useAvailabilityController = () => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const { organizationId } = useParams<{ organizationId: string }>();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRescheduleModalVisible, setIsRescheduleModalVisible] =
@@ -25,14 +28,16 @@ const useAvailabilityController = () => {
   const [slots, setSlots] = useState<TimeSlot[]>([]);
 
   const getAvailibility = useGetAvailibility(
-    formatDate(selectedDate).toString()
+    formatDate(selectedDate).toString(),
+    organizationId
   );
 
   const getAllOrganization = useGetAllOrganization();
-  const addAvailability = useCreateAvailibility();
+  const addAvailability = useCreateAvailibility(organizationId);
   const deleteAvailibility = useDeleteAvailibility();
   const updateAvailibility = useUpdateAvailibility();
   const requestReschedule = useRequestReschedule();
+  const getTherapists = useGetAllUsers(organizationId);
 
   const isUserInOrganization =
     getAllOrganization.data && getAllOrganization?.data?.length > 1;
@@ -55,7 +60,8 @@ const useAvailabilityController = () => {
     startTime: string,
     endTime: string,
     type: "online" | "offline",
-    slotId?: string
+    slotId?: string,
+    therapistId?: string
   ) => {
     const newSlot: {
       date: string;
@@ -63,11 +69,13 @@ const useAvailabilityController = () => {
       startTime: string;
       endTime: string;
       availibilityId?: string;
+      therapistId?: string;
     } = {
       date: formatDate(selectedDate),
       type,
       startTime,
       endTime,
+      therapistId,
     };
     if (slotId) {
       newSlot.availibilityId = slotId;
@@ -90,10 +98,13 @@ const useAvailabilityController = () => {
 
   const isWeekend = (date: Date) => {
     const day = date.getDay();
-    return day === 0 || day === 6; // 0 is Sunday, 6 is Saturday
+    return day === 6; // 0 is Sunday, 6 is Saturday
   };
 
   const isDayDisabled = (date: Date) => {
+    if (organizationId !== MENDING_MIND_ID) {
+      return isPastDate(date) || date.getDay() !== 6;
+    }
     return isPastDate(date) || (isUserInOrganization && isWeekend(date));
   };
 
@@ -126,7 +137,6 @@ const useAvailabilityController = () => {
       const daySlots = getDaySlots(date);
       const hasSlots = daySlots && daySlots.length > 0;
       const isDisabled = isDayDisabled(date);
-      const isWeekendDay = isWeekend(date);
 
       days.push(
         <button
@@ -137,11 +147,6 @@ const useAvailabilityController = () => {
               ${isSelected ? "bg-emerald-600 text-white" : "hover:bg-gray-100"}
               ${hasSlots ? "font-semibold" : ""}
               ${isDisabled ? "text-gray-400 cursor-not-allowed" : ""}
-              ${
-                isUserInOrganization && isWeekendDay && !isPastDate(date)
-                  ? "text-gray-400 cursor-not-allowed"
-                  : ""
-              }
             `}
         >
           {day}
@@ -217,7 +222,7 @@ const useAvailabilityController = () => {
   }, [updateAvailibility.isSuccess]);
 
   useEffect(() => {
-    if (user && user?.role !== "therapist") {
+    if (user && user?.role === "client") {
       navigate("/");
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,7 +244,10 @@ const useAvailabilityController = () => {
     generateCalendarDays,
     formatDate,
     formatTimeRange,
-    isLoading: getAvailibility.isLoading || getAllOrganization.isLoading,
+    isLoading:
+      getAvailibility.isLoading ||
+      getAllOrganization.isLoading ||
+      getTherapists.isLoading,
     editSlot,
     onEditClick,
     setEditSlot,
@@ -249,6 +257,7 @@ const useAvailabilityController = () => {
     isSlotInPast,
     onRescheduleModalSubmit,
     isUserInOrganization,
+    therapists: getTherapists.data?.users,
   };
 };
 
