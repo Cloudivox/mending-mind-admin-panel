@@ -59,7 +59,6 @@ const CodeVerificationForm: React.FC<CodeVerificationFormProps> = ({
       <h2 className="font-playfair text-3xl font-bold text-black mb-5">
         Enter Code for Organization
       </h2>
-
       <div className="space-y-2 mb-5">
         <label
           htmlFor="email"
@@ -78,11 +77,10 @@ const CodeVerificationForm: React.FC<CodeVerificationFormProps> = ({
         />
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
-
       <button
         onClick={handleVerify}
         disabled={verifyCode.isLoading}
-        className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
+        className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md flex items-center justify-center"
       >
         {verifyCode.isLoading ? (
           <>
