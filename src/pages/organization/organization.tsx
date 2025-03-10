@@ -207,7 +207,6 @@ function Organization() {
                     Description: {workspace.description}
                   </p>
                   <p className="text-sm text-gray-600 mb-2">
-                    {" "}
                     Code: {workspace.code}
                   </p>
                   {workspace.therapists && workspace.therapists.length > 0 && (
