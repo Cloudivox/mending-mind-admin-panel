@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGetAllTherapist, useGetAvailibility } from "./services";
+import { useParams } from "react-router-dom";
 
 interface Availability {
   clientId: string;
@@ -8,7 +9,10 @@ interface Availability {
   startTime: string;
   status: string;
   type: string;
-  userId: string;
+  userId: {
+    _id: string;
+    name: string;
+  };
   _id: string;
 }
 
@@ -40,6 +44,8 @@ const useCalenderController = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const { organizationId } = useParams();
+
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [users, setUsers] = useState<UserWithAvailability[]>([]);
 
@@ -49,7 +55,7 @@ const useCalenderController = () => {
   });
 
   const allTherapists = useGetAllTherapist();
-  const getAllAvailibility = useGetAvailibility(selectedDate);
+  const getAllAvailibility = useGetAvailibility(selectedDate, organizationId);
 
   useEffect(() => {
     if (
@@ -63,7 +69,7 @@ const useCalenderController = () => {
         (therapist: Therapist) => {
           const therapistAvailability =
             getAllAvailibility.data.availibility.filter(
-              (avail: Availability) => avail.userId === therapist._id
+              (avail: Availability) => avail.userId._id === therapist._id
             );
 
           return {

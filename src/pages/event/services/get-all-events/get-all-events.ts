@@ -4,18 +4,18 @@ import { IAPIError, IAxiosResponse } from "../../../../types";
 import { API_QUERY_KEY, APIS_ROUTES } from "../../../../utils/enum";
 import { IEvents } from "../create-event/create-event";
 
-const getAllEvents = async () => {
+const getAllEvents = async (organizationId?: string) => {
   const result = await apiClient.get<null, IAxiosResponse<IEvents[]>>(
-    `${APIS_ROUTES.EVENT_SERVICE}/get-all-events`
+    `${APIS_ROUTES.EVENT_SERVICE}/get-all-events/${organizationId}`
   );
 
   return result.data.Data;
 };
 
-const useGetAllEvents = () =>
+const useGetAllEvents = (organizationId?: string) =>
   useQuery<IEvents[], IAPIError>(
     [API_QUERY_KEY.GET_ALL_EVENTS],
-    () => getAllEvents(),
+    () => getAllEvents(organizationId),
     {
       cacheTime: 0,
     }

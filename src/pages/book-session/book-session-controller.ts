@@ -16,6 +16,7 @@ interface Slots {
   therapistName: string;
   therapistId: string;
   availibilityId: string;
+  clientId: string;
 }
 const useBookSessionController = () => {
   const { user } = useUser();
@@ -72,11 +73,12 @@ const useBookSessionController = () => {
       const slots = getAvailibility.data.availibility.map((slot) => ({
         time: convertTo12HourFormat(slot.startTime), // Convert "13:40" → "01:40 PM"
         available: slot.status === "available",
-        //@ts-ignore
+
         therapistName: slot.userId?.name || "Unknown",
-        //@ts-ignore
+
         therapistId: slot.userId?._id || "",
         availibilityId: slot._id,
+        clientId: slot.clientId,
       }));
       setTimeSlots(slots);
     }
@@ -146,15 +148,13 @@ const useBookSessionController = () => {
       isPaid: true,
       type: "individual-session",
       name: "Individual Therapy Session",
+      availibilityId: selectedSlot,
     };
 
     createSession.mutate(sessionData, {
       onSuccess: () => {
         toast.success("Session booked successfully!");
         navigate(`/${organizationId}/session`);
-
-        // Optional: Reset or navigate after successful booking
-        // You might want to reset the form or navigate to a confirmation page
       },
       onError: (error) => {
         //@ts-ignore
@@ -233,6 +233,10 @@ const useBookSessionController = () => {
     selectedTherapistName:
       timeSlots.find((slot) => slot.availibilityId === selectedSlot)
         ?.therapistName || "",
+    alreadyBooked: !!timeSlots.find((slot) => slot.clientId === user?.id),
+    isSelectSessionIsBooked: !!timeSlots.find(
+      (slot) => slot.availibilityId === selectedSlot
+    )?.clientId,
   };
 };
 

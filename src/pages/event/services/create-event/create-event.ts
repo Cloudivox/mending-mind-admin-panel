@@ -32,19 +32,19 @@ export interface IEvents {
   hostDescription?: string;
 }
 
-const createEvent = async (event: ICreateEvent) => {
+const createEvent = async (event: ICreateEvent, organizationId?: string) => {
   const result = await apiClient.post<null, IAxiosResponse<IEvents[]>>(
-    `${APIS_ROUTES.EVENT_SERVICE}/create-event`,
+    `${APIS_ROUTES.EVENT_SERVICE}/create-event/${organizationId}`,
     event
   );
 
   return result.data.Data;
 };
 
-const useCreateEvent = () =>
+const useCreateEvent = (organizationId?: string) =>
   useMutation<IEvents[], IAPIError, ICreateEvent>(
     [API_MUTATION_KEY.CREATE_EVENT],
-    createEvent
+    (event) => createEvent(event, organizationId)
   );
 
 export default useCreateEvent;
