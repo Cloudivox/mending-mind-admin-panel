@@ -14,6 +14,7 @@ interface ISession {
   isPaid: boolean;
   type: string;
   name: string;
+  availibilityId: string;
 }
 const createSession = async (session: ISession, organizationId?: string) => {
   const result = await apiClient.post<null, IAxiosResponse<void>>(

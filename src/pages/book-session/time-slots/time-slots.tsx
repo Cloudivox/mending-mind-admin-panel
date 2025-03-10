@@ -43,9 +43,10 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
       <div className="space-y-3">
         {timeSlots &&
           timeSlots.map((slot, index) => (
-            <div
-              key={index}
-              className={`
+            <>
+              <div
+                key={index}
+                className={`
               border rounded-md p-3 text-center cursor-pointer transition-colors
               ${
                 selectedSlot === slot.availibilityId
@@ -53,10 +54,18 @@ const TimeSlots: React.FC<TimeSlotsProps> = ({
                   : "border-gray-200 hover:border-yellow"
               }
             `}
-              onClick={() => handleSelectSlot(slot.availibilityId)}
-            >
-              <span className="font-montserrat text-sm">{slot.time}</span>
-            </div>
+                onClick={() => handleSelectSlot(slot.availibilityId)}
+              >
+                <span className="font-montserrat text-sm">{slot.time}</span>
+              </div>
+              {slot.availibilityId === selectedSlot && !slot.available && (
+                <div className="text-center mt-2">
+                  <span className="text-sm text-red-500 font-montserrat">
+                    This slot is not available
+                  </span>
+                </div>
+              )}
+            </>
           ))}
       </div>
     </div>

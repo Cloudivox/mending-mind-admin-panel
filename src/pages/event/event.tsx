@@ -6,6 +6,7 @@ import useJoinEvent from "./services/join-event/join-event";
 import { toast } from "react-toastify";
 import { useUser } from "../../context/user-context";
 import EventDetails from "./event-details";
+import { useParams } from "react-router-dom";
 
 // interface IEvent {
 //   id: string;
@@ -27,9 +28,10 @@ const Event = () => {
     data: {},
     isDetails: false,
   });
+  const { organizationId } = useParams<{ organizationId: string }>();
   const [events, setEvents] = useState<IEvents[]>([]);
-  const createEvent = useCreateEvent();
-  const getAllEvents = useGetAllEvents();
+  const createEvent = useCreateEvent(organizationId);
+  const getAllEvents = useGetAllEvents(organizationId);
   const joinEvent = useJoinEvent();
   const { user } = useUser();
   const handleCreateEvent = (eventData: any) => {

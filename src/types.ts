@@ -39,7 +39,10 @@ export interface IAuthData {
 
 export interface IAvailabilityResponse {
   _id: string;
-  userId: string;
+  userId: {
+    _id: string;
+    name: string;
+  };
   date: string;
   startTime: string;
   endTime: string;
