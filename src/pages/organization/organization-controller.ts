@@ -243,13 +243,20 @@ const useOrganizationController = () => {
     });
   };
 
-  const handleCopy = (workspaceId: number, text: string) => {
+  const handleCopy = (workspaceId: number) => {
+    const baseUrl =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:${window.location.port}`
+        : window.location.origin;
+
+    const urlToCopy = `${baseUrl}/join-organization`;
+
     navigator.clipboard
-      .writeText(text)
+      .writeText(urlToCopy)
       .then(() => {
         setIsCopied((prev: any) => ({ ...prev, [workspaceId]: true }));
 
-        // // Reset copied state after 2 seconds
+        // Reset copied state after 2 seconds
         setTimeout(() => {
           setIsCopied((prev: any) => ({ ...prev, [workspaceId]: false }));
         }, 2000);
