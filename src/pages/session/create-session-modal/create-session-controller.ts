@@ -24,6 +24,9 @@ const useCreateSessionController = ({
   const [allPatients, setAllPatients] = useState<IUsers[]>([]);
   const [showAddPatientModal, setShowAddPatientModal] = useState(false);
   const [isSlotAvailable, setIsSlotAvailable] = useState<boolean>(false);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<
+    { startTime: string; endTime: string }[]
+  >([]);
   const [form, setForm] = useState<CreateSessionForm>({
     therapist: "",
     patient: "",
@@ -39,7 +42,11 @@ const useCreateSessionController = ({
   });
 
   const getAllUsers = useGetAllUsers(organizationId);
-  const availabilityQuery = useCheckAvailibility(form.therapist, form.date);
+  const availabilityQuery = useCheckAvailibility(
+    form.therapist,
+    form.date,
+    organizationId
+  );
   const createNewClient = useAddUser(organizationId);
   const createSessionMutation = useCreateSession(organizationId);
 
@@ -72,6 +79,28 @@ const useCreateSessionController = ({
       // Handle error (you might want to show an error message to the user)
     }
   };
+
+  useEffect(() => {
+    if (availabilityQuery.data?.availibility) {
+      // Extract only available slots where status is "available" and no client is assigned
+      const slots = availabilityQuery.data.availibility
+        .filter((slot) => slot.status === "available" && !slot.clientId)
+        .map((slot) => ({
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+        }));
+
+      setAvailableTimeSlots(slots);
+
+      // Reset selected time if it's not in available slots anymore
+      if (form.time && !slots.some((slot) => slot.startTime === form.time)) {
+        setForm((prev) => ({ ...prev, time: "" }));
+      }
+    } else {
+      setAvailableTimeSlots([]);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availabilityQuery.data]);
 
   const handleCreateSession = async () => {
     try {
@@ -124,6 +153,16 @@ const useCreateSessionController = ({
     }
   }, [availabilityQuery.data, form.time]);
 
+  const formatTimeForDisplay = (time: string) => {
+    const [hours, minutes] = time.split(":");
+    const hour = parseInt(hours, 10);
+    const period = hour >= 12 ? "pm" : "am";
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    return `${
+      displayHour > 9 ? displayHour : `0${displayHour}`
+    }:${minutes} ${period}`;
+  };
+
   return {
     form,
     setForm,
@@ -136,6 +175,8 @@ const useCreateSessionController = ({
     handleAddPatient,
     isCheckingAvailability: availabilityQuery.isLoading,
     handleCreateSession: handleSubmit,
+    formatTimeForDisplay,
+    availableTimeSlots,
   };
 };
 
