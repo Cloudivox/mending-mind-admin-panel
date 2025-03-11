@@ -2,11 +2,10 @@ import AddPatientModal from "../add-client-modal";
 import useCreateSessionController from "./create-session-controller";
 
 interface CreateSessionModalProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
-
   const {
     form,
     setForm,
@@ -18,7 +17,9 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
     showAddPatientModal,
     setShowAddPatientModal,
     handleAddPatient,
-    handleCreateSession
+    handleCreateSession,
+    availableTimeSlots,
+    formatTimeForDisplay,
   } = useCreateSessionController({ onClose });
 
   return (
@@ -29,11 +30,15 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Select Therapist</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Select Therapist
+              </label>
               <select
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 value={form.therapist}
-                onChange={(e) => setForm({ ...form, therapist: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, therapist: e.target.value })
+                }
                 required
               >
                 <option value="">Select therapist...</option>
@@ -43,11 +48,12 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
                   </option>
                 ))}
               </select>
-              
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Select Patient</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Select Patient
+              </label>
               <select
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 value={form.patient}
@@ -71,18 +77,24 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Meeting Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Meeting Name
+              </label>
               <input
                 type="text"
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 value={form.meetingName}
-                onChange={(e) => setForm({ ...form, meetingName: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, meetingName: e.target.value })
+                }
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Session Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Session Type
+              </label>
               <select
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 value={form.type}
@@ -97,11 +109,15 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Duration
+                </label>
                 <select
                   className="w-full border border-gray-300 rounded-md px-3 py-2"
                   value={form.duration}
-                  onChange={(e) => setForm({ ...form, duration: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, duration: e.target.value })
+                  }
                   required
                 >
                   <option value="30m">30m</option>
@@ -111,7 +127,9 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Date
+                </label>
                 <input
                   type="date"
                   className="w-full border border-gray-300 rounded-md px-3 py-2"
@@ -122,23 +140,34 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Time
+                </label>
                 <select
                   className="w-full border border-gray-300 rounded-md px-3 py-2"
                   value={form.time}
                   onChange={(e) => setForm({ ...form, time: e.target.value })}
                   required
+                  disabled={
+                    isCheckingAvailability || !form.therapist || !form.date
+                  }
                 >
                   <option value="">Select time</option>
-                  <option value="9:00">9:00 am</option>
-                  <option value="10:00">10:00 am</option>
-                  <option value="11:00">11:00 am</option>
-                  <option value="12:00">12:00 pm</option>
-                  <option value="13:00">1:00 pm</option>
-                  <option value="14:00">2:00 pm</option>
-                  <option value="15:00">3:00 pm</option>
-                  <option value="16:00">4:00 pm</option>
-                  <option value="17:00">5:00 pm</option>
+                  {availableTimeSlots.length > 0 ? (
+                    availableTimeSlots.map((slot) => (
+                      <option key={slot.startTime} value={slot.startTime}>
+                        {formatTimeForDisplay(slot.startTime)}
+                      </option>
+                    ))
+                  ) : form.therapist && form.date ? (
+                    <option value="" disabled>
+                      No available slots
+                    </option>
+                  ) : (
+                    <option value="" disabled>
+                      Select therapist and date first
+                    </option>
+                  )}
                 </select>
               </div>
             </div>
@@ -146,15 +175,31 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
             {isCheckingAvailability ? (
               <div className="flex items-center text-gray-600 text-sm">
                 <svg className="animate-spin h-4 w-4 mr-1" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
                 </svg>
                 Checking availability...
               </div>
             ) : form.therapist && form.date && form.time ? (
               isSlotAvailable ? (
                 <div className="flex items-center text-green-600 text-sm">
-                  <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path
                       fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -165,7 +210,11 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
                 </div>
               ) : (
                 <div className="flex items-center text-red-600 text-sm">
-                  <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path
                       fillRule="evenodd"
                       d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -182,9 +231,13 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
                 type="checkbox"
                 className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                 checked={form.autoConfirm}
-                onChange={(e) => setForm({ ...form, autoConfirm: e.target.checked })}
+                onChange={(e) =>
+                  setForm({ ...form, autoConfirm: e.target.checked })
+                }
               />
-              <label className="ml-2 text-sm text-gray-700">Auto confirm this event</label>
+              <label className="ml-2 text-sm text-gray-700">
+                Auto confirm this event
+              </label>
             </div>
 
             {!form.autoConfirm && (
@@ -217,7 +270,9 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
                     name="paymentType"
                     value="no-booking-fee"
                     checked={form.paymentType === "no-booking-fee"}
-                    onChange={(e) => setForm({ ...form, paymentType: "no-booking-fee" })}
+                    onChange={(e) =>
+                      setForm({ ...form, paymentType: "no-booking-fee" })
+                    }
                     className="mr-2"
                   />
                   Paid (No booking fee)
@@ -226,7 +281,9 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Location
+              </label>
               <select
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 value={form.location}
@@ -251,11 +308,19 @@ const CreateSessionModal = ({ onClose }: CreateSessionModalProps) => {
               </button>
               <button
                 type="submit"
-                className={`px-4 py-2 rounded-md transition-colors ${isSlotAvailable && Boolean(form.therapist) && Boolean(form.date) && Boolean(form.time)
-                  ? 'bg-teal-600 text-white hover:bg-teal-700'
-                  : 'bg-teal-500 text-white cursor-not-allowed'
-                  }`}
-                disabled={!Boolean(isSlotAvailable && form.therapist && form.date && form.time)}
+                className={`px-4 py-2 rounded-md transition-colors ${
+                  isSlotAvailable &&
+                  Boolean(form.therapist) &&
+                  Boolean(form.date) &&
+                  Boolean(form.time)
+                    ? "bg-teal-600 text-white hover:bg-teal-700"
+                    : "bg-teal-500 text-white cursor-not-allowed"
+                }`}
+                disabled={
+                  !Boolean(
+                    isSlotAvailable && form.therapist && form.date && form.time
+                  )
+                }
                 onClick={handleCreateSession}
               >
                 Create one-off

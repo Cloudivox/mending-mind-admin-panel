@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import logo from "../../assets/logo.png";
@@ -24,19 +24,62 @@ import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-ico
 import { MENDING_MIND_ID, USER_ACCESS_KEY } from "../../utils/enum";
 
 const Nav = () => {
-  const { organizationId } = useParams<{
-    organizationId: string;
-  }>();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isActive, setIsActive] = useState("Home");
+  const { organizationId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useUser();
+
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Determine active menu item based on URL path
+  const getActiveTabFromPath = () => {
+    const path = location.pathname;
+    if (path.includes("/dashboard/overall")) return "OverAll";
+    if (path.includes("/dashboard/therapist")) return "Therapist";
+    if (path.includes("/dashboard/client")) return "Client";
+    if (path.includes("/dashboard/products")) return "Product";
+    if (path.includes("/calendar")) return "Calender";
+    if (path.includes("/session")) return "Session";
+    if (path.includes("/package")) return "Package";
+    if (path.includes("/availability")) return "Availability";
+    if (path.includes("/payment")) return "Payment";
+    if (path.includes("/blog")) return "blog";
+    if (path.includes("/event")) return "Event";
+    if (path.includes("/team")) return "Team";
+    if (path.includes("/profile")) return "Profile";
+    if (path.includes("/f&c")) return "f&c";
+    if (path.includes("/organization") && !path.endsWith(`/${organizationId}`))
+      return "Organization";
+    if (path === `/organization`) return "switch";
+    if (path === "/signin") return "logout";
+
+    return "Home";
+  };
+
+  // Set active tab based on current URL path
+  const [isActive, setIsActive] = useState(() => getActiveTabFromPath());
+
+  // Update active tab when location changes
+  useEffect(() => {
+    setIsActive(getActiveTabFromPath());
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
+  // Helper function for active class styling
+  const getActiveClass = (menuItem: string) =>
+    isActive === menuItem
+      ? "text-black bg-mint/20"
+      : "text-black/70 hover:text-black hover:bg-mint/10";
+
+  // Common nav item class
+  const navItemClass =
+    "flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors";
 
   return (
     <aside
       className={`group h-screen fixed left-0 top-0 bg-mint/10 border-r border-mint/25 transition-all
-    ${isCollapsed ? "w-[5.5rem]" : "w-64"} flex flex-col`}
+      ${isCollapsed ? "w-[5.5rem]" : "w-64"} flex flex-col`}
     >
       {isCollapsed ? (
         <div className="flex justify-center items-center w-20 h-[8rem]">
@@ -56,15 +99,12 @@ const Nav = () => {
           />
         </div>
       )}
+
       <nav className="px-4 font-montserrat flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
         <Link
-          to="/"
+          to={`/${organizationId}`}
           onClick={() => setIsActive("Home")}
-          className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-            isActive === "Home"
-              ? "text-black bg-mint/20"
-              : "text-black/70 hover:text-black hover:bg-mint/10"
-          }`}
+          className={`${navItemClass} ${getActiveClass("Home")}`}
         >
           <NavHomeIcon />
           {!isCollapsed && <span className="font-medium">Home</span>}
@@ -79,13 +119,11 @@ const Nav = () => {
                   setIsDropdownOpen(!isDropdownOpen);
                   setIsActive("OverAll");
                 }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors 
-            ${
-              isActive === "OverAll" && !isDropdownOpen
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }
-            `}
+                className={`${navItemClass} ${
+                  isActive === "OverAll" && !isDropdownOpen
+                    ? "text-black bg-mint/20"
+                    : "text-black/70 hover:text-black hover:bg-mint/10"
+                }`}
               >
                 <NavDashboardIcon />
                 {!isCollapsed && <span>Dashboard</span>}
@@ -99,44 +137,28 @@ const Nav = () => {
                   <Link
                     to={`/${organizationId}/dashboard/overall`}
                     onClick={() => setIsActive("OverAll")}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                      isActive === "OverAll"
-                        ? "text-black bg-mint/20"
-                        : "text-black/70 hover:text-black hover:bg-mint/10"
-                    }`}
+                    className={`${navItemClass} ${getActiveClass("OverAll")}`}
                   >
                     <span>Overall</span>
                   </Link>
                   <Link
                     to={`/${organizationId}/dashboard/therapist`}
                     onClick={() => setIsActive("Therapist")}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                      isActive === "Therapist"
-                        ? "text-black bg-mint/20"
-                        : "text-black/70 hover:text-black hover:bg-mint/10"
-                    }`}
+                    className={`${navItemClass} ${getActiveClass("Therapist")}`}
                   >
                     Therapist
                   </Link>
                   <Link
                     to={`/${organizationId}/dashboard/client`}
                     onClick={() => setIsActive("Client")}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                      isActive === "Client"
-                        ? "text-black bg-mint/20"
-                        : "text-black/70 hover:text-black hover:bg-mint/10"
-                    }`}
+                    className={`${navItemClass} ${getActiveClass("Client")}`}
                   >
                     Client
                   </Link>
                   <Link
                     to={`/${organizationId}/dashboard/products`}
                     onClick={() => setIsActive("Product")}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                      isActive === "Product"
-                        ? "text-black bg-mint/20"
-                        : "text-black/70 hover:text-black hover:bg-mint/10"
-                    }`}
+                    className={`${navItemClass} ${getActiveClass("Product")}`}
                   >
                     Product
                   </Link>
@@ -144,15 +166,12 @@ const Nav = () => {
               )}
             </>
           )}
+
           {user && user.role !== "client" && (
             <Link
               to={`/${organizationId}/organization`}
               onClick={() => setIsActive("Organization")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "Organization"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
+              className={`${navItemClass} ${getActiveClass("Organization")}`}
             >
               <svg
                 className="w-5 h-5"
@@ -164,39 +183,34 @@ const Nav = () => {
                 <path
                   fill="currentColor"
                   d="M16 17v8H6v-8zm0-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2m11-9v5H17V6zm0-2H17a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 13v5h-5v-5zm0-2h-5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2M11 6v5H6V6zm0-2H6a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"
-                  stroke-width="0.3"
+                  strokeWidth="0.3"
                   stroke="currentColor"
                 />
               </svg>
               {!isCollapsed && <span>Organization</span>}
             </Link>
           )}
+
           {user && user.role === "admin" && (
             <Link
               to={`/${organizationId}/calendar`}
               onClick={() => setIsActive("Calender")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "Calender"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
+              className={`${navItemClass} ${getActiveClass("Calender")}`}
             >
               <NavCalendarIcon />
               {!isCollapsed && <span>Calendar</span>}
             </Link>
           )}
+
           <Link
             to={`/${organizationId}/session`}
             onClick={() => setIsActive("Session")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Session"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
+            className={`${navItemClass} ${getActiveClass("Session")}`}
           >
             <NavSessionIcon />
             {!isCollapsed && <span>Session</span>}
           </Link>
+
           {user &&
             ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
               user.role === "admin" ||
@@ -204,16 +218,13 @@ const Nav = () => {
               <Link
                 to={`/${organizationId}/package`}
                 onClick={() => setIsActive("Package")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "Package"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
+                className={`${navItemClass} ${getActiveClass("Package")}`}
               >
                 <NavPackageIcon />
                 {!isCollapsed && <span>Package</span>}
               </Link>
             )}
+
           {(user?.role === "therapist" &&
             Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID) === MENDING_MIND_ID) ||
           (user?.role === "admin" &&
@@ -222,11 +233,7 @@ const Nav = () => {
             <Link
               to={`/${organizationId}/availability`}
               onClick={() => setIsActive("Availability")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "Availability"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
+              className={`${navItemClass} ${getActiveClass("Availability")}`}
             >
               <NavAvailabilityIcon />
               {!isCollapsed && <span>Availability</span>}
@@ -240,16 +247,13 @@ const Nav = () => {
               <Link
                 to="#"
                 onClick={() => setIsActive("Payment")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "Payment"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
+                className={`${navItemClass} ${getActiveClass("Payment")}`}
               >
                 <NavPaymentIcon />
                 {!isCollapsed && <span>Payment</span>}
               </Link>
             )}
+
           {user &&
             ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
               user.role === "admin" ||
@@ -257,80 +261,61 @@ const Nav = () => {
               <Link
                 to={`/${organizationId}/blog`}
                 onClick={() => setIsActive("blog")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "blog"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
+                className={`${navItemClass} ${getActiveClass("blog")}`}
               >
                 <NavBlogIcon />
                 {!isCollapsed && <span>Blog</span>}
               </Link>
             )}
+
           {user && (user.role === "admin" || user.role === "client") && (
             <Link
               to={`/${organizationId}/event`}
               onClick={() => setIsActive("Event")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "Event"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
+              className={`${navItemClass} ${getActiveClass("Event")}`}
             >
               <NavEventIcon />
               {!isCollapsed && <span>Event</span>}
             </Link>
           )}
+
           {user && user.role === "admin" && (
             <Link
               to={`/${organizationId}/team`}
               onClick={() => setIsActive("Team")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "Team"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
+              className={`${navItemClass} ${getActiveClass("Team")}`}
             >
               <NavTeamManageIcon />
               {!isCollapsed && <span>Team Management</span>}
             </Link>
           )}
+
           <Link
             to={`/${organizationId}/profile`}
             onClick={() => setIsActive("Profile")}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-              isActive === "Profile"
-                ? "text-black bg-mint/20"
-                : "text-black/70 hover:text-black hover:bg-mint/10"
-            }`}
+            className={`${navItemClass} ${getActiveClass("Profile")}`}
           >
             <NavProfileIcon />
             {!isCollapsed && <span>Profile</span>}
           </Link>
+
           {user && user.role !== "therapist" && (
             <Link
               to={`/${organizationId}/f&c`}
               onClick={() => setIsActive("f&c")}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "f&c"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
+              className={`${navItemClass} ${getActiveClass("f&c")}`}
             >
               <FeedbackCompainsIcon />
               {!isCollapsed && <span>Feedback & Complains</span>}
             </Link>
           )}
+
           <div className="absolute bottom-1">
             {user && user.role !== "client" && (
               <Link
                 to={"/organization"}
                 onClick={() => setIsActive("switch")}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                  isActive === "switch"
-                    ? "text-black bg-mint/20"
-                    : "text-black/70 hover:text-black hover:bg-mint/10"
-                }`}
+                className={`${navItemClass} ${getActiveClass("switch")}`}
               >
                 <svg
                   className="w-5 h-5"
@@ -342,15 +327,16 @@ const Nav = () => {
                   <path
                     fill="none"
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="4"
                     d="M42 19H6M30 7l12 12M6.799 29h36m-36 0l12 12"
                   />
                 </svg>
                 {!isCollapsed && <span>Switch Organization</span>}
               </Link>
             )}
+
             <Link
               to={"/signin"}
               onClick={() => {
@@ -358,11 +344,7 @@ const Nav = () => {
                 toast.success("Signout successfully");
                 logout();
               }}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${
-                isActive === "logout"
-                  ? "text-black bg-mint/20"
-                  : "text-black/70 hover:text-black hover:bg-mint/10"
-              }`}
+              className={`${navItemClass} ${getActiveClass("logout")}`}
             >
               <svg
                 className="w-5 h-5"
@@ -381,6 +363,7 @@ const Nav = () => {
           </div>
         </div>
       </nav>
+
       <button
         className="absolute right-[-16px] top-3/4 transform -translate-y-1/2
         w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 shadow-md 

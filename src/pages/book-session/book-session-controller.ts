@@ -26,20 +26,14 @@ const useBookSessionController = () => {
     useState<boolean>(false);
   const { organizationId } = useParams();
   const [timeSlots, setTimeSlots] = useState<Slots[]>([]);
-  const getLatestSessionByClient = useGetLatestSessionByClient(user?.id || "");
   const getAllUsers = useGetAllUsers(organizationId || "");
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
 
   const createSession = useCreateSession(organizationId);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (getLatestSessionByClient.data) {
-      setSelectedTherapistId(getLatestSessionByClient.data.therapistId);
-    }
-  }, [getLatestSessionByClient.data]);
-
   const [selectedTherapistId, setSelectedTherapistId] = useState("");
+  const getLatestSessionByClient = useGetLatestSessionByClient(user?.id || "");
   const months = [
     "January",
     "February",
@@ -67,22 +61,44 @@ const useBookSessionController = () => {
     return `${formattedHour}:${minute.toString().padStart(2, "0")} ${period}`;
   };
 
-  // Extract available time slots when data is fetched
   useEffect(() => {
-    if (getAvailibility.data) {
-      const slots = getAvailibility.data.availibility.map((slot) => ({
-        time: convertTo12HourFormat(slot.startTime), // Convert "13:40" → "01:40 PM"
-        available: slot.status === "available",
-
-        therapistName: slot.userId?.name || "Unknown",
-
-        therapistId: slot.userId?._id || "",
-        availibilityId: slot._id,
-        clientId: slot.clientId,
-      }));
-      setTimeSlots(slots);
+    if (!getAvailibility.data || !getLatestSessionByClient.isSuccess) {
+      return;
     }
-  }, [getAvailibility.data]);
+
+    const mapSlot = (slot: any) => ({
+      time: convertTo12HourFormat(slot.startTime),
+      available: slot.status === "available",
+      therapistName: slot.userId?.name || "Unknown",
+      therapistId: slot.userId?._id || "",
+      availibilityId: slot._id,
+      clientId: slot.clientId,
+    });
+
+    // If we have latest session data, try to filter by the same therapist
+    if (getLatestSessionByClient.data) {
+      const therapistId = getLatestSessionByClient.data.therapistId;
+
+      // Check if the therapist from the latest session is available
+      const therapistSlots = getAvailibility.data.availibility.filter(
+        (slot) => slot.userId?._id === therapistId
+      );
+
+      if (therapistSlots.length > 0) {
+        // If therapist is available, use only their slots
+        setTimeSlots(therapistSlots.map(mapSlot));
+        setSelectedTherapistId(therapistId);
+        return;
+      }
+    }
+
+    // Default case: use all available slots
+    setTimeSlots(getAvailibility.data.availibility.map(mapSlot));
+  }, [
+    getAvailibility.data,
+    getLatestSessionByClient.data,
+    getLatestSessionByClient.isSuccess,
+  ]);
 
   const years = Array.from({ length: 5 }, (_, i) => 2025 + i);
 
@@ -171,6 +187,21 @@ const useBookSessionController = () => {
     });
   };
 
+  const calculateDaysBetweenDates = (
+    date1: string | number | Date,
+    date2: string | number | Date
+  ) => {
+    // Convert both dates to milliseconds
+    const date1Ms = new Date(date1).getTime();
+    const date2Ms = new Date(date2).getTime();
+
+    // Calculate difference in milliseconds
+    const diffMs = Math.abs(date1Ms - date2Ms);
+
+    // Convert to days
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  };
+
   const goToNextMonth = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -219,7 +250,42 @@ const useBookSessionController = () => {
     handleDateSelect,
     organizationId,
     setShowMonthYearSelector,
-    hasLatestSession: !!getLatestSessionByClient.data,
+    hasLatestSession: (() => {
+      if (!getLatestSessionByClient.data) return false;
+
+      const latestSessionDate = getLatestSessionByClient.data.sessionDateTime;
+
+      if (selectedSlot) {
+        const selectedSlotData = timeSlots.find(
+          (slot) => slot.availibilityId === selectedSlot
+        );
+
+        if (selectedSlotData) {
+          const timeParts = selectedSlotData.time.split(" ");
+          const [time, period] = timeParts;
+          let [hours, minutes] = time.split(":").map(Number);
+
+          if (period === "PM" && hours !== 12) {
+            hours += 12;
+          } else if (period === "AM" && hours === 12) {
+            hours = 0;
+          }
+
+          const selectedDateTime = new Date(selectedDate);
+          selectedDateTime.setHours(hours, minutes, 0, 0);
+
+          // Calculate days between the two dates
+          const daysDifference = calculateDaysBetweenDates(
+            latestSessionDate,
+            selectedDateTime.toISOString()
+          );
+
+          return daysDifference <= 14;
+        }
+      }
+
+      return new Date(latestSessionDate) > new Date();
+    })(),
     getLatestSessionByClient: getLatestSessionByClient.data,
     therapists:
       getAllUsers.data?.users.filter((user) => user.role === "therapist") || [],

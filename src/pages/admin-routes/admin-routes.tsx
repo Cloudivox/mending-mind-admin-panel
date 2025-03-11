@@ -54,7 +54,7 @@ const AdminRoutes = () => {
             <Route path="blog" element={<Blog />} />
             <Route path="session" element={<Session />} />
             <Route path="session/:sessionId" element={<SessionDetails />} />
-            <Route path="book-session" element={<BookSession />} />
+            <Route path="/session/book-session" element={<BookSession />} />
             <Route path="package" element={<Package />} />
             <Route
               path="create-package/:sessionId"
