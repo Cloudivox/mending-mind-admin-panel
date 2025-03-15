@@ -95,7 +95,7 @@ const Nav = () => {
             src={logo}
             className="h-20 cursor-pointer"
             alt="logo"
-            title="logo"
+            title="Mending Mind"
           />
         </div>
       )}
@@ -315,6 +315,7 @@ const Nav = () => {
               <Link
                 to={"/organization"}
                 onClick={() => setIsActive("switch")}
+                title="Switch Organization"
                 className={`${navItemClass} ${getActiveClass("switch")}`}
               >
                 <svg
@@ -333,7 +334,9 @@ const Nav = () => {
                     d="M42 19H6M30 7l12 12M6.799 29h36m-36 0l12 12"
                   />
                 </svg>
-                {!isCollapsed && <span>Switch Organization</span>}
+                {!isCollapsed && (
+                  <span>{Cookies.get(USER_ACCESS_KEY.ORGANIZATION_NAME)}</span>
+                )}
               </Link>
             )}
 

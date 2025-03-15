@@ -295,6 +295,12 @@ const useOrganizationController = () => {
       secure: true,
       sameSite: "lax",
     });
+    const workspaceName =
+      workspaces.find((w) => w.id === workspaceId)?.name || "";
+    Cookies.set(USER_ACCESS_KEY.ORGANIZATION_NAME, workspaceName, {
+      secure: true,
+      sameSite: "lax",
+    });
   };
 
   const handleCopy = (workspaceId: number) => {
