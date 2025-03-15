@@ -10,21 +10,40 @@ export default function Calendar() {
     useCalenderController();
 
   return (
-    <div className="flex h-full flex-col space-y-6 p-8 bg-mint/5">
+    <div className="flex h-full flex-col space-y-6 p-8">
       <div className="flex items-center justify-between border-b-2 border-terracotta/20 pb-2">
-        <h1 className="text-2xl font-bold font-playfair text-black">
-          Calendar
-        </h1>
-        <DatePicker
-          selectedDate={selectedDate}
-          onDateChange={setSelectedDate}
-        />
+        <div className="flex items-center">
+          <h1 className="text-2xl font-bold font-playfair text-black">
+            Calendar
+          </h1>
+          <div className="relative group ms-3">
+            <div className="w-5 h-5 flex items-center justify-center border border-gray-400 rounded-full text-gray-600 cursor-pointer">
+              i
+            </div>
+            <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-gray-800 text-white text-sm rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              This section allows you to view all therapist slots for a
+              particular date.
+            </div>
+          </div>
+        </div>
+        <div>
+          <DatePicker
+            selectedDate={selectedDate}
+            onDateChange={setSelectedDate}
+          />
+          <div className="text-sm text-gray-600 mr-4 text-right">
+            Select a date to view therapist availability slots.
+          </div>
+        </div>
       </div>
 
       {isLoading ? (
         <Loader />
       ) : (
+        <>
+        <p className="text-gray-700 text-center">Therapist Slots</p>
         <div className="flex flex-1 overflow-hidden rounded-xl border-2 border-mint/30 bg-white">
+          
           <TimeSlots timeSlots={timeSlots} />
 
           <div className="flex-1 overflow-x-auto">
@@ -87,6 +106,7 @@ export default function Calendar() {
             </div>
           </div>
         </div>
+        </>
       )}
     </div>
   );

@@ -24,6 +24,7 @@ const SessionDetails = () => {
             <div className="flex items-center">
               <button
                 className="p-1 mr-3 text-black hover:text-gray-700"
+                title="back"
                 onClick={() => navigate(-1)}
               >
                 {/* Back Arrow SVG */}

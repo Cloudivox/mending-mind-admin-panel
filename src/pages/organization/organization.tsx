@@ -27,6 +27,7 @@ function Organization() {
     handleCopy,
     handleFileInputChange,
     removeImage,
+    setUIState,
   } = useOrganizationController();
   return (
     <>
@@ -45,6 +46,7 @@ function Organization() {
               </div>
               <button
                 onClick={openAddModal}
+                title="Add organization"
                 className="bg-teal-600 hover:bg-teal-700 text-white font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
               >
                 {/* Plus icon SVG */}
@@ -71,8 +73,8 @@ function Organization() {
               </h1>
               {/* <p className="text-gray-600">Manage your organization</p> */}
               <p className="text-gray-600">
-                Selecting an organization allows you to view and manage its information
-                efficiently.
+                Selecting an organization allows you to view and manage its
+                information efficiently.
               </p>
             </div>
           )}
@@ -81,7 +83,11 @@ function Organization() {
             {workspaces.map((workspace: any) => (
               <div
                 key={workspace.id}
-                title={`Click to manage ${workspace.name} Organization`}
+                title={
+                  !organizationId
+                    ? `Click to manage ${workspace.name} Organization`
+                    : ""
+                }
                 onClick={() => {
                   !organizationId && navigateHome(workspace.id);
                 }}
@@ -92,13 +98,15 @@ function Organization() {
                 <div className="p-4 flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`bg-purple text-white w-10 h-10 rounded-md flex items-center justify-center font-bold overflow-hidden`}
+                      className={`${
+                        !workspace?.logo?.base64 ? "bg-purple" : ""
+                      } text-white w-10 h-10 rounded-md flex items-center justify-center font-bold overflow-hidden`}
                     >
                       {workspace.logo ? (
                         <img
                           src={workspace.logo.base64}
                           alt={workspace.logo.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       ) : (
                         <>
@@ -121,7 +129,7 @@ function Organization() {
                   {organizationId && (
                     <div className="relative flex">
                       <button
-                        title="Copy organization link"
+                        title="Click to copy organization link"
                         className="flex items-center gap-2 text-white px-4 py-2 rounded-md transition"
                         onClick={() =>
                           workspace.id &&
@@ -169,6 +177,7 @@ function Organization() {
                       <button
                         onClick={() => toggleDropdown(workspace.id)}
                         className="p-1 rounded-md hover:bg-gray-100"
+                        title="Click to manage Organization"
                       >
                         {/* More Vertical icon SVG */}
                         <svg
@@ -192,12 +201,25 @@ function Organization() {
                       {uiState.activeDropdownId === workspace.id && (
                         <div className="absolute right-0 mt-1 w-40 bg-white rounded-md shadow-lg border border-gray-200 z-10">
                           <div className="py-1">
-                            <button
-                              onClick={() => openEditModal(workspace)}
-                              className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                            >
-                              Edit
-                            </button>
+                            <div className="flex flex-between">
+                              <button
+                                onClick={() => openEditModal(workspace)}
+                                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                className=" text-right px-4 text-red-800"
+                                onClick={() => {
+                                  setUIState((prev) => ({
+                                    ...prev,
+                                    activeDropdownId: null,
+                                  }));
+                                }}
+                              >
+                                X
+                              </button>
+                            </div>
                             <button
                               onClick={() =>
                                 handleDeleteWorkspace(workspace.id)
@@ -229,11 +251,11 @@ function Organization() {
                 </div>
 
                 <div className="border-t border-gray-200 px-4 py-3 flex justify-end text-sm">
-                  <div className="text-center">
+                  <div className="text-right">
                     <p className="font-medium text-gray-800">
                       {workspace.users}
                     </p>
-                    <p className="text-gray-500">Users</p>
+                    <p className="text-gray-500">Total Users</p>
                   </div>
                 </div>
               </div>
@@ -338,15 +360,22 @@ function Organization() {
                           : "Change Image"}
                       </button>
                       {activeWorkspace.logo && (
-                        <button onClick={removeImage} className="remove-button">
+                        <button
+                          onClick={removeImage}
+                          className="remove-button px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
+                        >
                           Remove Image
                         </button>
                       )}
                     </div>
 
                     <div className="upload-instructions">
-                      <p>Maximum file size: 2MB</p>
-                      <p>Supported formats: JPG, PNG, GIF</p>
+                      <p className="text-sm font-medium text-gray-500 ">
+                        Maximum file size: 2MB
+                      </p>
+                      <p className="text-sm font-medium text-gray-500 mb-2">
+                        Supported formats: JPG, PNG, GIF
+                      </p>
                     </div>
 
                     <div className="mb-4">

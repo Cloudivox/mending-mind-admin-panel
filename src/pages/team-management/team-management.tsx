@@ -34,9 +34,20 @@ const TeamManagement = () => {
       ) : (
         <div className="bg-white rounded-2xl p-8 transition-all">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-playfair font-bold text-2xl text-[#2C3E50]">
-              Team Management
-            </h3>
+            <div className="flex items-center">
+              <h3 className="font-playfair font-bold text-2xl text-[#2C3E50]">
+                Team Management
+              </h3>
+              <div className="relative group ms-3">
+                <div className="w-5 h-5 flex items-center justify-center border border-gray-400 rounded-full text-gray-600 cursor-pointer">
+                  i
+                </div>
+                <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-gray-800 text-white text-sm rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  This section allows you to add users, such as therapists, for
+                  this specific organization
+                </div>
+              </div>
+            </div>
             <div className="flex items-center gap-4">
               <div className="relative">
                 <input
@@ -62,6 +73,7 @@ const TeamManagement = () => {
               </div>
               <button
                 onClick={handleAddUser}
+                title="Add user"
                 className="bg-[#3498DB] hover:bg-[#2980B9] text-white px-6 py-2.5 rounded-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
               >
                 <PlusIcon />
@@ -326,12 +338,14 @@ const TeamManagement = () => {
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => handleEdit(user)}
+                            title="Update"
                             className="text-[#3498DB] hover:text-[#2980B9] transition-colors font-montserrat text-sm font-medium"
                           >
                             Update
                           </button>
                           <button
                             onClick={() => handleDelete(user._id)}
+                            title="Delete"
                             className="text-[#E74C3C] hover:text-[#C0392B] transition-colors font-montserrat text-sm font-medium"
                           >
                             Delete

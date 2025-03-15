@@ -148,6 +148,11 @@ const useAvailabilityController = () => {
               ${hasSlots ? "font-semibold" : ""}
               ${isDisabled ? "text-gray-400 cursor-not-allowed" : ""}
             `}
+          title={`
+          ${isDisabled ? "Can't Select" : ""}
+          ${!isSelected && !isDisabled ?'Click to select':""}
+          
+          `}
         >
           {day}
           {hasSlots && (
@@ -201,6 +206,7 @@ const useAvailabilityController = () => {
 
   useEffect(() => {
     if (addAvailability.isSuccess) {
+      toast.success("Slot added Successfully.")
       getAvailibility.refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -208,6 +214,7 @@ const useAvailabilityController = () => {
 
   useEffect(() => {
     if (deleteAvailibility.isSuccess) {
+      toast.success("Slot Deleted Successfully.")
       getAvailibility.refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,6 +222,7 @@ const useAvailabilityController = () => {
 
   useEffect(() => {
     if (updateAvailibility.isSuccess) {
+      toast.success("Slot Details Updated Successfully.")
       getAvailibility.refetch();
       setEditSlot(undefined);
     }

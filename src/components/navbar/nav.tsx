@@ -4,33 +4,32 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import logo from "../../assets/logo.png";
 import NavHomeIcon from "../../assets/icons/nav-home-icon";
-import NavDashboardIcon from "../../assets/icons/nav-dashboard-icon";
+// import NavDashboardIcon from "../../assets/icons/nav-dashboard-icon";
 import NavCalendarIcon from "../../assets/icons/nav-calendar-icon";
 import NavSessionIcon from "../../assets/icons/nav-session-icon";
 import NavPackageIcon from "../../assets/icons/nav-package-icon";
 import NavAvailabilityIcon from "../../assets/icons/nav-availability-icon";
-import NavPaymentIcon from "../../assets/icons/nav-payment-icon";
-import NavBlogIcon from "../../assets/icons/nav-blog-icon";
+// import NavPaymentIcon from "../../assets/icons/nav-payment-icon";
+// import NavBlogIcon from "../../assets/icons/nav-blog-icon";
 import NavEventIcon from "../../assets/icons/nav-event-icon";
 import NavTeamManageIcon from "../../assets/icons/nav-team-manage-icon";
 import NavProfileIcon from "../../assets/icons/nav-profile-icon";
-import ArrowUp from "../../assets/icons/arrow-up";
-import ArrowDown from "../../assets/icons/arrow-down";
+// import ArrowUp from "../../assets/icons/arrow-up";
+// import ArrowDown from "../../assets/icons/arrow-down";
 import WavyLines from "../../assets/icons/wavy-lines";
 import ArrowLeft from "../../assets/icons/arrow-left";
 import ArrowRight from "../../assets/icons/arrow-right";
 import { useUser } from "../../context/user-context";
-import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-icon";
+// import FeedbackCompainsIcon from "../../assets/icons/nav-feedback-&-compains-icon";
 import { MENDING_MIND_ID, USER_ACCESS_KEY } from "../../utils/enum";
 
-const Nav = () => {
+const Nav = ({ setIsCollapsed, isCollapsed }: any) => {
   const { organizationId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useUser();
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Determine active menu item based on URL path
   const getActiveTabFromPath = () => {
@@ -105,13 +104,14 @@ const Nav = () => {
           to={`/${organizationId}`}
           onClick={() => setIsActive("Home")}
           className={`${navItemClass} ${getActiveClass("Home")}`}
+          title="Home"
         >
           <NavHomeIcon />
           {!isCollapsed && <span className="font-medium">Home</span>}
         </Link>
 
         <div className="space-y-1.5">
-          {user && user.role === "admin" && (
+          {/* {user && user.role === "admin" && (
             <>
               <Link
                 to={`/${organizationId}/dashboard/overall`}
@@ -165,13 +165,14 @@ const Nav = () => {
                 </div>
               )}
             </>
-          )}
+          )} */}
 
           {user && user.role !== "client" && (
             <Link
               to={`/${organizationId}/organization`}
               onClick={() => setIsActive("Organization")}
               className={`${navItemClass} ${getActiveClass("Organization")}`}
+              title="Organization"
             >
               <svg
                 className="w-5 h-5"
@@ -195,6 +196,7 @@ const Nav = () => {
             <Link
               to={`/${organizationId}/calendar`}
               onClick={() => setIsActive("Calender")}
+              title="Calendar"
               className={`${navItemClass} ${getActiveClass("Calender")}`}
             >
               <NavCalendarIcon />
@@ -206,6 +208,7 @@ const Nav = () => {
             to={`/${organizationId}/session`}
             onClick={() => setIsActive("Session")}
             className={`${navItemClass} ${getActiveClass("Session")}`}
+            title="Session"
           >
             <NavSessionIcon />
             {!isCollapsed && <span>Session</span>}
@@ -213,12 +216,13 @@ const Nav = () => {
 
           {user &&
             ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
-              user.role === "admin" ||
+              (user.role === "admin" && organizationId === MENDING_MIND_ID) ||
               user.role === "therapist") && (
               <Link
                 to={`/${organizationId}/package`}
                 onClick={() => setIsActive("Package")}
                 className={`${navItemClass} ${getActiveClass("Package")}`}
+                title="Package"
               >
                 <NavPackageIcon />
                 {!isCollapsed && <span>Package</span>}
@@ -234,13 +238,14 @@ const Nav = () => {
               to={`/${organizationId}/availability`}
               onClick={() => setIsActive("Availability")}
               className={`${navItemClass} ${getActiveClass("Availability")}`}
+              title="Availability"
             >
               <NavAvailabilityIcon />
               {!isCollapsed && <span>Availability</span>}
             </Link>
           ) : null}
 
-          {user &&
+          {/* {user &&
             ((user.role === "client" && organizationId === MENDING_MIND_ID) ||
               user.role === "admin" ||
               user.role === "therapist") && (
@@ -248,6 +253,7 @@ const Nav = () => {
                 to="#"
                 onClick={() => setIsActive("Payment")}
                 className={`${navItemClass} ${getActiveClass("Payment")}`}
+                title="Payment"
               >
                 <NavPaymentIcon />
                 {!isCollapsed && <span>Payment</span>}
@@ -262,17 +268,19 @@ const Nav = () => {
                 to={`/${organizationId}/blog`}
                 onClick={() => setIsActive("blog")}
                 className={`${navItemClass} ${getActiveClass("blog")}`}
+                title="Blog"
               >
                 <NavBlogIcon />
                 {!isCollapsed && <span>Blog</span>}
               </Link>
-            )}
+            )} */}
 
           {user && (user.role === "admin" || user.role === "client") && (
             <Link
               to={`/${organizationId}/event`}
               onClick={() => setIsActive("Event")}
               className={`${navItemClass} ${getActiveClass("Event")}`}
+              title="Event"
             >
               <NavEventIcon />
               {!isCollapsed && <span>Event</span>}
@@ -284,6 +292,7 @@ const Nav = () => {
               to={`/${organizationId}/team`}
               onClick={() => setIsActive("Team")}
               className={`${navItemClass} ${getActiveClass("Team")}`}
+              title="Team Management"
             >
               <NavTeamManageIcon />
               {!isCollapsed && <span>Team Management</span>}
@@ -294,12 +303,13 @@ const Nav = () => {
             to={`/${organizationId}/profile`}
             onClick={() => setIsActive("Profile")}
             className={`${navItemClass} ${getActiveClass("Profile")}`}
+            title="Profile"
           >
             <NavProfileIcon />
             {!isCollapsed && <span>Profile</span>}
           </Link>
 
-          {user && user.role !== "therapist" && (
+          {/* {user && user.role !== "therapist" && (
             <Link
               to={`/${organizationId}/f&c`}
               onClick={() => setIsActive("f&c")}
@@ -308,9 +318,9 @@ const Nav = () => {
               <FeedbackCompainsIcon />
               {!isCollapsed && <span>Feedback & Complains</span>}
             </Link>
-          )}
+          )} */}
 
-          <div className="absolute bottom-1">
+          <div className="mt-auto">
             {user && user.role !== "client" && (
               <Link
                 to={"/organization"}
@@ -348,6 +358,7 @@ const Nav = () => {
                 logout();
               }}
               className={`${navItemClass} ${getActiveClass("logout")}`}
+              title="Signout"
             >
               <svg
                 className="w-5 h-5"
@@ -372,6 +383,7 @@ const Nav = () => {
         w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 shadow-md 
         opacity-0 group-hover:opacity-100 transition-all bg-white/80
         hover:w-12 hover:h-12 hover:border-gray-600"
+        title={isCollapsed ? "Click to expand" : "Click to collapse"}
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
         {isCollapsed ? <ArrowRight /> : <ArrowLeft />}
