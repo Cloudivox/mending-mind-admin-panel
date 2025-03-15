@@ -34,7 +34,7 @@ function Organization() {
       ) : (
         <div className="min-h-screen bg-gray-50 p-6 font-sans">
           {/* Header */}
-          {organizationId && (
+          {organizationId ? (
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h1 className="text-2xl font-bold text-gray-800 mt-5">
@@ -63,13 +63,24 @@ function Organization() {
                 Add Organization
               </button>
             </div>
+          ) : (
+            <div className="mb-5">
+              <h1 className="text-2xl font-bold text-gray-800 mt-5">
+                Select Organization
+              </h1>
+              {/* <p className="text-gray-600">Manage your organization</p> */}
+              <p className="text-gray-600">
+                Selecting an organization allows you to view and manage its information
+                efficiently.
+              </p>
+            </div>
           )}
-
           {/* Workspaces Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {workspaces.map((workspace: any) => (
               <div
                 key={workspace.id}
+                title={`Click to manage ${workspace.name} Organization`}
                 onClick={() => {
                   !organizationId && navigateHome(workspace.id);
                 }}

@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 const AppointmentTable = () => {
   return (
@@ -23,11 +23,13 @@ const AppointmentTable = () => {
                 </svg>
               </div>
               <h6 className="text-black font-playfair text-xl">
-                Upcoming Appointments
+                Upcoming Sessions
               </h6>
             </div>
             <button className="px-4 py-2 bg-mint/10 text-black rounded-xl text-sm hover:bg-mint/20 transition-colors font-montserrat">
-              View All
+              <Link to={'session'}>
+              View All Sessions
+              </Link>
             </button>
           </div>
         </div>
@@ -50,9 +52,6 @@ const AppointmentTable = () => {
                 </th>
                 <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
                   Status
-                </th>
-                <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
-                  Action
                 </th>
               </tr>
             </thead>
@@ -79,11 +78,6 @@ const AppointmentTable = () => {
                   <span className="px-3 py-1 rounded-full bg-mint/10 text-black text-xs font-medium font-montserrat">
                     Confirmed
                   </span>
-                </td>
-                <td className="py-4 px-4 text-center">
-                  <button className="text-terracotta hover:text-terracotta/80 transition-colors font-montserrat text-sm">
-                    View
-                  </button>
                 </td>
               </tr>
             </tbody>

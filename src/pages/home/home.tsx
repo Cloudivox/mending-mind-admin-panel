@@ -1,7 +1,6 @@
-import React from "react";
 import HorizotalBlock from "./horizontal-block";
 import AppointmentTable from "./appointment-table";
-import PendingRequest from "./pendig-requests";
+// import PendingRequest from "./pendig-requests";
 
 const Home = () => {
   return (
@@ -9,12 +8,14 @@ const Home = () => {
       <HorizotalBlock />
 
       {/* Content Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8"> */}
+      <div className="gap-6 mt-8">
         {/* Appointments Table */}
         <AppointmentTable />
         {/* Pending request */}
-        <PendingRequest />
-      </div>
+        {/* <PendingRequest /> */}
+        </div>
+      {/* </div> */}
     </div>
   );
 };
