@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import React from "react";
+import { Sessions } from "../../../utils/types";
 
-const AppointmentTable = () => {
+const AppointmentTable: React.FC<{
+  upcomingSessions?: Sessions[];
+  isLoading: boolean;
+}> = ({ upcomingSessions, isLoading }) => {
   return (
     <div className="lg:col-span-8">
       <div className="bg-white rounded-2xl shadow-sm border-2 border-mint/20 h-full">
@@ -27,61 +32,138 @@ const AppointmentTable = () => {
               </h6>
             </div>
             <button className="px-4 py-2 bg-mint/10 text-black rounded-xl text-sm hover:bg-mint/20 transition-colors font-montserrat">
-              <Link to={'session'}>
-              View All Sessions
-              </Link>
+              <Link to={"session"}>View All Sessions</Link>
             </button>
           </div>
         </div>
 
         <div className="p-6">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-black/5">
-                <th className="text-left text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
-                  Client Name
-                </th>
-                <th className="text-left text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
-                  Date
-                </th>
-                <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
-                  Slot
-                </th>
-                <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
-                  Assigned To
-                </th>
-                <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="hover:bg-black/5 transition-colors">
-                <td className="py-4 px-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-purple/10 flex items-center justify-center text-purple font-medium">
-                      JD
-                    </div>
-                    <span className="font-montserrat text-sm">John Doe</span>
-                  </div>
-                </td>
-                <td className="py-4 px-4 font-montserrat text-sm">
-                  Oct 24, 2023
-                </td>
-                <td className="py-4 px-4 text-center font-montserrat text-sm">
-                  10:00 AM
-                </td>
-                <td className="py-4 px-4 text-center font-montserrat text-sm">
-                  Dr. Smith
-                </td>
-                <td className="py-4 px-4 text-center">
-                  <span className="px-3 py-1 rounded-full bg-mint/10 text-black text-xs font-medium font-montserrat">
-                    Confirmed
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {isLoading || !upcomingSessions ? (
+            <div className="flex justify-center items-center py-8">
+              <p className="text-black/60 font-montserrat">
+                Loading sessions...
+              </p>
+            </div>
+          ) : upcomingSessions.length > 0 ? (
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-black/5">
+                  <th className="text-left text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
+                    Client Name
+                  </th>
+                  <th className="text-left text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
+                    Date
+                  </th>
+                  <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
+                    Slot
+                  </th>
+                  <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
+                    Assigned To
+                  </th>
+                  <th className="text-center text-xs font-semibold text-black/60 uppercase py-3 px-4 font-montserrat">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {upcomingSessions.map((session) => {
+                  // Format the date
+                  const sessionDate = new Date(session.sessionDateTime);
+                  const formattedDate = sessionDate.toLocaleDateString(
+                    "en-US",
+                    {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    }
+                  );
+
+                  // Format the time
+                  const formattedTime = sessionDate.toLocaleTimeString(
+                    "en-US",
+                    {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    }
+                  );
+
+                  // Get client initials for avatar
+                  const initials = session.clientName
+                    ? session.clientName
+                        .split(" ")
+                        .map((name) => name[0])
+                        .join("")
+                        .toUpperCase()
+                    : "CL";
+
+                  return (
+                    <tr
+                      key={session._id}
+                      className="hover:bg-black/5 transition-colors"
+                    >
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-purple/10 flex items-center justify-center text-purple font-medium">
+                            {initials}
+                          </div>
+                          <span className="font-montserrat text-sm">
+                            {session.clientName}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4 font-montserrat text-sm">
+                        {formattedDate}
+                      </td>
+                      <td className="py-4 px-4 text-center font-montserrat text-sm">
+                        {formattedTime}
+                      </td>
+                      <td className="py-4 px-4 text-center font-montserrat text-sm">
+                        {session.therapistName}
+                      </td>
+                      <td className="py-4 px-4 text-center">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium font-montserrat ${
+                            session.status === "confirmed" ||
+                            session.status === "Confirmed"
+                              ? "bg-mint/10 text-black"
+                              : session.status === "pending"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {session.status.charAt(0).toUpperCase() +
+                            session.status.slice(1)}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-10">
+              <svg
+                className="w-16 h-16 text-black/20 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <p className="text-black/60 font-montserrat text-lg">
+                No upcoming sessions right now
+              </p>
+              <p className="text-black/40 font-montserrat text-sm mt-2">
+                New sessions will appear here when scheduled
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

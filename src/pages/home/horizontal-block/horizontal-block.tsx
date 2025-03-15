@@ -1,4 +1,13 @@
-const HorizotalBlock = () => {
+import React from "react";
+
+interface ISessionDataHome {
+  totalSessionsCompleted: number;
+  totalUpcomingSessions: number;
+  totalTodaysSessions: number;
+}
+const HorizotalBlock: React.FC<{
+  sessionData?: ISessionDataHome;
+}> = ({ sessionData }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
       {/* Today's Appointments */}
@@ -25,7 +34,9 @@ const HorizotalBlock = () => {
           <p className="text-sm text-black/60 mb-1 font-montserrat">
             Today's Appointments
           </p>
-          <h4 className="text-2xl font-bold text-black font-playfair">24</h4>
+          <h4 className="text-2xl font-bold text-black font-playfair">
+            {sessionData?.totalTodaysSessions}
+          </h4>
         </div>
       </div>
 
@@ -53,7 +64,9 @@ const HorizotalBlock = () => {
           <p className="text-sm text-black/60 mb-1 font-montserrat">
             Appointments Done
           </p>
-          <h4 className="text-2xl font-bold text-black font-playfair">18</h4>
+          <h4 className="text-2xl font-bold text-black font-playfair">
+            {sessionData?.totalSessionsCompleted}
+          </h4>
         </div>
       </div>
 
@@ -81,7 +94,9 @@ const HorizotalBlock = () => {
           <p className="text-sm text-black/60 mb-1 font-montserrat">
             Pending Appointments
           </p>
-          <h4 className="text-2xl font-bold text-black font-playfair">6</h4>
+          <h4 className="text-2xl font-bold text-black font-playfair">
+            {sessionData?.totalUpcomingSessions}
+          </h4>
         </div>
       </div>
 
