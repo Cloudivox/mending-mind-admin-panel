@@ -10,17 +10,23 @@ interface IOrganization {
   description: string;
   country: string;
   therapists: Therapist[];
-  logo: string;
+  logo: FileBase64 | null;
   users: number;
   location: string;
   code: string;
+}
+
+interface FileBase64 {
+  base64: string;
+  name: string;
+  type: string;
+  size?: number;
 }
 
 interface Therapist {
   _id: string;
   name: string;
 }
-
 
 const getAllSessionPackage = async () => {
   const result = await apiClient.get<null, IAxiosResponse<IOrganization[]>>(

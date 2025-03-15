@@ -9,9 +9,16 @@ interface IOrganization {
   location: string;
   code: string;
   description: string;
-  logo: string;
+  logo: FileBase64 | null;
   therapists: string[];
   country: string;
+}
+
+interface FileBase64 {
+  base64: string;
+  name: string;
+  type: string;
+  size?: number;
 }
 
 const createOrganization = async (organization: IOrganization) => {
