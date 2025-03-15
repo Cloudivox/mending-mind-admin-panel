@@ -49,11 +49,17 @@ const useCalenderController = () => {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [users, setUsers] = useState<UserWithAvailability[]>([]);
 
-  const timeSlots = Array.from({ length: 24 }, (_, i) => {
-    const hour = i + 0; // Start from 8 AM
-    return `${hour.toString().padStart(2, "0")}:00`;
-  });
+  // const timeSlots = Array.from({ length: 24 }, (_, i) => {
+  //   const hour = i + 0; // Start from 8 AM
+  //   return `${hour.toString().padStart(2, "0")}:00`;
+  // });
 
+  const timeSlots = Array.from({ length: 24 }, (_, i) => {
+    const hour = i % 12 === 0 ? 12 : i % 12; // Convert 24-hour to 12-hour format
+    const period = i < 12 ? "AM" : "PM"; // Determine AM/PM
+    return `${hour.toString().padStart(2, "0")}:00 ${period}`;
+  });
+  
   const allTherapists = useGetAllTherapist();
   const getAllAvailibility = useGetAvailibility(selectedDate, organizationId);
 

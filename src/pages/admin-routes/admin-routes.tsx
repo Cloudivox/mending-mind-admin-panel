@@ -17,12 +17,13 @@ import CreatePackage from "../package/create-package";
 import Organization from "../organization";
 import SessionDetails from "../session/session-details";
 import BookSession from "../book-session/book-session";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { USER_ACCESS_KEY } from "../../utils/enum";
 // import EventDetails from "../event/event-details";
 
 const AdminRoutes = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     if (
@@ -37,8 +38,8 @@ const AdminRoutes = () => {
 
   return (
     <div className="min-h-screen bg-mint/5">
-      <Nav />
-      <div className="pl-64 bg-mint/5">
+      <Nav setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
+      <div className={`${isCollapsed ? "pl-[5.5rem]" : "pl-64"}`}>
         <main className="w-full">
           <Routes>
             <Route path="/" element={<Home />} />

@@ -69,6 +69,7 @@ const Event = () => {
   useEffect(() => {
     if (createEvent.isSuccess && createEvent.data) {
       getAllEvents.refetch();
+      toast.success("Event created successfully!");
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createEvent.isSuccess && createEvent.data]);
@@ -98,6 +99,7 @@ const Event = () => {
               {user && user.role === "admin" && (
                 <button
                   onClick={() => setIsCreateModalOpen(true)}
+                  title="Click to create event"
                   className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
                 >
                   <svg
@@ -131,6 +133,7 @@ const Event = () => {
                         user?.role === "admin" && handleClick(event)
                       }
                       className="cursor-pointer bg-white rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                      title="Click to view Event Details"
                     >
                       <div className="mb-4 overflow-hidden rounded-xl">
                         <img
@@ -182,7 +185,7 @@ const Event = () => {
                           />
                         </svg>
                         <span className="font-montserrat text-[#34495E] group-hover:text-[#64B5F6] transition-colors duration-300">
-                          {event.time} - {event.time}
+                          {event.time} ({event.duration} hours)
                         </span>
                       </div>
                       <div className="flex items-center gap-2 group">

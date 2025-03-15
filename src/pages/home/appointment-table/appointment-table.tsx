@@ -38,13 +38,13 @@ const AppointmentTable: React.FC<{
         </div>
 
         <div className="p-6">
-          {isLoading || !upcomingSessions ? (
+          {isLoading ? (
             <div className="flex justify-center items-center py-8">
               <p className="text-black/60 font-montserrat">
                 Loading sessions...
               </p>
             </div>
-          ) : upcomingSessions.length > 0 ? (
+          ) : upcomingSessions && upcomingSessions?.length > 0 ? (
             <table className="w-full">
               <thead>
                 <tr className="border-b border-black/5">
