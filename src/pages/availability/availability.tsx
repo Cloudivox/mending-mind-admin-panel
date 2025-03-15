@@ -1,6 +1,7 @@
 import ArrowLeft from "../../assets/icons/arrow-left";
 import ArrowRight from "../../assets/icons/arrow-right";
 import Loader from "../../components/loader";
+import { useUser } from "../../context/user-context";
 import AddSlotModal from "./add-slot-modal";
 import useAvailabilityController from "./availability-controller";
 import RescheduleModal from "./reschedule-modal";
@@ -28,17 +29,28 @@ export default function AvailabilityPage() {
     onRescheduleModalSubmit,
     therapists,
   } = useAvailabilityController();
+  const { user } = useUser();
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-sm p-6">
-          <h1 className="text-2xl font-semibold mb-8">Availability</h1>
-
+          <div className="flex items-center  mb-8">
+            <h1 className="text-2xl font-semibold">Availability</h1>
+            <div className="relative group ms-3">
+              <div className="w-5 h-5 flex items-center justify-center border border-gray-400 rounded-full text-gray-600 cursor-pointer">
+                i
+              </div>
+              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-gray-800 text-white text-sm rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                This section for add and manage therapist availability slots.
+                you can select a date and add a new slot for a therapist.
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Calendar */}
             <div>
-              <div className="mb-4 flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <button
                   onClick={() =>
                     setSelectedDate(
@@ -70,7 +82,9 @@ export default function AvailabilityPage() {
                   <ArrowRight />
                 </button>
               </div>
-
+              <p className="text-center text-gray-600 mb-4">
+                Select a date to add slots
+              </p>
               <div className="grid grid-cols-7 gap-2 mb-2">
                 {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(
                   (day) => (
@@ -102,6 +116,11 @@ export default function AvailabilityPage() {
                 <button
                   onClick={() => setIsModalOpen(true)}
                   disabled={isDayDisabled(selectedDate)}
+                  title={`${
+                    user && user.role === "admin"
+                      ? "click to assign therapist to their slots"
+                      : ""
+                  }`}
                   className={`bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2 
                       ${
                         isDayDisabled(selectedDate)
@@ -155,6 +174,7 @@ export default function AvailabilityPage() {
                               ) : (
                                 <button
                                   onClick={() => onEditClick(slot)}
+                                  title="Edit"
                                   className="text-gray-500 hover:text-gray-600"
                                 >
                                   <svg
@@ -174,6 +194,7 @@ export default function AvailabilityPage() {
                               )}
                               {!slot.clientId && (
                                 <button
+                                  title="Delete"
                                   onClick={() => handleDeleteSlot(slot._id)}
                                   className="text-red-500 hover:text-red-600"
                                 >

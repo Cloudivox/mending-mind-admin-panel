@@ -321,7 +321,12 @@ const useOrganizationController = () => {
           setIsCopied((prev: any) => ({ ...prev, [workspaceId]: false }));
         }, 2000);
 
-        toast.success("Copied to clipboard!");
+        toast.success(
+          "Organization link copied successfully! Share this link to invite users to join your organization.",
+          {
+            autoClose: 10000, // Time in milliseconds (e.g., 5000ms = 5 seconds)
+          }
+        );
       })
       .catch(() => {
         toast.error("Error copying text!");
@@ -336,24 +341,50 @@ const useOrganizationController = () => {
 
   useEffect(() => {
     if (createOrganization.isSuccess) {
+      toast.success("Organization created successfully!");
       getAllOrganization.refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createOrganization.isSuccess]);
 
   useEffect(() => {
+    if (createOrganization.isError) {
+      toast.success("Organization creation failed! Please try again later.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createOrganization.isError]);
+
+  useEffect(() => {
     if (updateOrganization.isSuccess) {
+      toast.success("Organization details are updated successfully!");
       getAllOrganization.refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateOrganization.isSuccess]);
 
   useEffect(() => {
+    if (updateOrganization.isError) {
+      toast.success(
+        "Organization details are not updated! Please try again later."
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateOrganization.isError]);
+
+  useEffect(() => {
     if (deleteOrganization.isSuccess) {
+      toast.success("Organization deleted successfully!");
       getAllOrganization.refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteOrganization.isSuccess]);
+
+  useEffect(() => {
+    if (deleteOrganization.isError) {
+      toast.success("Organization not deleted! Please try again later.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deleteOrganization.isError]);
 
   useEffect(() => {
     if (allTherapist.isSuccess && allTherapist.data) {
@@ -387,6 +418,7 @@ const useOrganizationController = () => {
     handleCopy,
     handleFileInputChange,
     removeImage,
+    setUIState,
   };
 };
 
