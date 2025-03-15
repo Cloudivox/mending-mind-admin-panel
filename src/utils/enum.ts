@@ -21,6 +21,8 @@ export const API_QUERY_KEY = {
   GET_PROFILE_DETAILS: "get-profile-details",
   GET_ALL_EVENTS: "get-all-events",
   GET_LATEST_SESSION_BY_CLIENT: "get-latest-session-client",
+  GET_UPCOMING_SESSIONS_HOME: "get-upcoming-sessions-home",
+  GET_HORIZONTAL_DATA: "get-horizontal-data",
 };
 
 export const API_MUTATION_KEY = {
