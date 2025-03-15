@@ -1,8 +1,6 @@
-import React from "react";
-
 const HorizotalBlock = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
       {/* Today's Appointments */}
       <div className="bg-white rounded-2xl p-6 relative group hover:shadow-lg transition-all duration-300 border-2 border-mint/20">
         <div className="absolute -top-4 left-4">
@@ -88,7 +86,7 @@ const HorizotalBlock = () => {
       </div>
 
       {/* Today's Revenue */}
-      <div className="bg-white rounded-2xl p-6 relative group hover:shadow-lg transition-all duration-300 border-2 border-mint/20">
+      {/* <div className="bg-white rounded-2xl p-6 relative group hover:shadow-lg transition-all duration-300 border-2 border-mint/20">
         <div className="absolute -top-4 left-4">
           <div className="w-12 h-12 bg-purple rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
             <svg
@@ -115,7 +113,7 @@ const HorizotalBlock = () => {
             $2,854
           </h4>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
