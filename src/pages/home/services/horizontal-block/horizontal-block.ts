@@ -20,7 +20,7 @@ const getSesssionDataForHome = async (organizationId?: string) => {
 
 const useGetSesssionDataForHome = (organizationId?: string) =>
   useQuery<ISessionDataHome, IAPIError>(
-    [API_QUERY_KEY.GET_ALL_SESSION],
+    [API_QUERY_KEY.GET_HORIZONTAL_DATA],
     () => getSesssionDataForHome(organizationId),
     {
       cacheTime: 0,

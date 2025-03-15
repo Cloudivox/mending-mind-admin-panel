@@ -1,6 +1,7 @@
 export const USER_ACCESS_KEY = {
   TOKEN: "mendingMindAccessToken",
   ORGANIZATION_ID: "organizationId",
+  ORGANIZATION_NAME: "organizationName",
 };
 
 export const MENDING_MIND_ID = "67c42246019b4349af563057";
