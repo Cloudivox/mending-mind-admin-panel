@@ -32,6 +32,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     Cookies.remove(USER_ACCESS_KEY.TOKEN);
     Cookies.remove(USER_ACCESS_KEY.ORGANIZATION_ID);
+    Cookies.remove(USER_ACCESS_KEY.ORGANIZATION_NAME);
   };
 
   useEffect(() => {
