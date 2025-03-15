@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Nav from "../../components/navbar";
 import Home from "../home";
 import Calender from "../calender";
@@ -17,9 +17,24 @@ import CreatePackage from "../package/create-package";
 import Organization from "../organization";
 import SessionDetails from "../session/session-details";
 import BookSession from "../book-session/book-session";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { USER_ACCESS_KEY } from "../../utils/enum";
 // import EventDetails from "../event/event-details";
 
 const AdminRoutes = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (
+      window.location.pathname.includes("not-access") &&
+      Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID)
+    ) {
+      navigate(`/${Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID)}`, {
+        replace: true,
+      });
+    }
+  }, [navigate]);
+
   return (
     <div className="min-h-screen bg-mint/5">
       <Nav />
@@ -39,13 +54,14 @@ const AdminRoutes = () => {
             <Route path="blog" element={<Blog />} />
             <Route path="session" element={<Session />} />
             <Route path="session/:sessionId" element={<SessionDetails />} />
-            <Route path="book-session" element={<BookSession />} />
+            <Route path="/session/book-session" element={<BookSession />} />
             <Route path="package" element={<Package />} />
             <Route
               path="create-package/:sessionId"
               element={<CreatePackage />}
             />
             <Route path="team" element={<TeamManagement />} />
+
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </main>

@@ -23,7 +23,7 @@ const useSessionController = () => {
   }, [getAllSessions.isSuccess, getAllSessions.data]);
 
   const navigateBookSession = () => {
-    navigate(`/${organizationId}/book-session`);
+    navigate(`/${organizationId}/session/book-session`);
   };
 
   return {

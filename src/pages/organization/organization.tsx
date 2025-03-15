@@ -114,7 +114,7 @@ function Organization() {
                         onClick={() =>
                           workspace.id &&
                           workspace.code &&
-                          handleCopy(workspace.id, workspace.code)
+                          handleCopy(workspace.id)
                         }
                       >
                         {" "}
@@ -204,7 +204,10 @@ function Organization() {
 
                 <div className="px-4 py-2">
                   <p className="text-sm text-gray-600 mb-2">
-                    {workspace.description}
+                    Description: {workspace.description}
+                  </p>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Code: {workspace.code}
                   </p>
                   {workspace.therapists && workspace.therapists.length > 0 && (
                     <p className="text-xs text-gray-500 mb-2">

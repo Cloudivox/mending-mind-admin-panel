@@ -1,7 +1,10 @@
 import { IUsers } from "../types";
 
 export interface TimeSlot {
-  userId: string;
+  userId: {
+    _id: string;
+    name: string;
+  };
   date: string;
   startTime: string;
   endTime: string;

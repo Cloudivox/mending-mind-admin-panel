@@ -22,15 +22,18 @@ function BookSession() {
     selectedSlot,
     setSelectedSlot,
     hasLatestSession,
-    therapists,
-    selectedTherapistId,
     handleBookSession,
     isBookingSession,
     timeSlots,
     selectedTherapistName,
+    alreadyBooked,
+    isSelectSessionIsBooked,
   } = useBookSessionController();
 
   const isBookingPossible = () => {
+    if (isBookingSession) {
+      return false;
+    }
     if (!selectedDate) {
       return false;
     }
@@ -50,24 +53,17 @@ function BookSession() {
               Individual session
             </h2>
 
-            {hasLatestSession ? (
-              <div className="flex items-center mt-2">
-                {/* <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center mr-3">
-                  <span className="text-black text-sm">KT</span>
-                </div> */}
-                <span className="font-montserrat text-sm">
-                  {therapists.find(
-                    (therapist) => therapist._id === selectedTherapistId
-                  )?.name || ""}
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center mt-2">
-                <span className="font-montserrat text-sm">
-                  {selectedTherapistName}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center mt-2">
+              <span className="font-montserrat text-sm">
+                {alreadyBooked ? "You already booked for the session" : ""}
+              </span>
+            </div>
+
+            <div className="flex items-center mt-2">
+              <span className="font-montserrat text-sm">
+                {selectedTherapistName}
+              </span>
+            </div>
 
             <div className="space-y-3 mt-6">
               <div className="flex items-center">
@@ -278,15 +274,33 @@ function BookSession() {
                 handleBookSession();
               }
             }}
-            disabled={isBookingPossible() === false || isBookingSession}
+            disabled={
+              isBookingPossible() === false ||
+              isBookingSession ||
+              alreadyBooked ||
+              isSelectSessionIsBooked ||
+              !hasLatestSession
+            }
             className={`
               px-6 py-3 rounded-md text-white font-semibold 
               ${
-                isBookingPossible() && !isBookingSession
+                isBookingPossible() &&
+                !isBookingSession &&
+                !alreadyBooked &&
+                !isSelectSessionIsBooked
                   ? "bg-yellow hover:bg-yellow-600"
                   : "bg-gray-400 cursor-not-allowed"
               }
             `}
+            title={
+              hasLatestSession
+                ? "You can book a session after while"
+                : alreadyBooked
+                ? "You already Booked for session"
+                : isSelectSessionIsBooked
+                ? "This session is booked by someone else"
+                : ""
+            }
           >
             {isBookingSession ? "Booking..." : "Book Session"}
           </button>
