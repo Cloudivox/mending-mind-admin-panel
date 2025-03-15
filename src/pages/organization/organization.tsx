@@ -16,7 +16,6 @@ function Organization() {
     closeModal,
     activeWorkspace,
     fileInputRef,
-    handleLogoSelect,
     triggerFileInput,
     setActiveWorkspace,
     toggleTherapistDropdown,
@@ -26,6 +25,8 @@ function Organization() {
     handleSaveWorkspace,
     isCopied,
     handleCopy,
+    handleFileInputChange,
+    removeImage,
   } = useOrganizationController();
   return (
     <>
@@ -95,8 +96,8 @@ function Organization() {
                     >
                       {workspace.logo ? (
                         <img
-                          src={workspace.logo}
-                          alt={workspace.name}
+                          src={workspace.logo.base64}
+                          alt={workspace.logo.name}
                           className="w-full h-full object-cover"
                         />
                       ) : (
@@ -128,7 +129,6 @@ function Organization() {
                           handleCopy(workspace.id)
                         }
                       >
-                        {" "}
                         {isCopied[workspace.id] ? (
                           <svg
                             className="text-gray-500"
@@ -287,12 +287,10 @@ function Organization() {
                       >
                         {activeWorkspace.logo ? (
                           <img
-                            src={activeWorkspace.logo}
-                            alt="Logo"
+                            src={activeWorkspace.logo.base64}
+                            alt={activeWorkspace.logo.name}
                             className="w-full h-full object-cover"
                           />
-                        ) : uiState.modalMode === "edit" ? (
-                          activeWorkspace.logo
                         ) : (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -319,10 +317,14 @@ function Organization() {
                           </svg>
                         )}
                       </div>
+
                       <input
                         type="file"
                         ref={fileInputRef}
-                        onChange={handleLogoSelect}
+                        onChange={handleFileInputChange}
+                        onClick={(e) =>
+                          ((e.target as HTMLInputElement).value = "")
+                        }
                         accept="image/*"
                         className="hidden"
                       />
@@ -330,10 +332,21 @@ function Organization() {
                         onClick={triggerFileInput}
                         className="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
                       >
-                        {uiState.modalMode === "add"
+                        {uiState.modalMode === "add" ||
+                        activeWorkspace.logo === null
                           ? "Add Image"
                           : "Change Image"}
                       </button>
+                      {activeWorkspace.logo && (
+                        <button onClick={removeImage} className="remove-button">
+                          Remove Image
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="upload-instructions">
+                      <p>Maximum file size: 2MB</p>
+                      <p>Supported formats: JPG, PNG, GIF</p>
                     </div>
 
                     <div className="mb-4">

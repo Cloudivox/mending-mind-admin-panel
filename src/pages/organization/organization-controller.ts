@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCreateOrganization, useGetAllOrganization } from "./services";
 import { useGetAllTherapist } from "../calender/services";
@@ -14,10 +14,17 @@ interface IOrganization {
   description: string;
   country: string;
   therapists: Therapist[];
-  logo: string;
+  logo: FileBase64 | null;
   users: number;
   location: string;
   code: string;
+}
+
+interface FileBase64 {
+  base64: string;
+  name: string;
+  type: string;
+  size?: number;
 }
 
 // Define therapist type
@@ -33,6 +40,9 @@ interface UIState {
   showModal: boolean;
   modalMode: "add" | "edit" | null;
 }
+
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
 const useOrganizationController = () => {
   const { organizationId } = useParams<{ organizationId: string }>();
   const getAllOrganization = useGetAllOrganization();
@@ -55,7 +65,7 @@ const useOrganizationController = () => {
     id: "",
     name: "",
     description: "",
-    logo: "",
+    logo: null,
     users: 0,
     location: "",
     therapists: [],
@@ -88,7 +98,7 @@ const useOrganizationController = () => {
       id: "",
       name: "",
       description: "",
-      logo: "",
+      logo: null,
       users: 0,
       location: "",
       therapists: [],
@@ -139,12 +149,8 @@ const useOrganizationController = () => {
       return;
 
     if (uiState.modalMode === "add") {
-      // Add new workspace
-      const logoChar = activeWorkspace.name.charAt(0).toUpperCase();
-
       const newWorkspace = {
         ...activeWorkspace,
-        logo: logoChar,
         therapists: activeWorkspace.therapists.map((t) => t._id),
         // users: 0,
       };
@@ -168,6 +174,13 @@ const useOrganizationController = () => {
       ...prev,
       activeDropdownId: null,
     }));
+  };
+
+  const removeImage = () => {
+    setActiveWorkspace({
+      ...activeWorkspace,
+      logo: null,
+    });
   };
 
   // Updated: Handle therapist selection
@@ -214,21 +227,62 @@ const useOrganizationController = () => {
       .join(", ");
   };
 
-  // Handle logo file selection
-  const handleLogoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setActiveWorkspace({
-        ...activeWorkspace,
-        logo: result,
-      });
-    };
-    reader.readAsDataURL(file);
+    if (files && files[0]) {
+      const file = files[0];
+
+      // Check file size
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error("File size exceeds 2MB limit");
+        // Reset the input
+        e.target.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (loadEvent) => {
+        if (loadEvent.target && loadEvent.target.result) {
+          const base64 = loadEvent.target.result.toString();
+          const result = {
+            base64,
+            name: file.name,
+            type: file.type,
+            size: file.size,
+          };
+
+          setActiveWorkspace({
+            ...activeWorkspace,
+            logo: result,
+          });
+        }
+      };
+
+      reader.onerror = () => {
+        toast.error("Error reading file");
+      };
+
+      reader.readAsDataURL(file);
+    }
   };
+
+  // Handle logo file selection
+  // const handleLogoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (!file) return;
+
+  //   const reader = new FileReader();
+  //   reader.onload = (e) => {
+  //     const result = e.target?.result as string;
+  //     setActiveWorkspace({
+  //       ...activeWorkspace,
+  //       logo: result,
+  //     });
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
 
   // Trigger file input click
   const triggerFileInput = () => {
@@ -315,7 +369,6 @@ const useOrganizationController = () => {
     closeModal,
     activeWorkspace,
     fileInputRef,
-    handleLogoSelect,
     triggerFileInput,
     setActiveWorkspace,
     toggleTherapistDropdown,
@@ -326,6 +379,8 @@ const useOrganizationController = () => {
     isCopied,
     setIsCopied,
     handleCopy,
+    handleFileInputChange,
+    removeImage,
   };
 };
 
