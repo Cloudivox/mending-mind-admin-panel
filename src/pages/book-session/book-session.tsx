@@ -279,7 +279,7 @@ function BookSession() {
               isBookingSession ||
               alreadyBooked ||
               isSelectSessionIsBooked ||
-              !hasLatestSession
+              hasLatestSession
             }
             className={`
               px-6 py-3 rounded-md text-white font-semibold 

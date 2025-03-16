@@ -19,6 +19,7 @@ function EventDetails({ event, setIsEventDetails }: any) {
               isDetails: false,
             })
           }
+          title="Back to Events"
           className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors"
         >
           <svg
@@ -141,7 +142,7 @@ function EventDetails({ event, setIsEventDetails }: any) {
         </div>
 
         {/* Participants Table */}
-        {eventData.participants &&!!eventData.participants?.length && (
+        {eventData.participants && !!eventData.participants?.length && (
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-playfair font-bold text-black">
