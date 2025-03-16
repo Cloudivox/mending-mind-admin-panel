@@ -41,6 +41,7 @@ function useTeamManagementController() {
   const {
     data: userData,
     isLoading,
+    isRefetching,
     refetch,
   } = useGetAllUsers(page, limit, searchTerm, organizationId);
   //@ts-ignore
@@ -75,8 +76,13 @@ function useTeamManagementController() {
   // Debounced search handler using lodash
   const handleSearch = debounce((value: string) => {
     setSearchTerm(value);
-    setPage(1); // Reset to first page on new search
+    setPage(1);
   }, 300);
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -229,6 +235,7 @@ function useTeamManagementController() {
     selectedTherapists,
     setShowTherapistList,
     setSelectedOption,
+    isRefetching,
   };
 }
 

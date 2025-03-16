@@ -41,7 +41,7 @@ const useGetAllUsers = (
   organizationId?: string
 ) =>
   useQuery<UsersResponse, IAPIError>(
-    [API_QUERY_KEY.GET_ALL_USERS, page, limit, search],
+    [API_QUERY_KEY.GET_ALL_USERS, page, limit],
     () => getAllUsers(page, limit, search, organizationId),
     {
       cacheTime: 0,
