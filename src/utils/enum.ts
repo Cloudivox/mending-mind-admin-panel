@@ -24,6 +24,7 @@ export const API_QUERY_KEY = {
   GET_LATEST_SESSION_BY_CLIENT: "get-latest-session-client",
   GET_UPCOMING_SESSIONS_HOME: "get-upcoming-sessions-home",
   GET_HORIZONTAL_DATA: "get-horizontal-data",
+  GET_THERAPIST_CALENDAR: "get-therapist-calendar",
 };
 
 export const API_MUTATION_KEY = {
