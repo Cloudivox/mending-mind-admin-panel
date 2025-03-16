@@ -25,6 +25,7 @@ const TeamManagement = () => {
     selectedTherapists,
     setShowTherapistList,
     handleAddUser,
+    setSelectedOption,
   } = useTeamManagementController();
 
   return (
@@ -238,7 +239,11 @@ const TeamManagement = () => {
                       <div className="flex justify-end gap-2 mt-6">
                         <button
                           type="button"
-                          onClick={() => setIsModalOpen(false)}
+                          onClick={() => {
+                            setIsModalOpen(false);
+                            setSelectedOption(null);
+                            setShowTherapistList(false);
+                          }}
                           className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
                         >
                           Cancel
