@@ -103,6 +103,7 @@ function useTeamManagementController() {
         });
         toast.success("User added successfully");
       }
+      refetch();
       setIsModalOpen(false);
       setSelectedOption(null);
       setShowTherapistList(false);
