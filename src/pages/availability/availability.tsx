@@ -37,13 +37,14 @@ export default function AvailabilityPage() {
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center  mb-8">
             <h1 className="text-2xl font-semibold">Availability</h1>
-            <div className="relative group ms-3">
-              <div className="w-5 h-5 flex items-center justify-center border border-gray-400 rounded-full text-gray-600 cursor-pointer">
-                i
-              </div>
-              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-gray-800 text-white text-sm rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                This section for add and manage therapist availability slots.
-                you can select a date and add a new slot for a therapist.
+            <div className="relative ms-3 flex items-center">
+              <div className="w-5 h-5 flex items-center justify-center border border-gray-400 rounded-full text-gray-600 cursor-pointer group relative">
+                <span>i</span>
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 w-64 bg-gray-800 text-white text-sm rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                  This section is for adding and managing therapist availability
+                  slots.<br/> You can select a date and add a new slot for a
+                  therapist.
+                </div>
               </div>
             </div>
           </div>
