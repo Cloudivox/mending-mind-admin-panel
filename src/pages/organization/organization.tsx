@@ -28,6 +28,7 @@ function Organization() {
     handleFileInputChange,
     removeImage,
     setUIState,
+    signOut,
   } = useOrganizationController();
   return (
     <>
@@ -67,15 +68,38 @@ function Organization() {
               </button>
             </div>
           ) : (
-            <div className="mb-5">
-              <h1 className="text-2xl font-bold text-gray-800 mt-5">
-                Select Organization
-              </h1>
-              {/* <p className="text-gray-600">Manage your organization</p> */}
-              <p className="text-gray-600">
-                Selecting an organization allows you to view and manage its
-                information efficiently.
-              </p>
+            <div className="flex justify-between items-center mb-5">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800 mt-5">
+                  Select Organization
+                </h1>
+                {/* <p className="text-gray-600">Manage your organization</p> */}
+                <p className="text-gray-600">
+                  Selecting an organization allows you to view and manage its
+                  information efficiently.
+                </p>
+              </div>
+              <div>
+                <button
+                  onClick={signOut}
+                  title="Add organization"
+                  className="bg-teal-600 hover:bg-teal-700 text-white font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h6q.425 0 .713.288T12 4t-.288.713T11 5H5v14h6q.425 0 .713.288T12 20t-.288.713T11 21zm12.175-8H10q-.425 0-.712-.288T9 12t.288-.712T10 11h7.175L15.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L20.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288t-.713-.313q-.275-.3-.262-.712t.287-.688z"
+                    />
+                  </svg>
+                  Sign Out
+                </button>
+              </div>
             </div>
           )}
           {/* Workspaces Grid */}

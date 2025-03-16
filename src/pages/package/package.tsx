@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/loader";
 import { useEffect, useState } from "react";
 import { useGetAllSessions } from "../session/services";
@@ -8,7 +8,8 @@ function Package() {
   const navigate = useNavigate();
 
   const [sessions, setSessions] = useState<Sessions[]>();
-  const getAllSessions = useGetAllSessions();
+  const { organizationId } = useParams<{ organizationId: string }>();
+  const getAllSessions = useGetAllSessions(organizationId);
 
   useEffect(() => {
     if (getAllSessions.isSuccess && getAllSessions.data) {
@@ -21,6 +22,29 @@ function Package() {
         <>
           {getAllSessions.isLoading ? (
             <Loader />
+          ) : sessions && !sessions?.length ? (
+            <div className="flex flex-col items-center justify-center py-10 border-2 rounded-xl">
+              <svg
+                className="w-16 h-16 text-black/20 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <p className="text-black/60 font-montserrat text-lg">
+                No previous sessions right now
+              </p>
+              <p className="text-black/40 font-montserrat text-sm mt-2">
+                Once session is completed then you can see here and create
+                package
+              </p>
+            </div>
           ) : (
             <>
               <div className="overflow-x-auto">

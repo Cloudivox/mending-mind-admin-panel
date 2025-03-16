@@ -8,6 +8,7 @@ import useDeleteOrganization from "./services/delete-organization/delete-organiz
 import Cookies from "js-cookie";
 import { USER_ACCESS_KEY } from "../../utils/enum";
 import { toast } from "react-toastify";
+import { useUser } from "../../context/user-context";
 interface IOrganization {
   id: string;
   name: string;
@@ -45,6 +46,7 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
 const useOrganizationController = () => {
   const { organizationId } = useParams<{ organizationId: string }>();
+  const { logout } = useUser();
   const getAllOrganization = useGetAllOrganization();
   const allTherapist = useGetAllTherapist();
 
@@ -392,6 +394,11 @@ const useOrganizationController = () => {
     }
   }, [allTherapist.isSuccess, allTherapist.data]);
 
+  const signOut = () => {
+    logout();
+    navigate("/signin");
+    toast.success("Sign Out Successfully");
+  };
   return {
     getAllOrganization,
     organizationId,
@@ -419,6 +426,7 @@ const useOrganizationController = () => {
     handleFileInputChange,
     removeImage,
     setUIState,
+    signOut,
   };
 };
 
