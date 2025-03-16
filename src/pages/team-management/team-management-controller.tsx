@@ -104,6 +104,8 @@ function useTeamManagementController() {
         toast.success("User added successfully");
       }
       setIsModalOpen(false);
+      setSelectedOption(null);
+      setShowTherapistList(false);
       resetForm();
     } catch (error) {
       toast.error("Operation failed. Please try again.");
