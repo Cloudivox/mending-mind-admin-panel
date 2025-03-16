@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { useGetAllTherapist, useGetAvailibility } from "./services";
+import {
+  // useGetAllTherapist,
+  useGetAllUsers,
+  useGetAvailibility,
+} from "./services";
 import { useParams } from "react-router-dom";
 
 interface Availability {
@@ -59,19 +63,20 @@ const useCalenderController = () => {
     const period = i < 12 ? "AM" : "PM"; // Determine AM/PM
     return `${hour.toString().padStart(2, "0")}:00 ${period}`;
   });
-  
-  const allTherapists = useGetAllTherapist();
+
+  // const allTherapists = useGetAllTherapist();
+  const allTherapists = useGetAllUsers(organizationId);
   const getAllAvailibility = useGetAvailibility(selectedDate, organizationId);
 
   useEffect(() => {
     if (
       allTherapists.isSuccess &&
-      allTherapists.data?.therapists &&
+      allTherapists.data?.users &&
       getAllAvailibility.isSuccess &&
       getAllAvailibility.data?.availibility
     ) {
       // Convert therapists and their availability into the required format
-      const formattedUsers = allTherapists.data.therapists.map(
+      const formattedUsers = allTherapists.data.users.map(
         (therapist: Therapist) => {
           const therapistAvailability =
             getAllAvailibility.data.availibility.filter(
