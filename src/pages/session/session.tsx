@@ -83,35 +83,33 @@ const Session = () => {
             </div>
           ) : (
             <>
-              {pastSessions && !pastSessions?.length ? (
-                <div className="flex flex-col items-center justify-center py-10 border-2 rounded-xl">
-                  <svg
-                    className="w-16 h-16 text-black/20 mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <p className="text-black/60 font-montserrat text-lg">
-                    No past sessions right now
-                  </p>
-                  <p className="text-black/40 font-montserrat text-sm mt-2">
-                    New sessions will appear here when scheduled
-                  </p>
+              <div className="overflow-x-auto">
+                <div className="mt-10 mb-4">
+                  <h2 className="text-lg font-bold mb-4">Previous Sessions</h2>
                 </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <div className="mt-10 mb-4">
-                    <h2 className="text-lg font-bold mb-4">
-                      Previous Sessions
-                    </h2>
+                {pastSessions && !pastSessions?.length ? (
+                  <div className="flex flex-col items-center justify-center py-10 border-2 rounded-xl">
+                    <svg
+                      className="w-16 h-16 text-black/20 mb-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <p className="text-black/60 font-montserrat text-lg">
+                      No past sessions right now
+                    </p>
+                    <p className="text-black/40 font-montserrat text-sm mt-2">
+                      New sessions will appear here when scheduled
+                    </p>
                   </div>
+                ) : (
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-[#ECF0F1]">
@@ -186,39 +184,38 @@ const Session = () => {
                         ))}
                     </tbody>
                   </table>
-                </div>
-              )}
+                )}
+              </div>
               {/* Upcoming Sessions Table */}
-              {upcomingSessions && !upcomingSessions.length ? (
-                <div className="flex flex-col items-center justify-center py-10 border-2 rounded-xl">
-                  <svg
-                    className="w-16 h-16 text-black/20 mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <p className="text-black/60 font-montserrat text-lg">
-                    No upcoming sessions right now
-                  </p>
-                  <p className="text-black/40 font-montserrat text-sm mt-2">
-                    New sessions will appear here when scheduled
-                  </p>
+
+              <>
+                {" "}
+                <div className="mt-10 mb-4">
+                  <h2 className="text-lg font-bold mb-4">Upcoming Sessions</h2>
                 </div>
-              ) : (
-                <>
-                  {" "}
-                  <div className="mt-10 mb-4">
-                    <h2 className="text-lg font-bold mb-4">
-                      Upcoming Sessions
-                    </h2>
+                {upcomingSessions && !upcomingSessions.length ? (
+                  <div className="flex flex-col items-center justify-center py-10 border-2 rounded-xl">
+                    <svg
+                      className="w-16 h-16 text-black/20 mb-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <p className="text-black/60 font-montserrat text-lg">
+                      No upcoming sessions right now
+                    </p>
+                    <p className="text-black/40 font-montserrat text-sm mt-2">
+                      New sessions will appear here when scheduled
+                    </p>
                   </div>
+                ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
@@ -293,8 +290,8 @@ const Session = () => {
                       </tbody>
                     </table>
                   </div>
-                </>
-              )}
+                )}
+              </>
             </>
           )}
         </>
