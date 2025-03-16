@@ -26,7 +26,7 @@ const Session = () => {
               i
             </div>
             <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-gray-800 text-white text-sm rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              In this section, you can view past and upcoming sessions with
+              In this section, you can view previous and upcoming sessions with
               client-therapist pairs.
             </div>
           </div>
@@ -75,7 +75,7 @@ const Session = () => {
                 />
               </svg>
               <p className="text-black/60 font-montserrat text-lg">
-                No past and upcoming sessions right now
+                No previous and upcoming sessions right now
               </p>
               <p className="text-black/40 font-montserrat text-sm mt-2">
                 New sessions will appear here when scheduled
@@ -103,7 +103,7 @@ const Session = () => {
                       />
                     </svg>
                     <p className="text-black/60 font-montserrat text-lg">
-                      No past sessions right now
+                      No previous sessions right now
                     </p>
                     <p className="text-black/40 font-montserrat text-sm mt-2">
                       New sessions will appear here when scheduled

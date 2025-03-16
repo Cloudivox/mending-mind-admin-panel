@@ -195,7 +195,15 @@ export default function AvailabilityPage() {
                               {!slot.clientId && (
                                 <button
                                   title="Delete"
-                                  onClick={() => handleDeleteSlot(slot._id)}
+                                  onClick={() => {
+                                    const isConfirmed = window.confirm(
+                                      "Are you sure you want to delete this slot?"
+                                    );
+                                    if (isConfirmed) {
+                                      handleDeleteSlot(slot._id);
+                                      // handleDeleteWorkspace(workspace.id);
+                                    }
+                                  }}
                                   className="text-red-500 hover:text-red-600"
                                 >
                                   <svg

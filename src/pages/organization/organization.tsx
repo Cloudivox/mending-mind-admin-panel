@@ -221,9 +221,18 @@ function Organization() {
                               </button>
                             </div>
                             <button
-                              onClick={() =>
-                                handleDeleteWorkspace(workspace.id)
-                              }
+                              onClick={() => {
+                                const isConfirmed = window.confirm(
+                                  "Are you sure you want to delete this workspace?"
+                                );
+                                if (isConfirmed) {
+                                  handleDeleteWorkspace(workspace.id);
+                                }
+                                setUIState((prev) => ({
+                                  ...prev,
+                                  activeDropdownId: null,
+                                }));
+                              }}
                               className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
                             >
                               Delete
@@ -354,8 +363,7 @@ function Organization() {
                         onClick={triggerFileInput}
                         className="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
                       >
-                        {uiState.modalMode === "add" ||
-                        activeWorkspace.logo === null
+                        {activeWorkspace.logo === null
                           ? "Add Image"
                           : "Change Image"}
                       </button>

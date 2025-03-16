@@ -18,6 +18,8 @@ export interface ICreateEvent {
 }
 
 export interface IEvents {
+  previousEvents: IEvents[];
+  upcomingEvents: IEvents[];
   id: string;
   name: string;
   description: string;
