@@ -25,12 +25,45 @@ const TeamManagement = () => {
     selectedTherapists,
     setShowTherapistList,
     handleAddUser,
+    searchTerm,
     setSelectedOption,
+    isRefetching,
   } = useTeamManagementController();
 
+  const EmptyStateIllustration = () => (
+    <svg
+      width="200"
+      height="200"
+      viewBox="0 0 200 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="mx-auto mb-4"
+    >
+      <circle cx="100" cy="100" r="60" fill="#F5F7FA" />
+
+      <circle
+        cx="100"
+        cy="100"
+        r="60"
+        stroke="#E1E4E8"
+        strokeWidth="4"
+        fill="none"
+      />
+
+      <circle cx="75" cy="85" r="8" fill="#3498DB" />
+      <circle cx="125" cy="85" r="8" fill="#3498DB" />
+
+      <path
+        d="M70 130C70 130 82 115 100 115C118 115 130 130 130 130"
+        stroke="#E1E4E8"
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
   return (
     <div>
-      {isLoading ? (
+      {isLoading && searchTerm === "" ? (
         <Loader />
       ) : (
         <div className="bg-white rounded-2xl p-8 transition-all">
@@ -53,7 +86,10 @@ const TeamManagement = () => {
               <div className="relative">
                 <input
                   type="text"
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    handleSearch(e.target.value);
+                  }}
                   placeholder="Search users..."
                   className="pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3498DB] focus:border-transparent w-64 transition-all duration-200"
                 />
@@ -282,89 +318,122 @@ const TeamManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {userData?.users
-                  .sort((a: any, b: any) => {
-                    const roleOrder: Record<string, number> = {
-                      admin: 1,
-                      therapist: 2,
-                    };
-
-                    return (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3);
-                  })
-                  .map((user: any) => (
-                    <tr
-                      key={user._id}
-                      className="border-b border-[#ECF0F1] hover:bg-black/5 transition-colors"
-                    >
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-full ${
-                              user.role === "admin"
-                                ? "bg-[#3498DB]/10 text-[#3498DB]"
-                                : "bg-[#9B59B6]/10 text-[#9B59B6]"
-                            } flex items-center justify-center font-medium`}
-                          >
-                            {user.name
-                              ? user.name
-                                  .split(" ")
-                                  .map((n: any) => n[0])
-                                  .join("")
-                                  .toUpperCase()
-                              : "U"}
-                          </div>
-                          <div>
-                            <div className="font-montserrat text-[#2C3E50] font-medium">
-                              {user.name || "Unknown"}
-                            </div>
-                            <div className="font-montserrat text-[#7F8C8D] text-sm">
-                              {user.email}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 font-montserrat text-[#34495E] capitalize">
-                        {user.role}
-                      </td>
-                      <td className="py-4 px-4 text-center">
-                        <span
-                          className={`${
-                            user.status === "active"
-                              ? "bg-[#2ECC71]/10 text-[#27AE60]"
-                              : user.status === "pending"
-                              ? "bg-[#F1C40F]/10 text-[#D35400]"
-                              : "bg-[#E74C3C]/10 text-[#C0392B]"
-                          } px-3 py-1 rounded-full text-xs font-medium font-montserrat`}
+                {isRefetching ? (
+                  <tr>
+                    <td colSpan={4} className="py-16">
+                      <div className="flex justify-center items-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#3498DB]"></div>
+                      </div>
+                    </td>
+                  </tr>
+                ) : userData?.users.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-16">
+                      <div className="flex flex-col items-center justify-center">
+                        <EmptyStateIllustration />
+                        <h3 className="text-xl font-medium text-gray-700 mb-2">
+                          No users found
+                        </h3>
+                        <p className="text-gray-500 mb-4 text-center max-w-md">
+                          There are no users matching your search criteria. Try
+                          adjusting your search or add a new user.
+                        </p>
+                        <button
+                          onClick={handleAddUser}
+                          className="bg-[#3498DB] hover:bg-[#2980B9] text-white px-6 py-2.5 rounded-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
                         >
-                          {user.status}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-center">
-                        <div className="flex justify-center gap-2">
-                          <button
-                            onClick={() => handleEdit(user)}
-                            title="Update"
-                            className="text-[#3498DB] hover:text-[#2980B9] transition-colors font-montserrat text-sm font-medium"
+                          <PlusIcon />
+                          Add User
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  userData?.users
+                    .sort((a: any, b: any) => {
+                      const roleOrder: Record<string, number> = {
+                        admin: 1,
+                        therapist: 2,
+                      };
+
+                      return (
+                        (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3)
+                      );
+                    })
+                    .map((user: any) => (
+                      <tr
+                        key={user._id}
+                        className="border-b border-[#ECF0F1] hover:bg-black/5 transition-colors"
+                      >
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`w-10 h-10 rounded-full ${
+                                user.role === "admin"
+                                  ? "bg-[#3498DB]/10 text-[#3498DB]"
+                                  : "bg-[#9B59B6]/10 text-[#9B59B6]"
+                              } flex items-center justify-center font-medium`}
+                            >
+                              {user.name
+                                ? user.name
+                                    .split(" ")
+                                    .map((n: any) => n[0])
+                                    .join("")
+                                    .toUpperCase()
+                                : "U"}
+                            </div>
+                            <div>
+                              <div className="font-montserrat text-[#2C3E50] font-medium">
+                                {user.name || "Unknown"}
+                              </div>
+                              <div className="font-montserrat text-[#7F8C8D] text-sm">
+                                {user.email}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 font-montserrat text-[#34495E] capitalize">
+                          {user.role}
+                        </td>
+                        <td className="py-4 px-4 text-center">
+                          <span
+                            className={`${
+                              user.status === "active"
+                                ? "bg-[#2ECC71]/10 text-[#27AE60]"
+                                : user.status === "pending"
+                                ? "bg-[#F1C40F]/10 text-[#D35400]"
+                                : "bg-[#E74C3C]/10 text-[#C0392B]"
+                            } px-3 py-1 rounded-full text-xs font-medium font-montserrat`}
                           >
-                            Update
-                          </button>
-                          <button
-                            onClick={() => handleDelete(user._id)}
-                            title="Delete"
-                            className="text-[#E74C3C] hover:text-[#C0392B] transition-colors font-montserrat text-sm font-medium"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            {user.status}
+                          </span>
+                        </td>
+                        <td className="py-4 px-4 text-center">
+                          <div className="flex justify-center gap-2">
+                            <button
+                              onClick={() => handleEdit(user)}
+                              title="Update"
+                              className="text-[#3498DB] hover:text-[#2980B9] transition-colors font-montserrat text-sm font-medium"
+                            >
+                              Update
+                            </button>
+                            <button
+                              onClick={() => handleDelete(user._id)}
+                              title="Delete"
+                              className="text-[#E74C3C] hover:text-[#C0392B] transition-colors font-montserrat text-sm font-medium"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                )}
               </tbody>
             </table>
           </div>
 
-          {/* Pagination */}
-          <Pagination />
+          {userData?.users.length !== 0 && <Pagination />}
         </div>
       )}
     </div>
