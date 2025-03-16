@@ -5,7 +5,7 @@ import { IAllTherapist, IUsers } from "../../types";
 import {
   useAddUser,
   useAddUserInOrganization,
-  // useDeleteUser,
+  useDeleteUser,
   useGetAllUsers,
   useRemoveUserFromOrganization,
   useUpdateUser,
@@ -47,7 +47,7 @@ function useTeamManagementController() {
   //@ts-ignore
   const adduser = useAddUser(organizationId);
   const updateUser = useUpdateUser();
-  // const deleteUser = useDeleteUser();
+  const deleteUser = useDeleteUser();
   const removeUserFromOrganization =
     useRemoveUserFromOrganization(organizationId);
   const addUserInOrganization = useAddUserInOrganization(organizationId);
@@ -133,12 +133,28 @@ function useTeamManagementController() {
   };
 
   const handleDelete = async (id: string) => {
-    try {
-      await removeUserFromOrganization.mutateAsync(id);
-      toast.success("User deleted successfully");
-      refetch(); // Refresh the user list
-    } catch (error) {
-      toast.error("Failed to delete user");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+    const userType = userData?.users.find((user) => user._id === id)?.role;
+
+    if (!confirmDelete) return;
+    if (userType === "admin") {
+      try {
+        await deleteUser.mutateAsync(id);
+        toast.success("User deleted successfully");
+        refetch();
+      } catch (error) {
+        toast.error("Failed to delete user");
+      }
+    } else {
+      try {
+        await removeUserFromOrganization.mutateAsync(id);
+        toast.success("User deleted successfully");
+        refetch(); // Refresh the user list
+      } catch (error) {
+        toast.error("Failed to delete user");
+      }
     }
   };
 
