@@ -208,7 +208,7 @@ function Profile() {
                 name="bio"
                 rows={3}
                 className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:bg-gray-50"
-                placeholder="No Data Found"
+                placeholder="Enter your bio"
                 value={profileData.bio}
                 onChange={handleInputChange}
                 disabled={!isEditing}
@@ -239,7 +239,7 @@ function Profile() {
                   type="text"
                   name="experience"
                   className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:bg-gray-50"
-                  placeholder="No Data Found"
+                  placeholder="Enter your Experience"
                   value={profileData.experience}
                   onChange={handleInputChange}
                   disabled={!isEditing}
@@ -269,7 +269,7 @@ function Profile() {
                   type="text"
                   name="qualification"
                   className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:bg-gray-50"
-                  placeholder="No Data Found"
+                  placeholder="Enter your qualification"
                   value={profileData.qualification}
                   onChange={handleInputChange}
                   disabled={!isEditing}
