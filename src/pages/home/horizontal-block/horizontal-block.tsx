@@ -32,7 +32,7 @@ const HorizotalBlock: React.FC<{
 
         <div className="text-right pt-1">
           <p className="text-sm text-black/60 mb-1 font-montserrat">
-            Today's Appointments
+            Today's Sessions
           </p>
           <h4 className="text-2xl font-bold text-black font-playfair">
             {sessionData?.totalTodaysSessions}
@@ -62,7 +62,7 @@ const HorizotalBlock: React.FC<{
 
         <div className="text-right pt-1">
           <p className="text-sm text-black/60 mb-1 font-montserrat">
-            Appointments Done
+            Sessions Completed
           </p>
           <h4 className="text-2xl font-bold text-black font-playfair">
             {sessionData?.totalSessionsCompleted}
@@ -92,7 +92,7 @@ const HorizotalBlock: React.FC<{
 
         <div className="text-right pt-1">
           <p className="text-sm text-black/60 mb-1 font-montserrat">
-            Pending Appointments
+            Upcoming Sessions
           </p>
           <h4 className="text-2xl font-bold text-black font-playfair">
             {sessionData?.totalUpcomingSessions}
