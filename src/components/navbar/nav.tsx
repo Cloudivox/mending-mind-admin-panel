@@ -101,15 +101,29 @@ const Nav = ({ setIsCollapsed, isCollapsed }: any) => {
         )}
 
         <nav className="px-4 font-montserrat flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
-          <Link
-            to={`/${organizationId}`}
-            onClick={() => setIsActive("Home")}
-            className={`${navItemClass} ${getActiveClass("Home")}`}
-            title="Home"
-          >
-            <NavHomeIcon />
-            {!isCollapsed && <span className="font-medium">Home</span>}
-          </Link>
+          {user && user.role !== "client" && (
+            <Link
+              to={`/${organizationId}`}
+              onClick={() => setIsActive("Home")}
+              className={`${navItemClass} ${getActiveClass("Home")}`}
+              title="Home"
+            >
+              <NavHomeIcon />
+              {!isCollapsed && <span className="font-medium">Home</span>}
+            </Link>
+          )}
+
+          {user && user.role === "client" && (
+            <Link
+              to={`/${organizationId}/new`}
+              onClick={() => setIsActive("Home")}
+              className={`${navItemClass} ${getActiveClass("Home")}`}
+              title="Home"
+            >
+              <NavHomeIcon />
+              {!isCollapsed && <span className="font-medium">Home</span>}
+            </Link>
+          )}
 
           <div className="space-y-1.5">
             {/* {user && user.role === "admin" && (
@@ -215,17 +229,19 @@ const Nav = ({ setIsCollapsed, isCollapsed }: any) => {
               {!isCollapsed && <span>Session</span>}
             </Link>
 
-            {user && organizationId === MENDING_MIND_ID && (
-              <Link
-                to={`/${organizationId}/package`}
-                onClick={() => setIsActive("Package")}
-                className={`${navItemClass} ${getActiveClass("Package")}`}
-                title="Package"
-              >
-                <NavPackageIcon />
-                {!isCollapsed && <span>Package</span>}
-              </Link>
-            )}
+            {user &&
+              organizationId === MENDING_MIND_ID &&
+              user.role !== "client" && (
+                <Link
+                  to={`/${organizationId}/package`}
+                  onClick={() => setIsActive("Package")}
+                  className={`${navItemClass} ${getActiveClass("Package")}`}
+                  title="Package"
+                >
+                  <NavPackageIcon />
+                  {!isCollapsed && <span>Package</span>}
+                </Link>
+              )}
 
             {(user?.role === "therapist" &&
               Cookies.get(USER_ACCESS_KEY.ORGANIZATION_ID) ===

@@ -136,7 +136,7 @@ function Profile() {
   }, [updateProfile.isSuccess, updateProfile.data]);
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] p-4 font-sans">
+    <div className="flex items-center justify-center min-h-screen bg-[#f8f9fa] p-4 font-sans">
       {getProfileDetails.isLoading || !user ? (
         <Loader />
       ) : (
@@ -214,68 +214,69 @@ function Profile() {
                 disabled={!isEditing}
               />
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="bg-[#f9f9f9] p-4 rounded-lg">
-                <div className="flex items-center mb-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-orange-600 mr-2"
-                  >
-                    <circle cx="12" cy="8" r="7"></circle>
-                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                  </svg>
-                  <h3 className="font-semibold">Experience</h3>
+            {user && user.role !== "client" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="bg-[#f9f9f9] p-4 rounded-lg">
+                  <div className="flex items-center mb-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-orange-600 mr-2"
+                    >
+                      <circle cx="12" cy="8" r="7"></circle>
+                      <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    <h3 className="font-semibold">Experience</h3>
+                  </div>
+                  <input
+                    type="text"
+                    name="experience"
+                    className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:bg-gray-50"
+                    placeholder="Enter your Experience"
+                    value={profileData.experience}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                  />
                 </div>
-                <input
-                  type="text"
-                  name="experience"
-                  className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:bg-gray-50"
-                  placeholder="Enter your Experience"
-                  value={profileData.experience}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                />
-              </div>
 
-              <div className="bg-[#f9f9f9] p-4 rounded-lg">
-                <div className="flex items-center mb-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-orange-600 mr-2"
-                  >
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                    <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
-                  </svg>
-                  <h3 className="font-semibold">Qualification</h3>
+                <div className="bg-[#f9f9f9] p-4 rounded-lg">
+                  <div className="flex items-center mb-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-orange-600 mr-2"
+                    >
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                      <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
+                    </svg>
+                    <h3 className="font-semibold">Qualification</h3>
+                  </div>
+                  <input
+                    type="text"
+                    name="qualification"
+                    className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:bg-gray-50"
+                    placeholder="Enter your qualification"
+                    value={profileData.qualification}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                  />
                 </div>
-                <input
-                  type="text"
-                  name="qualification"
-                  className="w-full p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-400 disabled:bg-gray-50"
-                  placeholder="Enter your qualification"
-                  value={profileData.qualification}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                />
               </div>
-            </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <div className="bg-[#f9f9f9] p-4 rounded-lg">
@@ -350,58 +351,61 @@ function Profile() {
                 </select>
               </div>
             </div>
-
-            {skills && !!skills?.length && (
-              <div>
-                <div className="flex justify-between items-center mb-3">
-                  <h2 className="text-xl font-semibold">Skills</h2>
-                  {isEditing && (
-                    <button
-                      onClick={handleAddSkill}
-                      className="flex items-center text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-3 rounded-md transition-colors"
-                    >
-                      <PlusIcon />
-                      Add Skill
-                    </button>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {skills.map((skill, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center bg-[#f9f9f9] p-3 rounded-lg"
-                    >
-                      <div className="bg-purple-500 w-3 h-3 rounded-full me-5"></div>
-                      <input
-                        type="text"
-                        className="flex-1 text-sm font-medium bg-transparent focus:outline-none disabled:bg-gray-50"
-                        value={skill}
-                        disabled={!isEditing}
-                        onChange={(e) =>
-                          handleSkillChange(index, e.target.value)
-                        }
-                      />
+            {user && user.role === "client" && (
+              <>
+                {skills && !!skills?.length && (
+                  <div>
+                    <div className="flex justify-between items-center mb-3">
+                      <h2 className="text-xl font-semibold">Skills</h2>
+                      {isEditing && (
+                        <button
+                          onClick={handleAddSkill}
+                          className="flex items-center text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-3 rounded-md transition-colors"
+                        >
+                          <PlusIcon />
+                          Add Skill
+                        </button>
+                      )}
                     </div>
-                  ))}
 
-                  {showNewSkillInput && isEditing && (
-                    <div className="flex items-center bg-[#f9f9f9] p-3 rounded-lg">
-                      <div className="bg-purple-500 w-3 h-3 rounded-full me-5"></div>
-                      <input
-                        type="text"
-                        autoFocus
-                        className="flex-1 text-sm font-medium bg-transparent focus:outline-none"
-                        placeholder="Enter new skill"
-                        value={newSkill}
-                        onChange={(e) => setNewSkill(e.target.value)}
-                        onBlur={handleSkillInputBlur}
-                        onKeyDown={handleSkillInputKeyDown}
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {skills.map((skill, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center bg-[#f9f9f9] p-3 rounded-lg"
+                        >
+                          <div className="bg-purple-500 w-3 h-3 rounded-full me-5"></div>
+                          <input
+                            type="text"
+                            className="flex-1 text-sm font-medium bg-transparent focus:outline-none disabled:bg-gray-50"
+                            value={skill}
+                            disabled={!isEditing}
+                            onChange={(e) =>
+                              handleSkillChange(index, e.target.value)
+                            }
+                          />
+                        </div>
+                      ))}
+
+                      {showNewSkillInput && isEditing && (
+                        <div className="flex items-center bg-[#f9f9f9] p-3 rounded-lg">
+                          <div className="bg-purple-500 w-3 h-3 rounded-full me-5"></div>
+                          <input
+                            type="text"
+                            autoFocus
+                            className="flex-1 text-sm font-medium bg-transparent focus:outline-none"
+                            placeholder="Enter new skill"
+                            value={newSkill}
+                            onChange={(e) => setNewSkill(e.target.value)}
+                            onBlur={handleSkillInputBlur}
+                            onKeyDown={handleSkillInputKeyDown}
+                          />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

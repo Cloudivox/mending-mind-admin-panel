@@ -250,6 +250,7 @@ const useBookSessionController = () => {
     handleDateSelect,
     organizationId,
     setShowMonthYearSelector,
+    navigate,
     hasLatestSession: (() => {
       if (!getLatestSessionByClient.data) return false;
 

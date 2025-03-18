@@ -20,6 +20,7 @@ import BookSession from "../book-session/book-session";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { USER_ACCESS_KEY } from "../../utils/enum";
+import UserHome from "../../client/user-home/user-home";
 // import EventDetails from "../event/event-details";
 
 const AdminRoutes = () => {
@@ -43,6 +44,7 @@ const AdminRoutes = () => {
         <main className="w-full">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="new" element={<UserHome />} />
             <Route path="calendar" element={<Calender />} />
             <Route path="organization" element={<Organization />} />
             <Route path="dashboard/products" element={<Products />} />

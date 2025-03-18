@@ -8,13 +8,20 @@ interface IVerifyCode {
   code: string;
 }
 
+interface FileBase64 {
+  base64: string;
+  name: string;
+  type: string;
+  size?: number;
+}
+
 interface IOrganization {
   id: string;
   name: string;
   description: string;
   country: string;
   therapists: string[];
-  logo: string;
+  logo: FileBase64 | null;
 }
 
 const createSession = async (code: IVerifyCode) => {

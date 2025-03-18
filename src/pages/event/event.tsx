@@ -160,8 +160,16 @@ const Event = () => {
                           onClick={() =>
                             user?.role === "admin" && handleClick(event)
                           }
-                          className="cursor-pointer bg-white rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                          title="Click to view Event Details"
+                          className={`${
+                            user && user.role !== "client"
+                              ? "cursor-pointer"
+                              : ""
+                          } bg-white rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}
+                          title={
+                            user && user.role !== "client"
+                              ? "Click to view Event Details"
+                              : ""
+                          }
                         >
                           <div className="mb-4 overflow-hidden rounded-xl">
                             <img

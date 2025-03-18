@@ -28,6 +28,7 @@ function BookSession() {
     selectedTherapistName,
     alreadyBooked,
     isSelectSessionIsBooked,
+    navigate,
   } = useBookSessionController();
 
   const isBookingPossible = () => {
@@ -44,7 +45,14 @@ function BookSession() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-100 flex items-center flex-col justify-center p-4">
+      <h2 className="text-3xl font-bold text-primary-black mb-2">
+        Book Your Session
+      </h2>
+      <p className="text-md text-gray-700 mb-4">
+        You can select a date and time to book sessions and view available
+        therapist slots.
+      </p>
       <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl overflow-hidden">
         <div className="flex flex-col md:flex-row">
           {/* Left Panel */}
@@ -267,7 +275,16 @@ function BookSession() {
             </div>
           </div>
         </div>
-        <div className="p-6 border-t border-gray-200 flex justify-end">
+        <div className="p-6 border-t border-gray-200 flex justify-end gap-4">
+          <button
+            className="
+          px-6 py-3 rounded-md text-white font-semibold bg-purple hover:bg-purple"
+            onClick={() => {
+              navigate(`/${organizationId}/session`);
+            }}
+          >
+            Back
+          </button>
           <button
             onClick={() => {
               if (isBookingPossible()) {

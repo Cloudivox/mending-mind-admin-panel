@@ -47,6 +47,18 @@ function Package() {
             </div>
           ) : (
             <>
+              <div className="flex items-center">
+                <h1 className="text-2xl font-bold">Package</h1>
+                <div className="relative group ms-3">
+                  <div className="w-5 h-5 flex items-center justify-center border border-gray-400 rounded-full text-gray-600 cursor-pointer">
+                    i
+                  </div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-gray-800 text-white text-sm rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    After one on one session is completed, you can create a
+                    package for specific client.
+                  </div>
+                </div>
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -112,7 +124,7 @@ function Package() {
                           <td className="py-4 px-4 text-center">
                             <button
                               onClick={() =>
-                                navigate(`/create-package/${session._id}`)
+                                navigate(`/${organizationId}/create-package/${session._id}`)
                               }
                               className="text-[#3498DB] hover:text-[#2980B9] transition-colors font-montserrat text-sm font-medium"
                             >

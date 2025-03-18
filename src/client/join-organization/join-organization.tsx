@@ -4,9 +4,17 @@ import RegistrationForm from "./registration-form";
 import { useVerifyCode } from "./services";
 import Loader from "../../components/loader";
 
+interface FileBase64 {
+  base64: string;
+  name: string;
+  type: string;
+  size?: number;
+}
+
 export interface OrganizationData {
   organizationName: string;
   organizationId: string;
+  logo: FileBase64 | null;
   // Add any other fields that might come from the API
 }
 function App() {
@@ -30,6 +38,7 @@ function App() {
       const data = {
         organizationName: verifyCode.data.organization.name,
         organizationId: verifyCode.data.organization.id,
+        logo: verifyCode.data.organization.logo,
       };
       setOrganizationData(data);
       setIsLoading(false);
