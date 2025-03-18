@@ -43,13 +43,19 @@ const Session = () => {
             </button>
           )}
         {user && user.role === "client" && (
-          <button
-            onClick={navigateBookSession}
-            title="Book Session"
-            className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
-          >
-            Book Session
-          </button>
+          <div className="flex flex-col items-end">
+            <button
+              onClick={navigateBookSession}
+              title="Book Session"
+              className="bg-[#16A085] hover:bg-[#457067] text-[#ffffff] font-montserrat font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-2"
+            >
+              Book Session
+            </button>
+            <span>
+              You can book a session by clicking this button and selecting your
+              preferred date and time.
+            </span>
+          </div>
         )}
       </div>
 

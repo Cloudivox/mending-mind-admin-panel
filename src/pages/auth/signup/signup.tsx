@@ -118,11 +118,7 @@ const SignUp = () => {
         role: signup.data?.user?.role,
       });
 
-      if (signup.data?.user?.role === "therapist") {
-        navigate(`/create-profile`);
-      } else {
-        navigate("/");
-      }
+      navigate("/");
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signup.isSuccess, signup.data]);

@@ -4,9 +4,18 @@ import { useVerifyCode } from "../services";
 interface CodeVerificationFormProps {
   onVerificationSuccess: (data: OrganizationData) => void;
 }
+interface FileBase64 {
+  base64: string;
+  name: string;
+  type: string;
+  size?: number;
+}
+
 export interface OrganizationData {
   organizationName: string;
   organizationId: string;
+  logo: FileBase64 | null;
+  // Add any other fields that might come from the API
 }
 
 const CodeVerificationForm: React.FC<CodeVerificationFormProps> = ({
@@ -36,6 +45,7 @@ const CodeVerificationForm: React.FC<CodeVerificationFormProps> = ({
       const data = {
         organizationName: verifyCode.data.organization.name,
         organizationId: verifyCode.data.organization.id,
+        logo: verifyCode.data.organization.logo,
       };
       onVerificationSuccess(data);
       sessionStorage.setItem("organizationCode", code);

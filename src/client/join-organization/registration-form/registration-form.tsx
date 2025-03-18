@@ -10,9 +10,17 @@ interface RegistrationFormProps {
   organizationData: OrganizationData;
 }
 
+interface FileBase64 {
+  base64: string;
+  name: string;
+  type: string;
+  size?: number;
+}
+
 export interface OrganizationData {
   organizationName: string;
   organizationId: string;
+  logo: FileBase64 | null;
   // Add any other fields that might come from the API
 }
 
@@ -109,6 +117,12 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
+  const removeStorageOnBack = () => {
+    sessionStorage.removeItem("organizationCode");
+    sessionStorage.removeItem("organizationData");
+    window.location.reload();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -156,7 +170,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           organizationData.organizationName
       );
 
-      navigate(`/${organizationData.organizationId}`, { replace: true });
+      navigate(`/${organizationData.organizationId}/new`, { replace: true });
       sessionStorage.removeItem("organizationCode");
 
       // Reset form after successful registration
@@ -187,6 +201,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             <img
               src={logo}
               alt="Mending Mind Logo"
+              title="Mending Mind"
               className="w-28 h-auto object-contain drop-shadow-lg"
             />
           </div>
@@ -196,11 +211,21 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             X
           </span>
 
-          {/* Letter P */}
+          {/* Letter */}
           <div className="w-36 h-36 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center shadow-md">
-            <span className="text-cyan-700 text-5xl font-extrabold drop-shadow-lg">
-              {organizationData.organizationName.slice(0, 1).toUpperCase()}
-            </span>
+            {organizationData.logo ? (
+              <img
+                src={organizationData.logo.base64}
+                alt={organizationData.organizationName}
+                className="p-3"
+                title={organizationData.organizationName}
+              />
+            ) : (
+              <span className="text-cyan-700 text-5xl font-extrabold drop-shadow-lg">
+                {" "}
+                {organizationData.organizationName.slice(0, 1).toUpperCase()}
+              </span>
+            )}
           </div>
         </div>
         <h2 className="font-playfair text-3xl font-bold text-black">
@@ -394,39 +419,51 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         )}
 
         {/* Submit Button with Full Width */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
-        >
-          {isLoading ? (
-            <div className="flex items-center justify-center">
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Submitting...
-            </div>
-          ) : (
-            "Submit"
-          )}
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            disabled={isLoading}
+            className="w-full h-12 bg-gray-500 hover:bg-gray-600 text-white transition-colors font-montserrat font-medium rounded-md"
+            title="Back"
+            onClick={removeStorageOnBack}
+          >
+            <div className="flex items-center justify-center">Back</div>
+          </button>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full h-12 bg-terracotta hover:bg-coral text-white transition-colors font-montserrat font-medium rounded-md"
+            title="Submit"
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Submitting...
+              </div>
+            ) : (
+              "Submit"
+            )}
+          </button>
+        </div>
       </form>
     </div>
   );
